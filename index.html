@@ -7,8 +7,9 @@
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#2e6b34" />
 
-  <!-- Librería para exportar a PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Librerías para exportar a PDF (captura directa + generación del PDF) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <!-- Librería SheetJS para descargar backup en Excel (.xlsx) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
@@ -712,7 +713,7 @@
     };
 
     // MOTOR PDF INDEPENDIENTE (760px / 26 filas con altura compacta 15px y escala 1.8 para entrar completo)
-    function generarArchivoPDFDesdeObjeto(datos) {
+    async function generarArchivoPDFDesdeObjeto(datos) {
       const numStr = String(datos.consecutivo || 1).padStart(3, "0");
       document.getElementById("pdf-numero").textContent = numStr;
       document.getElementById("pdf-fecha").textContent = datos.fecha || "";
@@ -773,20 +774,18 @@
 
       const lienzo = document.getElementById("lienzo-pdf-excel");
 
-      // CORRECCIÓN: html2canvas recortaba la captura a la altura de la ventana (viewport),
-      // por eso se perdían las últimas filas, el IVA, el total y las observaciones.
-      // Se mide la altura REAL del lienzo y se le indica explícitamente a html2canvas.
-      const anchoLienzo = 760;
-      const altoLienzo = Math.ceil(Math.max(lienzo.scrollHeight, lienzo.offsetHeight)) + 4;
+      // CORRECCIÓN: ya no se usa html2pdf (que clonaba la plantilla dentro de una capa del
+      // tamaño de la ventana y recortaba el final). Se captura la plantilla directamente
+      // con su altura REAL y se coloca en una sola hoja A4 sin que nada quede fuera.
+      try {
+        const { jsPDF } = window.jspdf;
+        const anchoLienzo = 760;
+        const altoLienzo = Math.ceil(Math.max(lienzo.scrollHeight, lienzo.offsetHeight)) + 2;
 
-      const opciones = {
-        margin:       [2, 2, 2, 2], // Márgenes mínimos para que entre todo verticalmente
-        filename:     nombreArchivo,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  {
+        const canvas = await html2canvas(lienzo, {
           scale: 1.8,
           useCORS: true,
-          backgroundColor: '#ffffff',
+          backgroundColor: "#ffffff",
           x: 0,
           y: 0,
           scrollX: 0,
@@ -794,15 +793,47 @@
           width: anchoLienzo,
           height: altoLienzo,
           windowWidth: anchoLienzo,
-          windowHeight: altoLienzo
-        },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
+          windowHeight: altoLienzo,
+          onclone: (docClon) => {
+            // En la copia que se fotografía, la plantilla fantasma se muestra completa y sin recortes
+            const cont = docClon.getElementById("contenedor-fantasma-pdf");
+            if (cont) {
+              cont.style.opacity = "1";
+              cont.style.zIndex = "auto";
+              cont.style.position = "absolute";
+              cont.style.left = "0";
+              cont.style.top = "0";
+              cont.style.height = "auto";
+              cont.style.overflow = "visible";
+            }
+            docClon.documentElement.style.overflow = "visible";
+            docClon.documentElement.style.height = "auto";
+            docClon.body.style.overflow = "visible";
+            docClon.body.style.height = "auto";
+          }
+        });
 
-      html2pdf().set(opciones).from(lienzo).save().catch((err) => {
+        const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
+        const pageW = pdf.internal.pageSize.getWidth();
+        const pageH = pdf.internal.pageSize.getHeight();
+        const margen = 2; // Márgenes mínimos, igual que antes
+        const maxW = pageW - margen * 2;
+        const maxH = pageH - margen * 2;
+
+        let w = maxW;
+        let h = (canvas.height * w) / canvas.width;
+        if (h > maxH) { // Si el contenido es más alto que la hoja, se ajusta para que entre completo
+          h = maxH;
+          w = (canvas.width * h) / canvas.height;
+        }
+        const posX = (pageW - w) / 2;
+
+        pdf.addImage(canvas.toDataURL("image/jpeg", 0.98), "JPEG", posX, margen, w, h);
+        pdf.save(nombreArchivo);
+      } catch (err) {
         console.error("Error generando PDF:", err);
         alert("No se pudo generar el PDF: " + (err && err.message ? err.message : err));
-      });
+      }
     }
 
     window.exportarCotizacionActualPDF = function() {
