@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Sistema de Cotizaciones - Soluciones Integrales M.W. S.A.S.</title>
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#2e6b34" />
 
   <!-- Librería para exportar a PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <!-- Librería SheetJS para descargar backup en Excel (.xlsx) si el gerente lo desea -->
+  <!-- Librería SheetJS para descargar backup en Excel (.xlsx) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <style>
@@ -20,7 +20,6 @@
       --morado-kpi: #e6e0ec;
       --rosa-kpi: #f2dcdb;
       --borde-celda: #808080;
-      --borde-suave: #d0d7de;
     }
 
     * {
@@ -30,38 +29,60 @@
 
     body {
       margin: 0;
-      padding: 0 0 60px 0;
+      padding: 0 0 65px 0;
       background-color: #f3f4f6;
       color: #111;
+      overflow-x: hidden;
     }
 
-    /* Barra de estado superior (Conexión / Modo Offline) */
+    /* Barra superior */
     .topbar {
       background: var(--verde-corporativo);
       color: white;
-      padding: 8px 16px;
+      padding: 10px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
       font-size: 13px;
     }
     .status-badge {
-      padding: 3px 10px;
+      padding: 4px 10px;
       border-radius: 12px;
       font-weight: bold;
       background: #1b4320;
+      font-size: 12px;
     }
 
-    /* Contenedor principal estilo Hoja de Excel */
+    /* Contenedor Principal */
     .workspace {
-      max-width: 1150px;
+      max-width: 1180px;
       margin: 15px auto;
       background: white;
       box-shadow: 0 2px 10px rgba(0,0,0,0.12);
       border: 1px solid var(--borde-celda);
     }
 
-    /* Barra de Botones de Acción (Tus 3 Macros) */
+    /* Banner de Modo Edición (CRUD Update) */
+    .edit-banner {
+      display: none;
+      background-color: #fff3cd;
+      color: #856404;
+      border-bottom: 2px solid #ffeeba;
+      padding: 10px 15px;
+      font-size: 14px;
+      font-weight: bold;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .edit-banner.active {
+      display: flex;
+    }
+
+    /* Barra de Macros */
     .macro-toolbar {
       background: #f8f9fa;
       padding: 12px 15px;
@@ -79,7 +100,7 @@
     }
     .btn-macro {
       border: none;
-      padding: 10px 18px;
+      padding: 10px 16px;
       border-radius: 6px;
       font-weight: bold;
       font-size: 13px;
@@ -87,17 +108,50 @@
       color: white;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-      transition: transform 0.1s, opacity 0.2s;
+      transition: transform 0.1s;
     }
     .btn-macro:active { transform: scale(0.98); }
-    .btn-orange { background-color: #e67e22; } /* Exportar PDF */
-    .btn-purple { background-color: #6c3483; } /* Guardar Historial */
-    .btn-red    { background-color: #c0392b; } /* Limpiar Datos */
-    .btn-green  { background-color: #27ae60; } /* Agregar Fila / Excel */
+    .btn-orange { background-color: #e67e22; }
+    .btn-purple { background-color: #6c3483; }
+    .btn-blue   { background-color: #2980b9; }
+    .btn-red    { background-color: #c0392b; }
+    .btn-green  { background-color: #27ae60; }
 
-    /* Estructura de cuadrícula tipo Excel */
+    /* Botones CRUD dentro de la tabla de Control */
+    .crud-actions {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      align-items: center;
+    }
+    .btn-crud {
+      border: 1px solid #ccc;
+      padding: 5px 9px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-crud-edit {
+      background-color: #e8f4fd;
+      color: #0d47a1;
+      border-color: #90caf9;
+    }
+    .btn-crud-edit:hover { background-color: #bbdefb; }
+    .btn-crud-del {
+      background-color: #fdecea;
+      color: #b71c1c;
+      border-color: #f5c6cb;
+    }
+    .btn-crud-del:hover { background-color: #f8d7da; }
+
+    /* Cuadrícula tipo Excel (Escritorio y PDF) */
     .excel-grid {
       width: 100%;
       border-collapse: collapse;
@@ -109,14 +163,13 @@
       vertical-align: middle;
     }
 
-    /* Encabezado Empresa (Izquierda) */
     .empresa-box {
       text-align: center;
-      width: 35%;
+      width: 34%;
     }
     .logo-container img {
-      max-height: 85px;
-      max-width: 180px;
+      max-height: 80px;
+      max-width: 170px;
       object-fit: contain;
     }
     .empresa-nombre {
@@ -132,14 +185,14 @@
       margin-bottom: 6px;
     }
 
-    /* Inputs dentro de celdas tipo Excel */
+    /* Inputs */
     .cell-input {
       width: 100%;
       border: none;
       outline: none;
       background: transparent;
       font-size: 13px;
-      padding: 3px;
+      padding: 4px;
     }
     .cell-input:focus {
       background: #fffde7;
@@ -152,55 +205,75 @@
       user-select: none;
     }
 
-    /* Colores de tabla Excel */
+    /* Colores Corporativos */
     .bg-verde-claro { background-color: var(--verde-header); }
     .bg-azul-header {
       background-color: var(--azul-tabla);
       font-weight: bold;
       text-align: center;
     }
-    .bg-kpi-header {
+
+    /* Dashboard KPIs Responsivo */
+    .kpi-grid-container {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr) 180px;
+      border-bottom: 1px solid var(--borde-celda);
+    }
+    .kpi-card {
+      border-right: 1px solid var(--borde-celda);
+      display: flex;
+      flex-direction: column;
+    }
+    .kpi-card:last-child {
+      border-right: none;
+    }
+    .kpi-title {
       background-color: var(--morado-kpi);
       font-weight: bold;
       text-align: center;
       font-size: 12px;
+      padding: 10px 6px;
+      border-bottom: 1px solid var(--borde-celda);
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .bg-kpi-value {
+    .kpi-val {
       background-color: var(--rosa-kpi);
       text-align: center;
       font-size: 16px;
-      font-weight: 600;
-      padding: 15px 8px !important;
+      font-weight: 700;
+      padding: 16px 8px;
+    }
+    .kpi-actions {
+      background-color: var(--verde-header);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
     }
 
-    /* Semáforo de Estados (Idéntico al formato condicional de Excel) */
+    /* Semáforo de Estados */
     .estado-select {
       width: 100%;
       border: none;
-      padding: 5px;
+      padding: 6px;
       font-weight: bold;
       border-radius: 3px;
       cursor: pointer;
       text-align: center;
     }
-    .estado-Pendiente {
-      background-color: #ffeb9c;
-      color: #9c6500;
-    }
-    .estado-Aprobada {
-      background-color: #c6efce;
-      color: #006100;
-    }
-    .estado-Rechazada {
-      background-color: #ffc7ce;
-      color: #9c0006;
-    }
+    .estado-Pendiente { background-color: #ffeb9c; color: #9c6500; }
+    .estado-Aprobada  { background-color: #c6efce; color: #006100; }
+    .estado-Rechazada { background-color: #ffc7ce; color: #9c0006; }
 
     /* Enlace WhatsApp */
     .wa-link {
       color: #111;
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 600;
       display: inline-flex;
       align-items: center;
       gap: 4px;
@@ -210,7 +283,7 @@
       color: #128c7e;
     }
 
-    /* Pestañas inferiores estilo Hojas de Excel */
+    /* Barra Inferior de Pestañas (Hojas de Excel) */
     .excel-tabs-bar {
       position: fixed;
       bottom: 0;
@@ -220,21 +293,25 @@
       border-top: 1px solid #adadad;
       display: flex;
       align-items: center;
-      padding: 0 15px;
-      height: 42px;
+      padding: 0 10px;
+      height: 46px;
       z-index: 1000;
-      gap: 4px;
+      gap: 6px;
     }
     .sheet-tab {
-      padding: 8px 20px;
+      flex: 1;
+      max-width: 240px;
+      text-align: center;
+      padding: 10px 12px;
       background: #f3f2f1;
       border: 1px solid #adadad;
       border-bottom: none;
       cursor: pointer;
       font-size: 13px;
-      font-weight: 500;
+      font-weight: 600;
       color: #333;
-      border-radius: 4px 4px 0 0;
+      border-radius: 6px 6px 0 0;
+      white-space: nowrap;
     }
     .sheet-tab.active {
       background: #ffffff;
@@ -243,23 +320,196 @@
       border-bottom: 3px solid var(--verde-corporativo);
     }
 
-    /* Vistas */
     .sheet-view { display: none; }
     .sheet-view.active { display: block; }
 
-    /* Ocultar elementos al generar PDF */
-    .no-pdf { }
-    .generating-pdf .no-pdf {
-      display: none !important;
-    }
+    /* =========================================================
+       MODO FORZADO A4 PARA EXPORTAR PDF (Ignora el celular)
+       ========================================================= */
     .generating-pdf {
+      width: 980px !important;
+      max-width: 980px !important;
+      margin: 0 !important;
+      padding: 15px !important;
+      background: white !important;
       border: none !important;
       box-shadow: none !important;
     }
+    .generating-pdf .no-pdf {
+      display: none !important;
+    }
 
-    @media (max-width: 768px) {
-      .workspace { margin: 0; border: none; }
-      .excel-grid td, .excel-grid th { font-size: 12px; padding: 4px; }
+    /* =========================================================
+       DISEÑO RESPONSIVO (CELULARES Y TABLETS VERTICALES)
+       ========================================================= */
+    @media screen and (max-width: 850px) {
+      .workspace {
+        margin: 0;
+        border: none;
+        box-shadow: none;
+      }
+
+      .macro-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 10px;
+      }
+      .macro-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .macro-buttons .btn-red {
+        grid-column: span 2;
+      }
+      .btn-macro {
+        width: 100%;
+        padding: 12px 10px;
+        font-size: 13px;
+      }
+
+      #area-impresion-pdf:not(.generating-pdf) {
+        padding: 10px !important;
+      }
+
+      #area-impresion-pdf:not(.generating-pdf) .tabla-encabezado,
+      #area-impresion-pdf:not(.generating-pdf) .tabla-encabezado tbody,
+      #area-impresion-pdf:not(.generating-pdf) .tabla-encabezado tr,
+      #area-impresion-pdf:not(.generating-pdf) .tabla-encabezado td {
+        display: block;
+        width: 100% !important;
+      }
+
+      #area-impresion-pdf:not(.generating-pdf) .tabla-encabezado tr {
+        margin-bottom: 6px;
+        border: 1px solid var(--borde-celda);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+
+      #area-impresion-pdf:not(.generating-pdf) .tabla-encabezado td {
+        border: none;
+        border-bottom: 1px solid #ddd;
+        text-align: left !important;
+        padding: 8px 10px;
+      }
+
+      #area-impresion-pdf:not(.generating-pdf) .empresa-box {
+        text-align: center !important;
+        background: #fff;
+      }
+
+      #area-impresion-pdf:not(.generating-pdf) .cell-input {
+        font-size: 16px;
+        padding: 6px 4px;
+        background: #fafafa;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      /* Tabla de Productos convertida en Tarjetas en Móvil */
+      #area-impresion-pdf:not(.generating-pdf) #tabla-items thead {
+        display: none;
+      }
+      #area-impresion-pdf:not(.generating-pdf) #tabla-items,
+      #area-impresion-pdf:not(.generating-pdf) #tabla-items tbody,
+      #area-impresion-pdf:not(.generating-pdf) #tabla-items tfoot,
+      #area-impresion-pdf:not(.generating-pdf) #tabla-items tr,
+      #area-impresion-pdf:not(.generating-pdf) #tabla-items td {
+        display: block;
+        width: 100% !important;
+      }
+
+      #area-impresion-pdf:not(.generating-pdf) #tbody-items tr {
+        background: #fff;
+        border: 2px solid var(--verde-corporativo);
+        border-radius: 8px;
+        margin-bottom: 12px;
+        padding: 6px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+      }
+
+      #area-impresion-pdf:not(.generating-pdf) #tbody-items td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 8px;
+        text-align: right !important;
+      }
+      #area-impresion-pdf:not(.generating-pdf) #tbody-items td:last-child {
+        border-bottom: none;
+        justify-content: flex-end;
+      }
+
+      #area-impresion-pdf:not(.generating-pdf) #tbody-items td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #333;
+        text-align: left;
+        margin-right: 10px;
+        min-width: 110px;
+      }
+
+      #area-impresion-pdf:not(.generating-pdf) #tabla-items tfoot tr {
+        border: 1px solid var(--borde-celda);
+        margin-bottom: 6px;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+
+      /* KPIs y Tabla de Control en Móvil */
+      .kpi-grid-container {
+        grid-template-columns: 1fr 1fr;
+      }
+      .kpi-card {
+        border-bottom: 1px solid var(--borde-celda);
+      }
+      .kpi-actions {
+        grid-column: span 2;
+        flex-direction: row;
+      }
+
+      .tabla-historial thead {
+        display: none;
+      }
+      .tabla-historial,
+      .tabla-historial tbody,
+      .tabla-historial tr,
+      .tabla-historial td {
+        display: block;
+        width: 100% !important;
+      }
+      .tabla-historial tbody tr {
+        margin: 10px;
+        width: calc(100% - 20px) !important;
+        border: 1px solid var(--borde-celda);
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        overflow: hidden;
+      }
+      .tabla-historial tbody td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        text-align: right !important;
+        font-size: 14px;
+      }
+      .tabla-historial tbody td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #444;
+        text-align: left;
+      }
+      .tabla-historial .estado-select {
+        max-width: 160px;
+        font-size: 14px;
+      }
     }
   </style>
 </head>
@@ -267,26 +517,34 @@
 
   <!-- Barra superior de estado -->
   <div class="topbar no-pdf">
-    <div><strong>Soluciones Integrales M.W. S.A.S.</strong> — Sistema Móvil PWA</div>
+    <div><strong>Soluciones Integrales M.W. S.A.S.</strong></div>
     <div id="conexion-status" class="status-badge">🟢 En línea (Sincronizado)</div>
   </div>
 
   <!-- =========================================================
-       HOJA 1: COTIZACIÓN (Formulario de creación y PDF)
+       HOJA 1: COTIZACIÓN (Formulario de creación, edición y PDF)
        ========================================================= -->
   <div id="vista-cotizacion" class="workspace sheet-view active">
     
+    <!-- Aviso de Modo Edición (CRUD) -->
+    <div id="banner-edicion" class="edit-banner no-pdf">
+      <span id="texto-banner-edicion">✏️ Editando Cotización N° 001</span>
+      <button class="btn-crud btn-crud-del" onclick="cancelarModoEdicion()">
+        ✕ Cancelar edición y crear nueva
+      </button>
+    </div>
+
     <!-- Barra de Macros -->
     <div class="macro-toolbar no-pdf">
       <div class="macro-buttons">
         <button class="btn-macro btn-orange" onclick="exportarCotizacionPDF()">
           📄 EXPORTAR A PDF
         </button>
-        <button class="btn-macro btn-purple" onclick="guardarCotizacion()">
-          💾 GUARDAR EN HISTORIAL
+        <button id="btn-guardar-principal" class="btn-macro btn-purple" onclick="guardarCotizacion()">
+          💾 GUARDAR HISTORIAL
         </button>
         <button class="btn-macro btn-red" onclick="limpiarCotizacion()">
-          🧹 NUEVA COTIZACIÓN / LIMPIAR
+          🧹 NUEVA / LIMPIAR DATOS
         </button>
       </div>
       <div>
@@ -300,18 +558,17 @@
     <div id="area-impresion-pdf" style="padding: 15px;">
       
       <!-- Encabezado Superior Idéntico al Excel -->
-      <table class="excel-grid">
+      <table class="excel-grid tabla-encabezado">
         <tr>
           <td rowspan="4" class="empresa-box">
             <div class="logo-container">
-              <!-- Si subes un archivo logo.png a la carpeta se mostrará automáticamente -->
               <img src="logo.png" alt="Logo M.W." onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';" />
               <div id="logo-fallback" style="display:none; font-size:34px;">🌱☀️</div>
             </div>
             <div class="empresa-nombre">Soluciones Integrales M.W. S.A.S.</div>
             <div class="empresa-lema">Energía que transforma el campo</div>
           </td>
-          <td colspan="2" class="bg-verde-claro" style="text-align:center; font-size:20px; font-weight:bold;">
+          <td colspan="2" class="bg-verde-claro" style="text-align:center; font-size:18px; font-weight:bold;">
             COTIZACIÓN COMERCIAL
           </td>
           <td class="bg-azul-header" style="width:15%;">COTIZACIÓN N°</td>
@@ -353,7 +610,7 @@
 
       <br />
 
-      <!-- Tabla de Productos (Columnas A a E con Escudo en la Columna E) -->
+      <!-- Tabla de Productos -->
       <table class="excel-grid" id="tabla-items">
         <thead>
           <tr class="bg-azul-header">
@@ -372,7 +629,7 @@
           <tr>
             <td colspan="2" rowspan="3" style="vertical-align: top;">
               <strong>OBSERVACIONES / CONDICIONES:</strong>
-              <textarea id="cot-observaciones" class="cell-input" rows="4" placeholder="Tiempo de entrega, forma de pago, garantía..."></textarea>
+              <textarea id="cot-observaciones" class="cell-input" rows="3" placeholder="Tiempo de entrega, forma de pago, garantía..."></textarea>
             </td>
             <td colspan="2" class="bg-azul-header" style="text-align:right;">SUBTOTAL:</td>
             <td class="cell-readonly" style="text-align:right;" id="cot-subtotal">$ 0,00</td>
@@ -380,14 +637,14 @@
           </tr>
           <tr>
             <td colspan="2" class="bg-azul-header" style="text-align:right;">
-              IVA (%): <input type="number" id="cot-iva-porcentaje" value="0" min="0" max="100" style="width:50px; text-align:center;" oninput="recalcularTotales()" />
+              IVA (%): <input type="number" id="cot-iva-porcentaje" value="0" min="0" max="100" style="width:55px; text-align:center; font-size:14px;" oninput="recalcularTotales()" />
             </td>
             <td class="cell-readonly" style="text-align:right;" id="cot-iva-valor">$ 0,00</td>
             <td class="no-pdf"></td>
           </tr>
           <tr>
             <td colspan="2" class="bg-azul-header" style="text-align:right; font-size:14px;">TOTAL COTIZACIÓN:</td>
-            <td class="cell-readonly" style="text-align:right; font-size:15px; background:#d9ead3;" id="cot-total-general">$ 0,00</td>
+            <td class="cell-readonly" style="text-align:right; font-size:16px; background:#d9ead3;" id="cot-total-general">$ 0,00</td>
             <td class="no-pdf"></td>
           </tr>
         </tfoot>
@@ -397,98 +654,86 @@
   </div>
 
   <!-- =========================================================
-       HOJA 2: CONTROL_COTIZACIONES (Historial, KPIs y WhatsApp)
+       HOJA 2: CONTROL_COTIZACIONES (Historial, KPIs, WhatsApp y CRUD)
        ========================================================= -->
   <div id="vista-control" class="workspace sheet-view">
     
-    <!-- Encabezado y Mini-Dashboard Financiero idéntico a tu captura -->
-    <table class="excel-grid">
-      <tr>
-        <td rowspan="3" class="empresa-box">
-          <div class="logo-container">
-            <img src="logo.png" alt="Logo M.W." onerror="this.style.display='none'; document.getElementById('logo-fallback-2').style.display='block';" />
-            <div id="logo-fallback-2" style="display:none; font-size:34px;">🌱☀️</div>
-          </div>
-          <div class="empresa-nombre">Soluciones Integrales M.W. S.A.S.</div>
-          <div class="empresa-lema">Energía que transforma el campo</div>
-        </td>
-        <td colspan="6" class="bg-verde-claro" style="text-align:center; font-size:20px; font-weight:bold; padding:18px;">
-          Control de Consecutivos de Cotizaciones
-        </td>
-      </tr>
-      <tr>
-        <td class="bg-kpi-header">Dinero Pendiente</td>
-        <td class="bg-kpi-header">Dinero Cerrado</td>
-        <td class="bg-kpi-header">Cotizaciones Aprobadas</td>
-        <td class="bg-kpi-header">Clientes por Llamar</td>
-        <td class="bg-kpi-header">Tasa de Éxito</td>
-        <td class="bg-verde-claro" rowspan="2" style="text-align:center;">
-          <button class="btn-macro btn-green" onclick="cambiarPestana('cotizacion')" style="margin-bottom:8px; width:100%; justify-content:center;">
-            ➕ Nueva Cotización
-          </button>
-          <button class="btn-macro btn-purple" onclick="exportarHistorialExcel()" style="width:100%; justify-content:center;">
-            📥 Descargar Excel
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="bg-kpi-value" id="kpi-pendiente">$ 0,00</td>
-        <td class="bg-kpi-value" id="kpi-aprobado" style="background-color:#d9ead3;">$ 0,00</td>
-        <td class="bg-kpi-value" id="kpi-cant-aprobadas">0</td>
-        <td class="bg-kpi-value" id="kpi-por-llamar">0</td>
-        <td class="bg-kpi-value" id="kpi-tasa">0%</td>
-      </tr>
-      <tr>
-        <td style="text-align:center; font-size:12px;">Documento: 123 4567 8901</td>
-        <td colspan="6" class="bg-verde-claro" style="padding: 8px 12px;">
-          <!-- Buscador y Segmentador Rápido -->
-          <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-            <strong>🔍 Filtrar cliente:</strong>
-            <input type="text" id="filtro-cliente" placeholder="Escribir nombre o cédula..." oninput="renderizarTablaControl()" style="padding:5px 10px; border:1px solid #888; border-radius:4px; min-width:220px;" />
-            <strong>Estado:</strong>
-            <select id="filtro-estado" onchange="renderizarTablaControl()" style="padding:5px 10px; border:1px solid #888; border-radius:4px;">
-              <option value="TODOS">Todos los estados</option>
-              <option value="Pendiente">🟡 Pendiente</option>
-              <option value="Aprobada">🟢 Aprobada</option>
-              <option value="Rechazada">🔴 Rechazada</option>
-            </select>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td style="text-align:center; font-size:12px;">Crra. 68 #1 - 26, Barrio El Cambio, Buenaventura</td>
-        <td colspan="6" class="bg-verde-claro"></td>
-      </tr>
-      <tr>
-        <td style="text-align:center; font-size:12px;">integralesmw@gmail.com | (+57) 314 573 5259</td>
-        <td colspan="6" class="bg-verde-claro"></td>
-      </tr>
-    </table>
+    <!-- Encabezado Responsivo de Control -->
+    <div style="background: var(--verde-header); padding: 14px; text-align: center; border-bottom: 1px solid var(--borde-celda);">
+      <div style="font-size: 19px; font-weight: bold; color: #111;">Control de Consecutivos de Cotizaciones</div>
+      <div style="font-size: 12px; color: var(--verde-corporativo); font-weight: bold;">Soluciones Integrales M.W. S.A.S. — Crra. 68 #1 - 26, Barrio El Cambio, Buenaventura</div>
+    </div>
 
-    <!-- Tabla de Historial -->
-    <table class="excel-grid">
+    <!-- Mini-Dashboard Financiero Responsivo -->
+    <div class="kpi-grid-container">
+      <div class="kpi-card">
+        <div class="kpi-title">Dinero Pendiente</div>
+        <div class="kpi-val" id="kpi-pendiente">$ 0,00</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Dinero Cerrado</div>
+        <div class="kpi-val" id="kpi-aprobado" style="background-color:#d9ead3;">$ 0,00</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Cotizaciones Aprobadas</div>
+        <div class="kpi-val" id="kpi-cant-aprobadas">0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Clientes por Llamar</div>
+        <div class="kpi-val" id="kpi-por-llamar">0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Tasa de Éxito</div>
+        <div class="kpi-val" id="kpi-tasa">0%</div>
+      </div>
+      <div class="kpi-actions">
+        <button class="btn-macro btn-green" onclick="irANuevaCotizacion()">
+          ➕ Nueva
+        </button>
+        <button class="btn-macro btn-purple" onclick="exportarHistorialExcel()">
+          📥 Excel
+        </button>
+      </div>
+    </div>
+
+    <!-- Buscador y Segmentador Rápido -->
+    <div class="bg-verde-claro" style="padding: 10px 14px; border-bottom: 1px solid var(--borde-celda); display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+      <strong>🔍 Buscar:</strong>
+      <input type="text" id="filtro-cliente" placeholder="Nombre o cédula..." oninput="renderizarTablaControl()" style="padding:8px 10px; border:1px solid #888; border-radius:4px; flex:1; min-width:160px; font-size:15px;" />
+      <strong>Estado:</strong>
+      <select id="filtro-estado" onchange="renderizarTablaControl()" style="padding:8px 10px; border:1px solid #888; border-radius:4px; font-size:15px;">
+        <option value="TODOS">Todos</option>
+        <option value="Pendiente">🟡 Pendiente</option>
+        <option value="Aprobada">🟢 Aprobada</option>
+        <option value="Rechazada">🔴 Rechazada</option>
+      </select>
+    </div>
+
+    <!-- Tabla de Historial con Controles CRUD -->
+    <table class="excel-grid tabla-historial">
       <thead>
         <tr class="bg-azul-header">
-          <th style="width: 10%;">No. Cotización</th>
-          <th style="width: 12%;">Fecha</th>
-          <th style="width: 22%;">Nombre Cliente</th>
-          <th style="width: 13%;">Cédula</th>
-          <th style="width: 13%;">Celular</th>
-          <th style="width: 14%;">Valor Total</th>
+          <th style="width: 8%;">No. Cotización</th>
+          <th style="width: 10%;">Fecha</th>
+          <th style="width: 19%;">Nombre Cliente</th>
+          <th style="width: 11%;">Cédula</th>
+          <th style="width: 11%;">Celular</th>
+          <th style="width: 13%;">Valor Total</th>
           <th style="width: 10%;">Estado</th>
-          <th style="width: 14%;">Enviar a Whatsapp</th>
+          <th style="width: 10%;">Enviar a Whatsapp</th>
+          <th style="width: 8%;">Acciones (CRUD)</th>
         </tr>
       </thead>
       <tbody id="tbody-control">
         <tr>
-          <td colspan="8" style="text-align:center; padding:20px; color:#666;">Cargando historial de cotizaciones...</td>
+          <td colspan="9" style="text-align:center; padding:20px; color:#666;">Cargando historial de cotizaciones...</td>
         </tr>
       </tbody>
     </table>
 
   </div>
 
-  <!-- Barra Inferior de Pestañas (Igual a un Libro de Excel) -->
+  <!-- Barra Inferior de Pestañas -->
   <div class="excel-tabs-bar no-pdf">
     <div id="tab-cotizacion" class="sheet-tab active" onclick="cambiarPestana('cotizacion')">
       📑 Cotización
@@ -499,7 +744,7 @@
   </div>
 
   <!-- =========================================================
-       LÓGICA JAVASCRIPT + FIREBASE OFFLINE
+       LÓGICA JAVASCRIPT + CRUD FIREBASE OFFLINE
        ========================================================= -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
@@ -511,12 +756,13 @@
       onSnapshot, 
       doc, 
       updateDoc, 
+      deleteDoc,
       query, 
       orderBy 
     } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
     // =========================================================================
-    // 1. PEGA AQUÍ TUS CREDENCIALES DE FIREBASE (Paso 4 de la guía de abajo)
+    // PEGA AQUÍ TUS CREDENCIALES DE FIREBASE
     // =========================================================================
     const firebaseConfig = {
         apiKey: "AIzaSyAiMACeB4GnB1ycj5L5C0BJCHSXnx1kTIE",
@@ -532,48 +778,43 @@
     let usarFirebase = firebaseConfig.apiKey !== "REEMPLAZAR_CON_TU_API_KEY";
     let listaCotizaciones = [];
     let totalActualNumerico = 0;
+    let cotizacionEditandoId = null; // Guarda el ID cuando se está editando una cotización existente
 
-    // Inicializar Firebase o Modo Local de respaldo mientras configuras Firebase
     if (usarFirebase) {
       try {
         const app = initializeApp(firebaseConfig);
         db = getFirestore(app);
 
-        // Activar modo fuera de línea para zonas sin cobertura en el Litoral
         enableIndexedDbPersistence(db).catch((err) => {
           console.warn("Persistencia offline aviso:", err.code);
         });
 
-        // Escuchar cambios en tiempo real
         const q = query(collection(db, "cotizaciones"), orderBy("consecutivo", "asc"));
         onSnapshot(q, (snapshot) => {
           listaCotizaciones = [];
           snapshot.forEach((docSnap) => {
             listaCotizaciones.push({ id: docSnap.id, ...docSnap.data() });
           });
-          actualizarConsecutivoAutomatico();
+          if (!cotizacionEditandoId) actualizarConsecutivoAutomatico();
           renderizarTablaControl();
         });
       } catch (e) {
         console.error("Error iniciando Firebase:", e);
       }
     } else {
-      // Modo de prueba local inmediato antes de que pongas las llaves de Firebase
-      document.getElementById("conexion-status").innerHTML = "⚠️ Modo Local (Falta configurar llaves Firebase)";
+      document.getElementById("conexion-status").innerHTML = "⚠️ Modo Local (Configurar Firebase)";
       listaCotizaciones = JSON.parse(localStorage.getItem("cotizaciones_mw") || "[]");
       actualizarConsecutivoAutomatico();
       renderizarTablaControl();
     }
 
-    // Detector de señal de internet
     window.addEventListener("online", () => {
       if (usarFirebase) document.getElementById("conexion-status").innerHTML = "🟢 En línea (Sincronizado)";
     });
     window.addEventListener("offline", () => {
-      document.getElementById("conexion-status").innerHTML = "🟠 Sin señal (Guardando en memoria de la Tablet)";
+      document.getElementById("conexion-status").innerHTML = "🟠 Sin señal (Guardando en Tablet)";
     });
 
-    // Formato Moneda Colombiana (COP)
     function formatearCOP(valor) {
       return "$ " + Number(valor || 0).toLocaleString("es-CO", {
         minimumFractionDigits: 2,
@@ -581,26 +822,25 @@
       });
     }
 
-    // Calcular siguiente consecutivo (001, 002...)
     function actualizarConsecutivoAutomatico() {
       const maxNum = listaCotizaciones.reduce((max, item) => Math.max(max, Number(item.consecutivo) || 0), 0);
       const siguiente = maxNum + 1;
       document.getElementById("cot-numero").textContent = String(siguiente).padStart(3, "0");
     }
 
-    // Inicializar filas de la tabla de cotización
+    // Agregar fila de producto
     window.agregarFilaProducto = function(descripcion = "", cantidad = "", precio = "") {
       const tbody = document.getElementById("tbody-items");
       const numFila = tbody.children.length + 1;
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td style="text-align:center;" class="num-item">${numFila}</td>
-        <td><input type="text" class="cell-input item-desc" value="${descripcion}" placeholder="Descripción del producto o servicio..." /></td>
-        <td><input type="number" class="cell-input item-cant" value="${cantidad}" min="0" step="any" style="text-align:center;" oninput="recalcularTotales()" /></td>
-        <td><input type="number" class="cell-input item-precio" value="${precio}" min="0" step="any" style="text-align:right;" oninput="recalcularTotales()" /></td>
-        <td class="cell-readonly item-total" style="text-align:right;">$ 0,00</td>
+        <td data-label="Ítem #" style="text-align:center;" class="num-item">${numFila}</td>
+        <td data-label="Descripción"><input type="text" class="cell-input item-desc" value="${descripcion}" placeholder="Descripción del producto o servicio..." /></td>
+        <td data-label="Cantidad"><input type="number" class="cell-input item-cant" value="${cantidad}" min="0" step="any" style="text-align:center;" oninput="recalcularTotales()" /></td>
+        <td data-label="Precio Unit."><input type="number" class="cell-input item-precio" value="${precio}" min="0" step="any" style="text-align:right;" oninput="recalcularTotales()" /></td>
+        <td data-label="Total 🔒" class="cell-readonly item-total" style="text-align:right;">$ 0,00</td>
         <td class="no-pdf" style="text-align:center;">
-          <button onclick="eliminarFila(this)" style="border:none; background:transparent; cursor:pointer; color:#c0392b; font-weight:bold;">✕</button>
+          <button onclick="eliminarFila(this)" style="border:none; background:#fee2e2; color:#c0392b; padding:4px 8px; border-radius:4px; cursor:pointer; font-weight:bold;">✕ Quitar</button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -618,7 +858,6 @@
       }
     };
 
-    // Escudo de Totales Automático
     window.recalcularTotales = function() {
       let subtotal = 0;
       const filas = document.querySelectorAll("#tbody-items tr");
@@ -639,7 +878,7 @@
       document.getElementById("cot-total-general").textContent = formatearCOP(totalActualNumerico);
     };
 
-    // Macro 1: Exportar a PDF con nombre inteligente
+    // Exportar a PDF
     window.exportarCotizacionPDF = function() {
       const consecutivo = document.getElementById("cot-numero").textContent.trim();
       const cliente = document.getElementById("cot-cliente").value.trim() || "Cliente";
@@ -652,7 +891,7 @@
         margin:       8,
         filename:     nombreArchivo,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
+        html2canvas:  { scale: 2, useCORS: true, windowWidth: 1050 },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
@@ -661,7 +900,9 @@
       });
     };
 
-    // Macro 2: Guardar en Base de Datos (Estado inicial: "Pendiente")
+    // =========================================================================
+    // CRUD 1 & 2: CREAR NUEVA COTIZACIÓN O ACTUALIZAR EXISTENTE
+    // =========================================================================
     window.guardarCotizacion = async function() {
       const cliente = document.getElementById("cot-cliente").value.trim();
       if (!cliente) {
@@ -670,31 +911,73 @@
       }
 
       const consecutivoNum = parseInt(document.getElementById("cot-numero").textContent, 10);
-      const fechaInput = document.getElementById("cot-fecha").value;
-      const fechaFormateada = fechaInput ? fechaInput.split("-").reverse().join("/") : new Date().toLocaleDateString("es-CO");
+      const fechaISO = document.getElementById("cot-fecha").value;
+      const fechaFormateada = fechaISO ? fechaISO.split("-").reverse().join("/") : new Date().toLocaleDateString("es-CO");
 
-      const nuevaCotizacion = {
+      // Recolectar todos los ítems de la tabla para poder editarlos después
+      const itemsGuardados = [];
+      document.querySelectorAll("#tbody-items tr").forEach((fila) => {
+        const desc = fila.querySelector(".item-desc").value.trim();
+        const cant = parseFloat(fila.querySelector(".item-cant").value) || 0;
+        const precio = parseFloat(fila.querySelector(".item-precio").value) || 0;
+        if (desc !== "" || cant > 0 || precio > 0) {
+          itemsGuardados.push({ descripcion: desc, cantidad: cant, precio: precio });
+        }
+      });
+
+      const datosCotizacion = {
         consecutivo: consecutivoNum,
         fecha: fechaFormateada,
+        fechaISO: fechaISO,
+        validaHasta: document.getElementById("cot-valida").value,
         cliente: cliente,
         cedula: document.getElementById("cot-documento").value.trim(),
         celular: document.getElementById("cot-celular").value.trim(),
-        valorTotal: totalActualNumerico,
-        estado: "Pendiente",
-        creadoEn: new Date().toISOString()
+        direccion: document.getElementById("cot-direccion").value.trim(),
+        observaciones: document.getElementById("cot-observaciones").value.trim(),
+        ivaPorcentaje: parseFloat(document.getElementById("cot-iva-porcentaje").value) || 0,
+        items: itemsGuardados,
+        valorTotal: totalActualNumerico
       };
+
+      // Si estamos en MODO EDICIÓN (Update)
+      if (cotizacionEditandoId) {
+        if (usarFirebase && db) {
+          try {
+            const ref = doc(db, "cotizaciones", cotizacionEditandoId);
+            await updateDoc(ref, datosCotizacion);
+            alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} actualizada correctamente.`);
+            cancelarModoEdicion();
+          } catch (err) {
+            alert("Error al actualizar: " + err.message);
+          }
+        } else {
+          const idx = listaCotizaciones.findIndex(c => c.id === cotizacionEditandoId);
+          if (idx !== -1) {
+            listaCotizaciones[idx] = { ...listaCotizaciones[idx], ...datosCotizacion };
+            localStorage.setItem("cotizaciones_mw", JSON.stringify(listaCotizaciones));
+            renderizarTablaControl();
+            alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} actualizada correctamente.`);
+            cancelarModoEdicion();
+          }
+        }
+        return;
+      }
+
+      // Si es una COTIZACIÓN NUEVA (Create)
+      datosCotizacion.estado = "Pendiente";
+      datosCotizacion.creadoEn = new Date().toISOString();
 
       if (usarFirebase && db) {
         try {
-          // addDoc en modo offline no espera respuesta del servidor, por eso no bloqueamos si no hay red
-          addDoc(collection(db, "cotizaciones"), nuevaCotizacion);
-          alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} guardada exitosamente en el historial.`);
+          addDoc(collection(db, "cotizaciones"), datosCotizacion);
+          alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} guardada exitosamente.`);
         } catch (err) {
           alert("Error al guardar: " + err.message);
         }
       } else {
-        nuevaCotizacion.id = "local_" + Date.now();
-        listaCotizaciones.push(nuevaCotizacion);
+        datosCotizacion.id = "local_" + Date.now();
+        listaCotizaciones.push(datosCotizacion);
         localStorage.setItem("cotizaciones_mw", JSON.stringify(listaCotizaciones));
         actualizarConsecutivoAutomatico();
         renderizarTablaControl();
@@ -702,10 +985,103 @@
       }
     };
 
-    // Macro 3: Limpiar Datos para Nueva Cotización
-    window.limpiarCotizacion = function() {
-      if (!confirm("¿Estás seguro de que deseas limpiar todos los datos para iniciar una nueva cotización?")) return;
+    // =========================================================================
+    // CRUD 3: CARGAR COTIZACIÓN EN EL FORMULARIO PARA EDITARLA O RE-IMPRIMIR PDF
+    // =========================================================================
+    window.editarCotizacion = function(id) {
+      const cot = listaCotizaciones.find(c => c.id === id);
+      if (!cot) return;
 
+      cotizacionEditandoId = cot.id;
+
+      // Mostrar banner de edición y cambiar botón principal
+      const numFormateado = String(cot.consecutivo).padStart(3, "0");
+      document.getElementById("texto-banner-edicion").textContent = `✏️ Modo Edición Activo: Modificando Cotización N° ${numFormateado} (${cot.cliente})`;
+      document.getElementById("banner-edicion").classList.add("active");
+
+      const btnGuardar = document.getElementById("btn-guardar-principal");
+      btnGuardar.innerHTML = `💾 ACTUALIZAR COTIZACIÓN #${numFormateado}`;
+      btnGuardar.classList.remove("btn-purple");
+      btnGuardar.classList.add("btn-blue");
+
+      // Cargar campos del encabezado
+      document.getElementById("cot-numero").textContent = numFormateado;
+      if (cot.fechaISO) {
+        document.getElementById("cot-fecha").value = cot.fechaISO;
+      } else if (cot.fecha && cot.fecha.includes("/")) {
+        const partes = cot.fecha.split("/");
+        if (partes.length === 3) {
+          document.getElementById("cot-fecha").value = `${partes[2]}-${partes[1].padStart(2, "0")}-${partes[0].padStart(2, "0")}`;
+        }
+      }
+      document.getElementById("cot-valida").value = cot.validaHasta || "";
+      document.getElementById("cot-cliente").value = cot.cliente || "";
+      document.getElementById("cot-documento").value = cot.cedula || "";
+      document.getElementById("cot-celular").value = cot.celular || "";
+      document.getElementById("cot-direccion").value = cot.direccion || "";
+      document.getElementById("cot-observaciones").value = cot.observaciones || "";
+      document.getElementById("cot-iva-porcentaje").value = cot.ivaPorcentaje || 0;
+
+      // Cargar filas de productos
+      const tbody = document.getElementById("tbody-items");
+      tbody.innerHTML = "";
+      if (Array.isArray(cot.items) && cot.items.length > 0) {
+        cot.items.forEach(item => {
+          agregarFilaProducto(item.descripcion, item.cantidad, item.precio);
+        });
+      } else {
+        // Si fue una cotización antigua sin detalle de ítems, carga una fila con el valor total
+        agregarFilaProducto("Servicios / Equipos según cotización", 1, cot.valorTotal || 0);
+      }
+
+      recalcularTotales();
+      cambiarPestana("cotizacion");
+    };
+
+    // Salir del Modo Edición y volver a modo Nueva Cotización
+    window.cancelarModoEdicion = function() {
+      cotizacionEditandoId = null;
+      document.getElementById("banner-edicion").classList.remove("active");
+
+      const btnGuardar = document.getElementById("btn-guardar-principal");
+      btnGuardar.innerHTML = `💾 GUARDAR HISTORIAL`;
+      btnGuardar.classList.remove("btn-blue");
+      btnGuardar.classList.add("btn-purple");
+
+      limpiarFormularioSinConfirmar();
+    };
+
+    // =========================================================================
+    // CRUD 4: ELIMINAR COTIZACIÓN DEL HISTORIAL
+    // =========================================================================
+    window.eliminarCotizacion = async function(id) {
+      const cot = listaCotizaciones.find(c => c.id === id);
+      const etiqueta = cot ? `N° ${String(cot.consecutivo).padStart(3, "0")} de ${cot.cliente}` : "seleccionada";
+
+      if (!confirm(`⚠️ ¿Estás seguro de que deseas ELIMINAR definitivamente la cotización ${etiqueta}?`)) {
+        return;
+      }
+
+      if (cotizacionEditandoId === id) {
+        cancelarModoEdicion();
+      }
+
+      if (usarFirebase && db) {
+        try {
+          await deleteDoc(doc(db, "cotizaciones", id));
+        } catch (err) {
+          alert("Error al eliminar en Firebase (Verifica que las reglas permitan delete): " + err.message);
+        }
+      } else {
+        listaCotizaciones = listaCotizaciones.filter(c => c.id !== id);
+        localStorage.setItem("cotizaciones_mw", JSON.stringify(listaCotizaciones));
+        if (!cotizacionEditandoId) actualizarConsecutivoAutomatico();
+        renderizarTablaControl();
+      }
+    };
+
+    function limpiarFormularioSinConfirmar() {
+      document.getElementById("cot-fecha").valueAsDate = new Date();
       document.getElementById("cot-cliente").value = "";
       document.getElementById("cot-documento").value = "";
       document.getElementById("cot-celular").value = "";
@@ -716,11 +1092,20 @@
 
       const tbody = document.getElementById("tbody-items");
       tbody.innerHTML = "";
-      for (let i = 0; i < 6; i++) agregarFilaProducto();
+      for (let i = 0; i < 4; i++) agregarFilaProducto();
       actualizarConsecutivoAutomatico();
+    }
+
+    window.limpiarCotizacion = function() {
+      if (!confirm("¿Estás seguro de que deseas limpiar todos los datos para iniciar una nueva cotización?")) return;
+      cancelarModoEdicion();
     };
 
-    // Cambiar estado del Semáforo en tiempo real
+    window.irANuevaCotizacion = function() {
+      cancelarModoEdicion();
+      cambiarPestana("cotizacion");
+    };
+
     window.cambiarEstadoCotizacion = async function(id, nuevoEstado) {
       if (usarFirebase && db) {
         const ref = doc(db, "cotizaciones", id);
@@ -735,13 +1120,12 @@
       }
     };
 
-    // Renderizar Tabla Control_Cotizaciones y KPIs del Dashboard
+    // Renderizar Tabla Control_Cotizaciones con botones Editar y Eliminar
     window.renderizarTablaControl = function() {
       const tbody = document.getElementById("tbody-control");
       const textoFiltro = (document.getElementById("filtro-cliente")?.value || "").toLowerCase();
       const estadoFiltro = document.getElementById("filtro-estado")?.value || "TODOS";
 
-      // Calcular KPIs Globales
       let dineroPendiente = 0;
       let dineroCerrado = 0;
       let cantAprobadas = 0;
@@ -767,7 +1151,6 @@
       document.getElementById("kpi-por-llamar").textContent = clientesPorLlamar;
       document.getElementById("kpi-tasa").textContent = tasaExito + "%";
 
-      // Filtrar lista para la tabla
       const filtradas = listaCotizaciones.filter((c) => {
         const coincideTexto = (c.cliente || "").toLowerCase().includes(textoFiltro) ||
                               (c.cedula || "").toLowerCase().includes(textoFiltro);
@@ -776,7 +1159,7 @@
       });
 
       if (filtradas.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:18px; color:#777;">No hay cotizaciones registradas con ese filtro.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:18px; color:#777;">No hay cotizaciones registradas con ese filtro.</td></tr>`;
         return;
       }
 
@@ -784,31 +1167,40 @@
       filtradas.forEach((c) => {
         const numLimpio = (c.celular || "").replace(/\D/g, "");
         const linkWa = numLimpio
-          ? `<a class="wa-link" href="https://wa.me/57${numLimpio}?text=${encodeURIComponent('Hola ' + c.cliente + ', te compartimos la cotización N° ' + String(c.consecutivo).padStart(3, '0') + ' de Soluciones Integrales M.W. S.A.S. Quedamos atentos.')}" target="_blank">📲 Enviar WhatsApp</a>`
+          ? `<a class="wa-link" href="https://wa.me/57${numLimpio}?text=${encodeURIComponent('Hola ' + c.cliente + ', te compartimos la cotización N° ' + String(c.consecutivo).padStart(3, '0') + ' de Soluciones Integrales M.W. S.A.S. Quedamos atentos.')}" target="_blank">📲 WhatsApp</a>`
           : `<span style="color:#999;">Sin celular</span>`;
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td style="text-align:right;">${c.consecutivo}</td>
-          <td style="text-align:right;">${c.fecha || ""}</td>
-          <td>${c.cliente || ""}</td>
-          <td style="text-align:right;">${c.cedula || ""}</td>
-          <td>${c.celular || ""}</td>
-          <td style="text-align:right;">${formatearCOP(c.valorTotal)}</td>
-          <td class="estado-${c.estado}" style="padding:0;">
+          <td data-label="No. Cotización" style="text-align:right; font-weight:bold;">#${String(c.consecutivo).padStart(3, "0")}</td>
+          <td data-label="Fecha" style="text-align:right;">${c.fecha || ""}</td>
+          <td data-label="Cliente">${c.cliente || ""}</td>
+          <td data-label="Cédula / NIT" style="text-align:right;">${c.cedula || ""}</td>
+          <td data-label="Celular">${c.celular || ""}</td>
+          <td data-label="Valor Total" style="text-align:right; font-weight:bold;">${formatearCOP(c.valorTotal)}</td>
+          <td data-label="Estado" class="estado-${c.estado}">
             <select class="estado-select estado-${c.estado}" onchange="cambiarEstadoCotizacion('${c.id}', this.value)">
               <option value="Pendiente" ${c.estado === "Pendiente" ? "selected" : ""}>Pendiente</option>
               <option value="Aprobada" ${c.estado === "Aprobada" ? "selected" : ""}>Aprobada</option>
               <option value="Rechazada" ${c.estado === "Rechazada" ? "selected" : ""}>Rechazada</option>
             </select>
           </td>
-          <td>${linkWa}</td>
+          <td data-label="Contacto">${linkWa}</td>
+          <td data-label="Acciones">
+            <div class="crud-actions">
+              <button class="btn-crud btn-crud-edit" onclick="editarCotizacion('${c.id}')" title="Cargar para editar o descargar PDF">
+                ✏️ Editar
+              </button>
+              <button class="btn-crud btn-crud-del" onclick="eliminarCotizacion('${c.id}')" title="Eliminar cotización">
+                🗑️
+              </button>
+            </div>
+          </td>
         `;
         tbody.appendChild(tr);
       });
     };
 
-    // Exportar Historial a un archivo de Excel real (.xlsx)
     window.exportarHistorialExcel = function() {
       if (listaCotizaciones.length === 0) {
         alert("Aún no hay cotizaciones para exportar.");
@@ -820,6 +1212,7 @@
         "Nombre Cliente": c.cliente,
         "Cédula": c.cedula,
         "Celular": c.celular,
+        "Dirección": c.direccion || "",
         "Valor Total": c.valorTotal,
         "Estado": c.estado
       }));
@@ -829,19 +1222,17 @@
       XLSX.writeFile(wb, "Control_Cotizaciones_MW.xlsx");
     };
 
-    // Navegación entre las pestañas inferiores estilo Excel
     window.cambiarPestana = function(nombre) {
       document.getElementById("vista-cotizacion").classList.toggle("active", nombre === "cotizacion");
       document.getElementById("vista-control").classList.toggle("active", nombre === "control");
       document.getElementById("tab-cotizacion").classList.toggle("active", nombre === "cotizacion");
       document.getElementById("tab-control").classList.toggle("active", nombre === "control");
+      window.scrollTo(0, 0);
     };
 
-    // Inicializar fecha de hoy y 6 filas por defecto al abrir
     document.getElementById("cot-fecha").valueAsDate = new Date();
-    for (let i = 0; i < 6; i++) agregarFilaProducto();
+    for (let i = 0; i < 4; i++) agregarFilaProducto();
 
-    // Registrar Service Worker para PWA
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("./sw.js").catch(err => console.log("SW aviso:", err));
     }
