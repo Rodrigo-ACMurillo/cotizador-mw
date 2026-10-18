@@ -224,18 +224,20 @@
     .sheet-view.active { display: block; }
 
     /* =========================================================
-       PLANTILLA FANTASMA VERTICAL PERFECTA (780px - ANCHO EXACTO CARTA)
+       CONTENEDOR FANTASMA PDF (Posicionado sin cortes de pantalla)
        ========================================================= */
     #contenedor-fantasma-pdf {
-      position: fixed;
-      left: -9999px;
+      position: absolute;
+      left: 0;
       top: 0;
-      width: 780px;
+      width: 760px;
       background: #ffffff;
-      z-index: -1;
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1000;
     }
     .pdf-sheet {
-      width: 780px;
+      width: 760px;
       padding: 10px;
       background: #ffffff;
       color: #000;
@@ -248,7 +250,7 @@
     .pdf-table td, .pdf-table th {
       border: 1px solid #444444;
       padding: 4px 6px;
-      font-size: 11.5px;
+      font-size: 11px;
       vertical-align: middle;
       word-wrap: break-word;
     }
@@ -501,7 +503,7 @@
   </div>
 
   <!-- ========================================================= -->
-  <!-- PLANTILLA FANTASMA VERTICAL EXACTA (780px / 26 FILAS)     -->
+  <!-- PLANTILLA FANTASMA PDF (Aislada y centrada - Ancho 760px) -->
   <!-- ========================================================= -->
   <div id="contenedor-fantasma-pdf">
     <div id="lienzo-pdf-excel" class="pdf-sheet">
@@ -555,7 +557,6 @@
 
       <div style="height: 4px;"></div>
 
-      <!-- Tabla de ítems con anchos proporcionales exactos y 26 filas -->
       <table class="pdf-table">
         <thead>
           <tr class="bg-azul-header">
@@ -710,7 +711,7 @@
       document.getElementById("cot-total-general").textContent = formatearCOP(totalActualNumerico);
     };
 
-    // MOTOR DE PDF VERTICAL A ANCHO EXACTO CARTA (780px / 26 FILAS)
+    // MOTOR PDF INDEPENDIENTE DE LA PANTALLA (Ancho 760px / 26 filas)
     function generarArchivoPDFDesdeObjeto(datos) {
       const numStr = String(datos.consecutivo || 1).padStart(3, "0");
       document.getElementById("pdf-numero").textContent = numStr;
@@ -775,7 +776,7 @@
         margin:       [4, 4, 4, 4],
         filename:     nombreArchivo,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, width: 780, windowWidth: 780, scrollX: 0, scrollY: 0 },
+        html2canvas:  { scale: 2, useCORS: true, width: 760, windowWidth: 760, x: 0, y: 0 },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
