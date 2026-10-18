@@ -224,19 +224,19 @@
     .sheet-view.active { display: block; }
 
     /* =========================================================
-       PLANTILLA FANTASMA VERTICAL TAMAÑO CARTA CON 26 FILAS (794px)
+       PLANTILLA FANTASMA VERTICAL OPTIMIZADA A ANCHO COMPLETO (1020px)
        ========================================================= */
     #contenedor-fantasma-pdf {
       position: fixed;
       left: -9999px;
       top: 0;
-      width: 794px;
+      width: 1020px;
       background: #ffffff;
       z-index: -1;
     }
     .pdf-sheet {
-      width: 794px;
-      padding: 15px;
+      width: 1020px;
+      padding: 25px;
       background: #ffffff;
       color: #000;
     }
@@ -247,8 +247,8 @@
     }
     .pdf-table td, .pdf-table th {
       border: 1px solid #444444;
-      padding: 4px 6px;
-      font-size: 11px;
+      padding: 6px 8px;
+      font-size: 13px;
       vertical-align: middle;
       word-wrap: break-word;
     }
@@ -501,7 +501,7 @@
   </div>
 
   <!-- ========================================================= -->
-  <!-- PLANTILLA FANTASMA VERTICAL CON LAS 26 FILAS EXACTAS      -->
+  <!-- PLANTILLA FANTASMA VERTICAL ANCHO COMPLETO (1020px)       -->
   <!-- ========================================================= -->
   <div id="contenedor-fantasma-pdf">
     <div id="lienzo-pdf-excel" class="pdf-sheet">
@@ -510,16 +510,16 @@
           <td rowspan="4" style="width:32%; text-align:center;">
             <div class="logo-container">
               <img src="logo.png" alt="Logo M.W." onerror="this.style.display='none'; document.getElementById('logo-pdf-fallback').style.display='block';" />
-              <div id="logo-pdf-fallback" style="display:none; font-size:30px;">🌱☀️</div>
+              <div id="logo-pdf-fallback" style="display:none; font-size:34px;">🌱☀️</div>
             </div>
-            <div class="empresa-nombre" style="font-size: 13px;">Soluciones Integrales M.W. S.A.S.</div>
-            <div class="empresa-lema" style="font-size: 10px;">Energía que transforma el campo</div>
+            <div class="empresa-nombre" style="font-size: 14px;">Soluciones Integrales M.W. S.A.S.</div>
+            <div class="empresa-lema" style="font-size: 11px;">Energía que transforma el campo</div>
           </td>
-          <td colspan="2" class="bg-verde-claro" style="width:36%; text-align:center; font-size:15px; font-weight:bold;">
+          <td colspan="2" class="bg-verde-claro" style="width:36%; text-align:center; font-size:17px; font-weight:bold;">
             COTIZACIÓN COMERCIAL
           </td>
           <td class="bg-azul-header" style="width:15%;">COTIZACIÓN N°</td>
-          <td class="cell-readonly" style="width:17%; text-align:center; font-size:14px; color:#c0392b;" id="pdf-numero">001</td>
+          <td class="cell-readonly" style="width:17%; text-align:center; font-size:15px; color:#c0392b;" id="pdf-numero">001</td>
         </tr>
         <tr>
           <td class="bg-azul-header" style="width:14%;">Fecha:</td>
@@ -540,36 +540,36 @@
           <td id="pdf-direccion"></td>
         </tr>
         <tr>
-          <td style="text-align:center; font-size:9.5px;">Doc: 123 4567 8901</td>
-          <td colspan="4" rowspan="3" class="bg-verde-claro" style="font-size:10.5px; padding:6px;">
+          <td style="text-align:center; font-size:10.5px;">Doc: 123 4567 8901</td>
+          <td colspan="4" rowspan="3" class="bg-verde-claro" style="font-size:11.5px; padding:6px;">
             <strong>Propuesta Técnica y Económica:</strong> Detalle de equipos, insumos y/o servicios cotizados.
           </td>
         </tr>
         <tr>
-          <td style="text-align:center; font-size:9.5px;">Crra. 68 #1-26, El Cambio, Buenaventura</td>
+          <td style="text-align:center; font-size:10.5px;">Crra. 68 #1-26, El Cambio, Buenaventura</td>
         </tr>
         <tr>
-          <td style="text-align:center; font-size:9.5px;">integralesmw@gmail.com | 314 573 5259</td>
+          <td style="text-align:center; font-size:10.5px;">integralesmw@gmail.com | 314 573 5259</td>
         </tr>
       </table>
 
-      <div style="height: 4px;"></div>
+      <div style="height: 6px;"></div>
 
-      <!-- Tabla de ítems con 26 filas fijas idénticas al Excel -->
+      <!-- Tabla de ítems con 26 filas fijas distribuidas a ancho completo (1020px) -->
       <table class="pdf-table">
         <thead>
           <tr class="bg-azul-header">
-            <th style="width: 7%;">#</th>
-            <th style="width: 47%;">DESCRIPCIÓN / DESCRIPTION</th>
+            <th style="width: 5%;">#</th>
+            <th style="width: 45%;">DESCRIPCIÓN / DESCRIPTION</th>
             <th style="width: 12%;">CANTIDAD</th>
-            <th style="width: 17%;">VALOR UNITARIO</th>
-            <th style="width: 17%;">TOTAL (COP)</th>
+            <th style="width: 19%;">VALOR UNITARIO</th>
+            <th style="width: 19%;">TOTAL (COP)</th>
           </tr>
         </thead>
         <tbody id="pdf-tbody-items"></tbody>
         <tfoot>
           <tr>
-            <td colspan="2" rowspan="3" style="vertical-align: top; font-size: 10.5px;">
+            <td colspan="2" rowspan="3" style="vertical-align: top; font-size: 11.5px;">
               <strong>OBSERVACIONES / CONDICIONES:</strong>
               <div id="pdf-observaciones" style="margin-top:2px; white-space:pre-wrap;"></div>
             </td>
@@ -581,8 +581,8 @@
             <td class="cell-readonly" style="text-align:right;" id="pdf-iva-valor">$ 0,00</td>
           </tr>
           <tr>
-            <td colspan="2" class="bg-azul-header" style="text-align:right; font-size:12px;">TOTAL COTIZACIÓN:</td>
-            <td class="cell-readonly" style="text-align:right; font-size:13px; background:#d9ead3;" id="pdf-total-general">$ 0,00</td>
+            <td colspan="2" class="bg-azul-header" style="text-align:right; font-size:13px;">TOTAL COTIZACIÓN:</td>
+            <td class="cell-readonly" style="text-align:right; font-size:14px; background:#d9ead3;" id="pdf-total-general">$ 0,00</td>
           </tr>
         </tfoot>
       </table>
@@ -710,7 +710,7 @@
       document.getElementById("cot-total-general").textContent = formatearCOP(totalActualNumerico);
     };
 
-    // MOTOR DE PDF VERTICAL TAMAÑO CARTA CON LAS 26 FILAS EXACTAS
+    // MOTOR DE PDF VERTICAL A ANCHO COMPLETO (1020px / 26 FILAS)
     function generarArchivoPDFDesdeObjeto(datos) {
       const numStr = String(datos.consecutivo || 1).padStart(3, "0");
       document.getElementById("pdf-numero").textContent = numStr;
@@ -738,7 +738,7 @@
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td style="text-align:center; height:20px;">${idx + 1}</td>
+          <td style="text-align:center; height:22px;">${idx + 1}</td>
           <td>${it.descripcion || ""}</td>
           <td style="text-align:center;">${cant || ""}</td>
           <td style="text-align:right;">${precio ? formatearCOP(precio) : ""}</td>
@@ -747,12 +747,12 @@
         tbodyPdf.appendChild(tr);
       });
 
-      // Rellenar exactamente hasta las 26 filas para que ocupe todo el PDF idéntico a Excel
+      // Rellenar exactamente hasta las 26 filas
       const filasMinimas = 26;
       for (let i = itemsLista.length; i < filasMinimas; i++) {
         const trVacio = document.createElement("tr");
         trVacio.innerHTML = `
-          <td style="text-align:center; height:20px; color:#aaa;">${i + 1}</td>
+          <td style="text-align:center; height:22px; color:#bbb;">${i + 1}</td>
           <td></td><td></td><td></td><td></td>
         `;
         tbodyPdf.appendChild(trVacio);
@@ -775,7 +775,7 @@
         margin:       [4, 4, 4, 4],
         filename:     nombreArchivo,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, width: 794, windowWidth: 794, scrollX: 0, scrollY: 0 },
+        html2canvas:  { scale: 2, useCORS: true, width: 1020, windowWidth: 1020, scrollX: 0, scrollY: 0 },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
