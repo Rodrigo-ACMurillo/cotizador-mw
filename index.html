@@ -727,6 +727,9 @@
       const tbodyPdf = document.getElementById("pdf-tbody-items");
       tbodyPdf.innerHTML = "";
 
+      // Alto de cada fila de productos en el PDF (antes 15px). Súbelo o bájalo aquí si lo quieres distinto.
+      const ALTO_FILA_PDF = 24;
+
       let subtotal = 0;
       const itemsLista = Array.isArray(datos.items) && datos.items.length > 0
         ? datos.items
@@ -740,7 +743,7 @@
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td style="text-align:center; height:15px;">${idx + 1}</td>
+          <td style="text-align:center; height:${ALTO_FILA_PDF}px;">${idx + 1}</td>
           <td>${it.descripcion || ""}</td>
           <td style="text-align:center;">${cant || ""}</td>
           <td style="text-align:right;">${precio ? formatearCOP(precio) : ""}</td>
@@ -754,7 +757,7 @@
       for (let i = itemsLista.length; i < filasMinimas; i++) {
         const trVacio = document.createElement("tr");
         trVacio.innerHTML = `
-          <td style="text-align:center; height:15px; color:#aaa;">${i + 1}</td>
+          <td style="text-align:center; height:${ALTO_FILA_PDF}px; color:#aaa;">${i + 1}</td>
           <td></td><td></td><td></td><td></td>
         `;
         tbodyPdf.appendChild(trVacio);
