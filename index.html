@@ -64,7 +64,7 @@
       border: 1px solid var(--borde-celda);
     }
 
-    /* Banner de Modo Edición (CRUD Update) */
+    /* Banner de Modo Edición */
     .edit-banner {
       display: none;
       background-color: #fff3cd;
@@ -78,9 +78,7 @@
       gap: 10px;
       flex-wrap: wrap;
     }
-    .edit-banner.active {
-      display: flex;
-    }
+    .edit-banner.active { display: flex; }
 
     /* Barra de Macros */
     .macro-toolbar {
@@ -111,47 +109,49 @@
       justify-content: center;
       gap: 6px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-      transition: transform 0.1s;
     }
-    .btn-macro:active { transform: scale(0.98); }
     .btn-orange { background-color: #e67e22; }
     .btn-purple { background-color: #6c3483; }
     .btn-blue   { background-color: #2980b9; }
     .btn-red    { background-color: #c0392b; }
     .btn-green  { background-color: #27ae60; }
 
-    /* Botones CRUD dentro de la tabla de Control */
+    /* Botones CRUD en Control_Cotizaciones */
     .crud-actions {
       display: flex;
-      gap: 6px;
+      gap: 5px;
       justify-content: center;
       align-items: center;
+      flex-wrap: wrap;
     }
     .btn-crud {
       border: 1px solid #ccc;
-      padding: 5px 9px;
+      padding: 5px 8px;
       border-radius: 4px;
       font-size: 12px;
       font-weight: bold;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
+    }
+    .btn-crud-pdf {
+      background-color: #fff3e0;
+      color: #e65100;
+      border-color: #ffb74d;
     }
     .btn-crud-edit {
       background-color: #e8f4fd;
       color: #0d47a1;
       border-color: #90caf9;
     }
-    .btn-crud-edit:hover { background-color: #bbdefb; }
     .btn-crud-del {
       background-color: #fdecea;
       color: #b71c1c;
       border-color: #f5c6cb;
     }
-    .btn-crud-del:hover { background-color: #f8d7da; }
 
-    /* Cuadrícula tipo Excel (Escritorio y PDF) */
+    /* Cuadrícula tipo Excel */
     .excel-grid {
       width: 100%;
       border-collapse: collapse;
@@ -165,7 +165,7 @@
 
     .empresa-box {
       text-align: center;
-      width: 34%;
+      width: 32%;
     }
     .logo-container img {
       max-height: 80px;
@@ -205,7 +205,6 @@
       user-select: none;
     }
 
-    /* Colores Corporativos */
     .bg-verde-claro { background-color: var(--verde-header); }
     .bg-azul-header {
       background-color: var(--azul-tabla);
@@ -213,7 +212,7 @@
       text-align: center;
     }
 
-    /* Dashboard KPIs Responsivo */
+    /* Dashboard KPIs */
     .kpi-grid-container {
       display: grid;
       grid-template-columns: repeat(5, 1fr) 180px;
@@ -224,9 +223,7 @@
       display: flex;
       flex-direction: column;
     }
-    .kpi-card:last-child {
-      border-right: none;
-    }
+    .kpi-card:last-child { border-right: none; }
     .kpi-title {
       background-color: var(--morado-kpi);
       font-weight: bold;
@@ -269,7 +266,6 @@
     .estado-Aprobada  { background-color: #c6efce; color: #006100; }
     .estado-Rechazada { background-color: #ffc7ce; color: #9c0006; }
 
-    /* Enlace WhatsApp */
     .wa-link {
       color: #111;
       text-decoration: none;
@@ -278,12 +274,8 @@
       align-items: center;
       gap: 4px;
     }
-    .wa-link:hover {
-      text-decoration: underline;
-      color: #128c7e;
-    }
 
-    /* Barra Inferior de Pestañas (Hojas de Excel) */
+    /* Pestañas inferiores */
     .excel-tabs-bar {
       position: fixed;
       bottom: 0;
@@ -324,30 +316,40 @@
     .sheet-view.active { display: block; }
 
     /* =========================================================
-       MODO FORZADO A4 PARA EXPORTAR PDF (Ignora el celular)
+       LIENZO FANTASMA FIJO EN FORMATO CARTA VERTICAL (PORTRAIT)
        ========================================================= */
-    .generating-pdf {
-      width: 980px !important;
-      max-width: 980px !important;
-      margin: 0 !important;
-      padding: 15px !important;
-      background: white !important;
-      border: none !important;
-      box-shadow: none !important;
+    #contenedor-fantasma-pdf {
+      position: fixed;
+      left: -9999px;
+      top: 0;
+      width: 790px;
+      background: #ffffff;
+      z-index: -1;
     }
-    .generating-pdf .no-pdf {
-      display: none !important;
+    .pdf-sheet {
+      width: 790px;
+      padding: 15px;
+      background: #ffffff;
+      color: #000;
+    }
+    .pdf-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    .pdf-table td, .pdf-table th {
+      border: 1px solid #555555;
+      padding: 5px 7px;
+      font-size: 12px;
+      vertical-align: middle;
+      word-wrap: break-word;
     }
 
     /* =========================================================
-       DISEÑO RESPONSIVO (CELULARES Y TABLETS VERTICALES)
+       DISEÑO RESPONSIVO EN PANTALLA (MÓVIL / TABLET)
        ========================================================= */
     @media screen and (max-width: 850px) {
-      .workspace {
-        margin: 0;
-        border: none;
-        box-shadow: none;
-      }
+      .workspace { margin: 0; border: none; box-shadow: none; }
 
       .macro-toolbar {
         flex-direction: column;
@@ -359,47 +361,30 @@
         grid-template-columns: 1fr 1fr;
         gap: 8px;
       }
-      .macro-buttons .btn-red {
-        grid-column: span 2;
-      }
-      .btn-macro {
-        width: 100%;
-        padding: 12px 10px;
-        font-size: 13px;
-      }
+      .macro-buttons .btn-red { grid-column: span 2; }
+      .btn-macro { width: 100%; padding: 12px 10px; font-size: 13px; }
 
-      #area-impresion-pdf:not(.generating-pdf) {
-        padding: 10px !important;
-      }
-
-      #area-impresion-pdf:not(.generating-pdf) .tabla-encabezado,
-      #area-impresion-pdf:not(.generating-pdf) .tabla-encabezado tbody,
-      #area-impresion-pdf:not(.generating-pdf) .tabla-encabezado tr,
-      #area-impresion-pdf:not(.generating-pdf) .tabla-encabezado td {
+      .formulario-pantalla .tabla-encabezado,
+      .formulario-pantalla .tabla-encabezado tbody,
+      .formulario-pantalla .tabla-encabezado tr,
+      .formulario-pantalla .tabla-encabezado td {
         display: block;
         width: 100% !important;
       }
-
-      #area-impresion-pdf:not(.generating-pdf) .tabla-encabezado tr {
+      .formulario-pantalla .tabla-encabezado tr {
         margin-bottom: 6px;
         border: 1px solid var(--borde-celda);
         border-radius: 6px;
         overflow: hidden;
       }
-
-      #area-impresion-pdf:not(.generating-pdf) .tabla-encabezado td {
+      .formulario-pantalla .tabla-encabezado td {
         border: none;
         border-bottom: 1px solid #ddd;
         text-align: left !important;
         padding: 8px 10px;
       }
-
-      #area-impresion-pdf:not(.generating-pdf) .empresa-box {
-        text-align: center !important;
-        background: #fff;
-      }
-
-      #area-impresion-pdf:not(.generating-pdf) .cell-input {
+      .formulario-pantalla .empresa-box { text-align: center !important; background: #fff; }
+      .formulario-pantalla .cell-input {
         font-size: 16px;
         padding: 6px 4px;
         background: #fafafa;
@@ -407,29 +392,23 @@
         border-radius: 4px;
       }
 
-      /* Tabla de Productos convertida en Tarjetas en Móvil */
-      #area-impresion-pdf:not(.generating-pdf) #tabla-items thead {
-        display: none;
-      }
-      #area-impresion-pdf:not(.generating-pdf) #tabla-items,
-      #area-impresion-pdf:not(.generating-pdf) #tabla-items tbody,
-      #area-impresion-pdf:not(.generating-pdf) #tabla-items tfoot,
-      #area-impresion-pdf:not(.generating-pdf) #tabla-items tr,
-      #area-impresion-pdf:not(.generating-pdf) #tabla-items td {
+      .formulario-pantalla #tabla-items thead { display: none; }
+      .formulario-pantalla #tabla-items,
+      .formulario-pantalla #tabla-items tbody,
+      .formulario-pantalla #tabla-items tfoot,
+      .formulario-pantalla #tabla-items tr,
+      .formulario-pantalla #tabla-items td {
         display: block;
         width: 100% !important;
       }
-
-      #area-impresion-pdf:not(.generating-pdf) #tbody-items tr {
+      .formulario-pantalla #tbody-items tr {
         background: #fff;
         border: 2px solid var(--verde-corporativo);
         border-radius: 8px;
         margin-bottom: 12px;
         padding: 6px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.06);
       }
-
-      #area-impresion-pdf:not(.generating-pdf) #tbody-items td {
+      .formulario-pantalla #tbody-items td {
         border: none;
         border-bottom: 1px solid #eee;
         display: flex;
@@ -438,12 +417,8 @@
         padding: 6px 8px;
         text-align: right !important;
       }
-      #area-impresion-pdf:not(.generating-pdf) #tbody-items td:last-child {
-        border-bottom: none;
-        justify-content: flex-end;
-      }
-
-      #area-impresion-pdf:not(.generating-pdf) #tbody-items td::before {
+      .formulario-pantalla #tbody-items td:last-child { border-bottom: none; justify-content: flex-end; }
+      .formulario-pantalla #tbody-items td::before {
         content: attr(data-label);
         font-weight: bold;
         color: #333;
@@ -451,29 +426,18 @@
         margin-right: 10px;
         min-width: 110px;
       }
-
-      #area-impresion-pdf:not(.generating-pdf) #tabla-items tfoot tr {
+      .formulario-pantalla #tabla-items tfoot tr {
         border: 1px solid var(--borde-celda);
         margin-bottom: 6px;
         border-radius: 6px;
         overflow: hidden;
       }
 
-      /* KPIs y Tabla de Control en Móvil */
-      .kpi-grid-container {
-        grid-template-columns: 1fr 1fr;
-      }
-      .kpi-card {
-        border-bottom: 1px solid var(--borde-celda);
-      }
-      .kpi-actions {
-        grid-column: span 2;
-        flex-direction: row;
-      }
+      .kpi-grid-container { grid-template-columns: 1fr 1fr; }
+      .kpi-card { border-bottom: 1px solid var(--borde-celda); }
+      .kpi-actions { grid-column: span 2; flex-direction: row; }
 
-      .tabla-historial thead {
-        display: none;
-      }
+      .tabla-historial thead { display: none; }
       .tabla-historial,
       .tabla-historial tbody,
       .tabla-historial tr,
@@ -506,39 +470,32 @@
         color: #444;
         text-align: left;
       }
-      .tabla-historial .estado-select {
-        max-width: 160px;
-        font-size: 14px;
-      }
+      .tabla-historial .estado-select { max-width: 160px; font-size: 14px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Barra superior de estado -->
-  <div class="topbar no-pdf">
+  <!-- Barra superior -->
+  <div class="topbar">
     <div><strong>Soluciones Integrales M.W. S.A.S.</strong></div>
     <div id="conexion-status" class="status-badge">🟢 En línea (Sincronizado)</div>
   </div>
 
-  <!-- =========================================================
-       HOJA 1: COTIZACIÓN (Formulario de creación, edición y PDF)
-       ========================================================= -->
+  <!-- HOJA 1: COTIZACIÓN -->
   <div id="vista-cotizacion" class="workspace sheet-view active">
     
-    <!-- Aviso de Modo Edición (CRUD) -->
-    <div id="banner-edicion" class="edit-banner no-pdf">
+    <div id="banner-edicion" class="edit-banner">
       <span id="texto-banner-edicion">✏️ Editando Cotización N° 001</span>
       <button class="btn-crud btn-crud-del" onclick="cancelarModoEdicion()">
         ✕ Cancelar edición y crear nueva
       </button>
     </div>
 
-    <!-- Barra de Macros -->
-    <div class="macro-toolbar no-pdf">
+    <div class="macro-toolbar">
       <div class="macro-buttons">
-        <button class="btn-macro btn-orange" onclick="exportarCotizacionPDF()">
-          📄 EXPORTAR A PDF
+        <button class="btn-macro btn-orange" onclick="exportarCotizacionActualPDF()">
+          📄 EXPORTAR A PDF (CARTA)
         </button>
         <button id="btn-guardar-principal" class="btn-macro btn-purple" onclick="guardarCotizacion()">
           💾 GUARDAR HISTORIAL
@@ -554,10 +511,7 @@
       </div>
     </div>
 
-    <!-- Área imprimible del PDF -->
-    <div id="area-impresion-pdf" style="padding: 15px;">
-      
-      <!-- Encabezado Superior Idéntico al Excel -->
+    <div class="formulario-pantalla" style="padding: 15px;">
       <table class="excel-grid tabla-encabezado">
         <tr>
           <td rowspan="4" class="empresa-box">
@@ -610,7 +564,6 @@
 
       <br />
 
-      <!-- Tabla de Productos -->
       <table class="excel-grid" id="tabla-items">
         <thead>
           <tr class="bg-azul-header">
@@ -619,12 +572,10 @@
             <th style="width: 12%;">CANTIDAD</th>
             <th style="width: 16%;">PRECIO UNITARIO (COP)</th>
             <th style="width: 16%;">TOTAL (COP) 🔒</th>
-            <th class="no-pdf" style="width: 4%;"></th>
+            <th style="width: 4%;"></th>
           </tr>
         </thead>
-        <tbody id="tbody-items">
-          <!-- Se generan dinámicamente -->
-        </tbody>
+        <tbody id="tbody-items"></tbody>
         <tfoot>
           <tr>
             <td colspan="2" rowspan="3" style="vertical-align: top;">
@@ -633,38 +584,33 @@
             </td>
             <td colspan="2" class="bg-azul-header" style="text-align:right;">SUBTOTAL:</td>
             <td class="cell-readonly" style="text-align:right;" id="cot-subtotal">$ 0,00</td>
-            <td class="no-pdf"></td>
+            <td></td>
           </tr>
           <tr>
             <td colspan="2" class="bg-azul-header" style="text-align:right;">
               IVA (%): <input type="number" id="cot-iva-porcentaje" value="0" min="0" max="100" style="width:55px; text-align:center; font-size:14px;" oninput="recalcularTotales()" />
             </td>
             <td class="cell-readonly" style="text-align:right;" id="cot-iva-valor">$ 0,00</td>
-            <td class="no-pdf"></td>
+            <td></td>
           </tr>
           <tr>
             <td colspan="2" class="bg-azul-header" style="text-align:right; font-size:14px;">TOTAL COTIZACIÓN:</td>
             <td class="cell-readonly" style="text-align:right; font-size:16px; background:#d9ead3;" id="cot-total-general">$ 0,00</td>
-            <td class="no-pdf"></td>
+            <td></td>
           </tr>
         </tfoot>
       </table>
-
     </div>
   </div>
 
-  <!-- =========================================================
-       HOJA 2: CONTROL_COTIZACIONES (Historial, KPIs, WhatsApp y CRUD)
-       ========================================================= -->
+  <!-- HOJA 2: CONTROL_COTIZACIONES -->
   <div id="vista-control" class="workspace sheet-view">
     
-    <!-- Encabezado Responsivo de Control -->
     <div style="background: var(--verde-header); padding: 14px; text-align: center; border-bottom: 1px solid var(--borde-celda);">
       <div style="font-size: 19px; font-weight: bold; color: #111;">Control de Consecutivos de Cotizaciones</div>
       <div style="font-size: 12px; color: var(--verde-corporativo); font-weight: bold;">Soluciones Integrales M.W. S.A.S. — Crra. 68 #1 - 26, Barrio El Cambio, Buenaventura</div>
     </div>
 
-    <!-- Mini-Dashboard Financiero Responsivo -->
     <div class="kpi-grid-container">
       <div class="kpi-card">
         <div class="kpi-title">Dinero Pendiente</div>
@@ -696,7 +642,6 @@
       </div>
     </div>
 
-    <!-- Buscador y Segmentador Rápido -->
     <div class="bg-verde-claro" style="padding: 10px 14px; border-bottom: 1px solid var(--borde-celda); display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
       <strong>🔍 Buscar:</strong>
       <input type="text" id="filtro-cliente" placeholder="Nombre o cédula..." oninput="renderizarTablaControl()" style="padding:8px 10px; border:1px solid #888; border-radius:4px; flex:1; min-width:160px; font-size:15px;" />
@@ -709,19 +654,18 @@
       </select>
     </div>
 
-    <!-- Tabla de Historial con Controles CRUD -->
     <table class="excel-grid tabla-historial">
       <thead>
         <tr class="bg-azul-header">
-          <th style="width: 8%;">No. Cotización</th>
-          <th style="width: 10%;">Fecha</th>
-          <th style="width: 19%;">Nombre Cliente</th>
+          <th style="width: 7%;">No. Cot.</th>
+          <th style="width: 9%;">Fecha</th>
+          <th style="width: 18%;">Nombre Cliente</th>
           <th style="width: 11%;">Cédula</th>
-          <th style="width: 11%;">Celular</th>
+          <th style="width: 10%;">Celular</th>
           <th style="width: 13%;">Valor Total</th>
           <th style="width: 10%;">Estado</th>
-          <th style="width: 10%;">Enviar a Whatsapp</th>
-          <th style="width: 8%;">Acciones (CRUD)</th>
+          <th style="width: 9%;">WhatsApp</th>
+          <th style="width: 13%;">Acciones / PDF</th>
         </tr>
       </thead>
       <tbody id="tbody-control">
@@ -733,8 +677,96 @@
 
   </div>
 
+  <!-- =========================================================
+       PLANTILLA FANTASMA VERTICAL TAMAÑO CARTA (PORTRAIT)
+       ========================================================= -->
+  <div id="contenedor-fantasma-pdf">
+    <div id="lienzo-pdf-excel" class="pdf-sheet">
+      <table class="pdf-table">
+        <tr>
+          <td rowspan="4" style="width:32%; text-align:center;">
+            <div class="logo-container">
+              <img src="logo.png" alt="Logo M.W." onerror="this.style.display='none'; document.getElementById('logo-pdf-fallback').style.display='block';" />
+              <div id="logo-pdf-fallback" style="display:none; font-size:30px;">🌱☀️</div>
+            </div>
+            <div class="empresa-nombre" style="font-size: 13px;">Soluciones Integrales M.W. S.A.S.</div>
+            <div class="empresa-lema" style="font-size: 10px;">Energía que transforma el campo</div>
+          </td>
+          <td colspan="2" class="bg-verde-claro" style="width:36%; text-align:center; font-size:15px; font-weight:bold;">
+            COTIZACIÓN COMERCIAL
+          </td>
+          <td class="bg-azul-header" style="width:15%;">COTIZACIÓN N°</td>
+          <td class="cell-readonly" style="width:17%; text-align:center; font-size:14px; color:#c0392b;" id="pdf-numero">001</td>
+        </tr>
+        <tr>
+          <td class="bg-azul-header" style="width:14%;">Fecha:</td>
+          <td style="width:22%;" id="pdf-fecha"></td>
+          <td class="bg-azul-header" style="width:15%;">Válida hasta:</td>
+          <td style="width:17%;" id="pdf-valida"></td>
+        </tr>
+        <tr>
+          <td class="bg-azul-header">Cliente:</td>
+          <td id="pdf-cliente" style="font-weight:bold;"></td>
+          <td class="bg-azul-header">NIT / C.C.:</td>
+          <td id="pdf-documento"></td>
+        </tr>
+        <tr>
+          <td class="bg-azul-header">Celular:</td>
+          <td id="pdf-celular"></td>
+          <td class="bg-azul-header">Dir / Email:</td>
+          <td id="pdf-direccion"></td>
+        </tr>
+        <tr>
+          <td style="text-align:center; font-size:10px;">Doc: 123 4567 8901</td>
+          <td colspan="4" rowspan="3" class="bg-verde-claro" style="font-size:11px; padding:6px;">
+            <strong>Propuesta Técnica y Económica:</strong> Detalle de equipos, insumos y/o servicios cotizados.
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align:center; font-size:10px;">Crra. 68 #1-26, El Cambio, Buenaventura</td>
+        </tr>
+        <tr>
+          <td style="text-align:center; font-size:10px;">integralesmw@gmail.com | 314 573 5259</td>
+        </tr>
+      </table>
+
+      <div style="height: 8px;"></div>
+
+      <table class="pdf-table">
+        <thead>
+          <tr class="bg-azul-header">
+            <th style="width: 7%;">#</th>
+            <th style="width: 47%;">DESCRIPCIÓN / DESCRIPTION</th>
+            <th style="width: 12%;">CANTIDAD</th>
+            <th style="width: 17%;">VALOR UNITARIO</th>
+            <th style="width: 17%;">TOTAL (COP)</th>
+          </tr>
+        </thead>
+        <tbody id="pdf-tbody-items"></tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2" rowspan="3" style="vertical-align: top; font-size: 11px;">
+              <strong>OBSERVACIONES:</strong>
+              <div id="pdf-observaciones" style="margin-top:2px; white-space:pre-wrap;"></div>
+            </td>
+            <td colspan="2" class="bg-azul-header" style="text-align:right;">SUBTOTAL:</td>
+            <td class="cell-readonly" style="text-align:right;" id="pdf-subtotal">$ 0,00</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="bg-azul-header" style="text-align:right;" id="pdf-iva-label">IVA (0%):</td>
+            <td class="cell-readonly" style="text-align:right;" id="pdf-iva-valor">$ 0,00</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="bg-azul-header" style="text-align:right; font-size:12.5px;">TOTAL:</td>
+            <td class="cell-readonly" style="text-align:right; font-size:13.5px; background:#d9ead3;" id="pdf-total-general">$ 0,00</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
   <!-- Barra Inferior de Pestañas -->
-  <div class="excel-tabs-bar no-pdf">
+  <div class="excel-tabs-bar">
     <div id="tab-cotizacion" class="sheet-tab active" onclick="cambiarPestana('cotizacion')">
       📑 Cotización
     </div>
@@ -743,9 +775,7 @@
     </div>
   </div>
 
-  <!-- =========================================================
-       LÓGICA JAVASCRIPT + CRUD FIREBASE OFFLINE
-       ========================================================= -->
+  <!-- LÓGICA JAVASCRIPT -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
     import { 
@@ -761,9 +791,6 @@
       orderBy 
     } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-    // =========================================================================
-    // PEGA AQUÍ TUS CREDENCIALES DE FIREBASE
-    // =========================================================================
     const firebaseConfig = {
         apiKey: "AIzaSyAiMACeB4GnB1ycj5L5C0BJCHSXnx1kTIE",
         authDomain: "cotizador-mw-sas.firebaseapp.com",
@@ -778,17 +805,13 @@
     let usarFirebase = firebaseConfig.apiKey !== "REEMPLAZAR_CON_TU_API_KEY";
     let listaCotizaciones = [];
     let totalActualNumerico = 0;
-    let cotizacionEditandoId = null; // Guarda el ID cuando se está editando una cotización existente
+    let cotizacionEditandoId = null;
 
     if (usarFirebase) {
       try {
         const app = initializeApp(firebaseConfig);
         db = getFirestore(app);
-
-        enableIndexedDbPersistence(db).catch((err) => {
-          console.warn("Persistencia offline aviso:", err.code);
-        });
-
+        enableIndexedDbPersistence(db).catch(() => {});
         const q = query(collection(db, "cotizaciones"), orderBy("consecutivo", "asc"));
         onSnapshot(q, (snapshot) => {
           listaCotizaciones = [];
@@ -799,36 +822,24 @@
           renderizarTablaControl();
         });
       } catch (e) {
-        console.error("Error iniciando Firebase:", e);
+        console.error(e);
       }
     } else {
-      document.getElementById("conexion-status").innerHTML = "⚠️ Modo Local (Configurar Firebase)";
+      document.getElementById("conexion-status").innerHTML = "⚠️ Modo Local";
       listaCotizaciones = JSON.parse(localStorage.getItem("cotizaciones_mw") || "[]");
       actualizarConsecutivoAutomatico();
       renderizarTablaControl();
     }
 
-    window.addEventListener("online", () => {
-      if (usarFirebase) document.getElementById("conexion-status").innerHTML = "🟢 En línea (Sincronizado)";
-    });
-    window.addEventListener("offline", () => {
-      document.getElementById("conexion-status").innerHTML = "🟠 Sin señal (Guardando en Tablet)";
-    });
-
     function formatearCOP(valor) {
-      return "$ " + Number(valor || 0).toLocaleString("es-CO", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
+      return "$ " + Number(valor || 0).toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     function actualizarConsecutivoAutomatico() {
       const maxNum = listaCotizaciones.reduce((max, item) => Math.max(max, Number(item.consecutivo) || 0), 0);
-      const siguiente = maxNum + 1;
-      document.getElementById("cot-numero").textContent = String(siguiente).padStart(3, "0");
+      document.getElementById("cot-numero").textContent = String(maxNum + 1).padStart(3, "0");
     }
 
-    // Agregar fila de producto
     window.agregarFilaProducto = function(descripcion = "", cantidad = "", precio = "") {
       const tbody = document.getElementById("tbody-items");
       const numFila = tbody.children.length + 1;
@@ -839,8 +850,8 @@
         <td data-label="Cantidad"><input type="number" class="cell-input item-cant" value="${cantidad}" min="0" step="any" style="text-align:center;" oninput="recalcularTotales()" /></td>
         <td data-label="Precio Unit."><input type="number" class="cell-input item-precio" value="${precio}" min="0" step="any" style="text-align:right;" oninput="recalcularTotales()" /></td>
         <td data-label="Total 🔒" class="cell-readonly item-total" style="text-align:right;">$ 0,00</td>
-        <td class="no-pdf" style="text-align:center;">
-          <button onclick="eliminarFila(this)" style="border:none; background:#fee2e2; color:#c0392b; padding:4px 8px; border-radius:4px; cursor:pointer; font-weight:bold;">✕ Quitar</button>
+        <td style="text-align:center;">
+          <button onclick="eliminarFila(this)" style="border:none; background:#fee2e2; color:#c0392b; padding:4px 8px; border-radius:4px; cursor:pointer; font-weight:bold;">✕</button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -860,8 +871,7 @@
 
     window.recalcularTotales = function() {
       let subtotal = 0;
-      const filas = document.querySelectorAll("#tbody-items tr");
-      filas.forEach((fila) => {
+      document.querySelectorAll("#tbody-items tr").forEach((fila) => {
         const cant = parseFloat(fila.querySelector(".item-cant").value) || 0;
         const precio = parseFloat(fila.querySelector(".item-precio").value) || 0;
         const totalFila = cant * precio;
@@ -878,35 +888,107 @@
       document.getElementById("cot-total-general").textContent = formatearCOP(totalActualNumerico);
     };
 
-    // Exportar a PDF
-    window.exportarCotizacionPDF = function() {
-      const consecutivo = document.getElementById("cot-numero").textContent.trim();
-      const cliente = document.getElementById("cot-cliente").value.trim() || "Cliente";
-      const nombreArchivo = `Cotizacion_${consecutivo}_${cliente.replace(/\s+/g, "_")}.pdf`;
+    // MOTOR DE PDF VERTICAL (PORTRAIT - TAMAÑO CARTA)
+    function generarArchivoPDFDesdeObjeto(datos) {
+      const numStr = String(datos.consecutivo || 1).padStart(3, "0");
+      document.getElementById("pdf-numero").textContent = numStr;
+      document.getElementById("pdf-fecha").textContent = datos.fecha || "";
+      document.getElementById("pdf-valida").textContent = datos.validaHasta ? datos.validaHasta.split("-").reverse().join("/") : "";
+      document.getElementById("pdf-cliente").textContent = datos.cliente || "";
+      document.getElementById("pdf-documento").textContent = datos.cedula || "";
+      document.getElementById("pdf-celular").textContent = datos.celular || "";
+      document.getElementById("pdf-direccion").textContent = datos.direccion || "";
+      document.getElementById("pdf-observaciones").textContent = datos.observaciones || "";
 
-      const elemento = document.getElementById("area-impresion-pdf");
-      elemento.classList.add("generating-pdf");
+      const tbodyPdf = document.getElementById("pdf-tbody-items");
+      tbodyPdf.innerHTML = "";
 
+      let subtotal = 0;
+      const itemsLista = Array.isArray(datos.items) && datos.items.length > 0
+        ? datos.items
+        : [{ descripcion: "Servicios / Equipos cotizados", cantidad: 1, precio: datos.valorTotal || 0 }];
+
+      itemsLista.forEach((it, idx) => {
+        const cant = Number(it.cantidad) || 0;
+        const precio = Number(it.precio) || 0;
+        const totalFila = cant * precio;
+        subtotal += totalFila;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td style="text-align:center;">${idx + 1}</td>
+          <td>${it.descripcion || ""}</td>
+          <td style="text-align:center;">${cant || ""}</td>
+          <td style="text-align:right;">${precio ? formatearCOP(precio) : ""}</td>
+          <td class="cell-readonly" style="text-align:right;">${formatearCOP(totalFila)}</td>
+        `;
+        tbodyPdf.appendChild(tr);
+      });
+
+      const porcIva = Number(datos.ivaPorcentaje) || 0;
+      const valorIva = subtotal * (porcIva / 100);
+      const totalGen = subtotal + valorIva;
+
+      document.getElementById("pdf-subtotal").textContent = formatearCOP(subtotal);
+      document.getElementById("pdf-iva-label").textContent = `IVA (${porcIva}%):`;
+      document.getElementById("pdf-iva-valor").textContent = formatearCOP(valorIva);
+      document.getElementById("pdf-total-general").textContent = formatearCOP(totalGen);
+
+      const clienteLimpio = (datos.cliente || "Cliente").trim().replace(/\s+/g, "_");
+      const nombreArchivo = `Cotizacion_${numStr}_${clienteLimpio}.pdf`;
+
+      const lienzo = document.getElementById("lienzo-pdf-excel");
       const opciones = {
-        margin:       8,
+        margin:       [6, 6, 6, 6],
         filename:     nombreArchivo,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, windowWidth: 1050 },
+        html2canvas:  { scale: 2, useCORS: true, width: 790, windowWidth: 790, scrollX: 0, scrollY: 0 },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      html2pdf().set(opciones).from(elemento).save().then(() => {
-        elemento.classList.remove("generating-pdf");
+      html2pdf().set(opciones).from(lienzo).save();
+    }
+
+    window.exportarCotizacionActualPDF = function() {
+      const consecutivoNum = parseInt(document.getElementById("cot-numero").textContent, 10) || 1;
+      const fechaISO = document.getElementById("cot-fecha").value;
+      const fechaFormateada = fechaISO ? fechaISO.split("-").reverse().join("/") : new Date().toLocaleDateString("es-CO");
+
+      const itemsActuales = [];
+      document.querySelectorAll("#tbody-items tr").forEach((fila) => {
+        const desc = fila.querySelector(".item-desc").value.trim();
+        const cant = parseFloat(fila.querySelector(".item-cant").value) || 0;
+        const precio = parseFloat(fila.querySelector(".item-precio").value) || 0;
+        if (desc !== "" || cant > 0 || precio > 0) {
+          itemsActuales.push({ descripcion: desc, cantidad: cant, precio: precio });
+        }
+      });
+
+      generarArchivoPDFDesdeObjeto({
+        consecutivo: consecutivoNum,
+        fecha: fechaFormateada,
+        validaHasta: document.getElementById("cot-valida").value,
+        cliente: document.getElementById("cot-cliente").value.trim() || "Cliente",
+        cedula: document.getElementById("cot-documento").value.trim(),
+        celular: document.getElementById("cot-celular").value.trim(),
+        direccion: document.getElementById("cot-direccion").value.trim(),
+        observaciones: document.getElementById("cot-observaciones").value.trim(),
+        ivaPorcentaje: parseFloat(document.getElementById("cot-iva-porcentaje").value) || 0,
+        items: itemsActuales,
+        valorTotal: totalActualNumerico
       });
     };
 
-    // =========================================================================
-    // CRUD 1 & 2: CREAR NUEVA COTIZACIÓN O ACTUALIZAR EXISTENTE
-    // =========================================================================
+    window.descargarPDFDesdeHistorial = function(id) {
+      const cot = listaCotizaciones.find(c => c.id === id);
+      if (!cot) return;
+      generarArchivoPDFDesdeObjeto(cot);
+    };
+
     window.guardarCotizacion = async function() {
       const cliente = document.getElementById("cot-cliente").value.trim();
       if (!cliente) {
-        alert("Por favor escribe el nombre del Cliente antes de guardar.");
+        alert("Por favor escribe el nombre del Cliente.");
         return;
       }
 
@@ -914,7 +996,6 @@
       const fechaISO = document.getElementById("cot-fecha").value;
       const fechaFormateada = fechaISO ? fechaISO.split("-").reverse().join("/") : new Date().toLocaleDateString("es-CO");
 
-      // Recolectar todos los ítems de la tabla para poder editarlos después
       const itemsGuardados = [];
       document.querySelectorAll("#tbody-items tr").forEach((fila) => {
         const desc = fila.querySelector(".item-desc").value.trim();
@@ -940,79 +1021,64 @@
         valorTotal: totalActualNumerico
       };
 
-      // Si estamos en MODO EDICIÓN (Update)
       if (cotizacionEditandoId) {
         if (usarFirebase && db) {
           try {
-            const ref = doc(db, "cotizaciones", cotizacionEditandoId);
-            await updateDoc(ref, datosCotizacion);
-            alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} actualizada correctamente.`);
+            await updateDoc(doc(db, "cotizaciones", cotizacionEditandoId), datosCotizacion);
+            alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} actualizada.`);
             cancelarModoEdicion();
-          } catch (err) {
-            alert("Error al actualizar: " + err.message);
-          }
+          } catch (err) { alert("Error: " + err.message); }
         } else {
           const idx = listaCotizaciones.findIndex(c => c.id === cotizacionEditandoId);
           if (idx !== -1) {
             listaCotizaciones[idx] = { ...listaCotizaciones[idx], ...datosCotizacion };
             localStorage.setItem("cotizaciones_mw", JSON.stringify(listaCotizaciones));
             renderizarTablaControl();
-            alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} actualizada correctamente.`);
+            alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} actualizada.`);
             cancelarModoEdicion();
           }
         }
         return;
       }
 
-      // Si es una COTIZACIÓN NUEVA (Create)
       datosCotizacion.estado = "Pendiente";
       datosCotizacion.creadoEn = new Date().toISOString();
 
       if (usarFirebase && db) {
         try {
           addDoc(collection(db, "cotizaciones"), datosCotizacion);
-          alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} guardada exitosamente.`);
-        } catch (err) {
-          alert("Error al guardar: " + err.message);
-        }
+          alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} guardada.`);
+        } catch (err) { alert("Error: " + err.message); }
       } else {
         datosCotizacion.id = "local_" + Date.now();
         listaCotizaciones.push(datosCotizacion);
         localStorage.setItem("cotizaciones_mw", JSON.stringify(listaCotizaciones));
         actualizarConsecutivoAutomatico();
         renderizarTablaControl();
-        alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} guardada en el historial.`);
+        alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} guardada.`);
       }
     };
 
-    // =========================================================================
-    // CRUD 3: CARGAR COTIZACIÓN EN EL FORMULARIO PARA EDITARLA O RE-IMPRIMIR PDF
-    // =========================================================================
     window.editarCotizacion = function(id) {
       const cot = listaCotizaciones.find(c => c.id === id);
       if (!cot) return;
-
       cotizacionEditandoId = cot.id;
 
-      // Mostrar banner de edición y cambiar botón principal
       const numFormateado = String(cot.consecutivo).padStart(3, "0");
-      document.getElementById("texto-banner-edicion").textContent = `✏️ Modo Edición Activo: Modificando Cotización N° ${numFormateado} (${cot.cliente})`;
+      document.getElementById("texto-banner-edicion").textContent = `✏️ Editando N° ${numFormateado} (${cot.cliente})`;
       document.getElementById("banner-edicion").classList.add("active");
 
       const btnGuardar = document.getElementById("btn-guardar-principal");
-      btnGuardar.innerHTML = `💾 ACTUALIZAR COTIZACIÓN #${numFormateado}`;
+      btnGuardar.innerHTML = `💾 ACTUALIZAR #${numFormateado}`;
       btnGuardar.classList.remove("btn-purple");
       btnGuardar.classList.add("btn-blue");
 
-      // Cargar campos del encabezado
       document.getElementById("cot-numero").textContent = numFormateado;
       if (cot.fechaISO) {
         document.getElementById("cot-fecha").value = cot.fechaISO;
       } else if (cot.fecha && cot.fecha.includes("/")) {
         const partes = cot.fecha.split("/");
-        if (partes.length === 3) {
-          document.getElementById("cot-fecha").value = `${partes[2]}-${partes[1].padStart(2, "0")}-${partes[0].padStart(2, "0")}`;
-        }
+        if (partes.length === 3) document.getElementById("cot-fecha").value = `${partes[2]}-${partes[1].padStart(2, "0")}-${partes[0].padStart(2, "0")}`;
       }
       document.getElementById("cot-valida").value = cot.validaHasta || "";
       document.getElementById("cot-cliente").value = cot.cliente || "";
@@ -1022,56 +1088,34 @@
       document.getElementById("cot-observaciones").value = cot.observaciones || "";
       document.getElementById("cot-iva-porcentaje").value = cot.ivaPorcentaje || 0;
 
-      // Cargar filas de productos
       const tbody = document.getElementById("tbody-items");
       tbody.innerHTML = "";
       if (Array.isArray(cot.items) && cot.items.length > 0) {
-        cot.items.forEach(item => {
-          agregarFilaProducto(item.descripcion, item.cantidad, item.precio);
-        });
+        cot.items.forEach(item => agregarFilaProducto(item.descripcion, item.cantidad, item.precio));
       } else {
-        // Si fue una cotización antigua sin detalle de ítems, carga una fila con el valor total
         agregarFilaProducto("Servicios / Equipos según cotización", 1, cot.valorTotal || 0);
       }
-
       recalcularTotales();
       cambiarPestana("cotizacion");
     };
 
-    // Salir del Modo Edición y volver a modo Nueva Cotización
     window.cancelarModoEdicion = function() {
       cotizacionEditandoId = null;
       document.getElementById("banner-edicion").classList.remove("active");
-
       const btnGuardar = document.getElementById("btn-guardar-principal");
       btnGuardar.innerHTML = `💾 GUARDAR HISTORIAL`;
       btnGuardar.classList.remove("btn-blue");
       btnGuardar.classList.add("btn-purple");
-
       limpiarFormularioSinConfirmar();
     };
 
-    // =========================================================================
-    // CRUD 4: ELIMINAR COTIZACIÓN DEL HISTORIAL
-    // =========================================================================
     window.eliminarCotizacion = async function(id) {
       const cot = listaCotizaciones.find(c => c.id === id);
-      const etiqueta = cot ? `N° ${String(cot.consecutivo).padStart(3, "0")} de ${cot.cliente}` : "seleccionada";
-
-      if (!confirm(`⚠️ ¿Estás seguro de que deseas ELIMINAR definitivamente la cotización ${etiqueta}?`)) {
-        return;
-      }
-
-      if (cotizacionEditandoId === id) {
-        cancelarModoEdicion();
-      }
+      if (!confirm(`⚠️ ¿Deseas eliminar esta cotización?`)) return;
+      if (cotizacionEditandoId === id) cancelarModoEdicion();
 
       if (usarFirebase && db) {
-        try {
-          await deleteDoc(doc(db, "cotizaciones", id));
-        } catch (err) {
-          alert("Error al eliminar en Firebase (Verifica que las reglas permitan delete): " + err.message);
-        }
+        try { await deleteDoc(doc(db, "cotizaciones", id)); } catch (err) { alert("Error: " + err.message); }
       } else {
         listaCotizaciones = listaCotizaciones.filter(c => c.id !== id);
         localStorage.setItem("cotizaciones_mw", JSON.stringify(listaCotizaciones));
@@ -1089,7 +1133,6 @@
       document.getElementById("cot-valida").value = "";
       document.getElementById("cot-observaciones").value = "";
       document.getElementById("cot-iva-porcentaje").value = "0";
-
       const tbody = document.getElementById("tbody-items");
       tbody.innerHTML = "";
       for (let i = 0; i < 4; i++) agregarFilaProducto();
@@ -1097,7 +1140,7 @@
     }
 
     window.limpiarCotizacion = function() {
-      if (!confirm("¿Estás seguro de que deseas limpiar todos los datos para iniciar una nueva cotización?")) return;
+      if (!confirm("¿Deseas limpiar todos los datos para una nueva cotización?")) return;
       cancelarModoEdicion();
     };
 
@@ -1108,8 +1151,7 @@
 
     window.cambiarEstadoCotizacion = async function(id, nuevoEstado) {
       if (usarFirebase && db) {
-        const ref = doc(db, "cotizaciones", id);
-        await updateDoc(ref, { estado: nuevoEstado });
+        await updateDoc(doc(db, "cotizaciones", id), { estado: nuevoEstado });
       } else {
         const item = listaCotizaciones.find(c => c.id === id);
         if (item) {
@@ -1120,46 +1162,34 @@
       }
     };
 
-    // Renderizar Tabla Control_Cotizaciones con botones Editar y Eliminar
     window.renderizarTablaControl = function() {
       const tbody = document.getElementById("tbody-control");
       const textoFiltro = (document.getElementById("filtro-cliente")?.value || "").toLowerCase();
       const estadoFiltro = document.getElementById("filtro-estado")?.value || "TODOS";
 
-      let dineroPendiente = 0;
-      let dineroCerrado = 0;
-      let cantAprobadas = 0;
-      let clientesPorLlamar = 0;
+      let dineroPendiente = 0, dineroCerrado = 0, cantAprobadas = 0, clientesPorLlamar = 0;
 
       listaCotizaciones.forEach((c) => {
         const val = Number(c.valorTotal) || 0;
-        if (c.estado === "Pendiente") {
-          dineroPendiente += val;
-          clientesPorLlamar++;
-        } else if (c.estado === "Aprobada") {
-          dineroCerrado += val;
-          cantAprobadas++;
-        }
+        if (c.estado === "Pendiente") { dineroPendiente += val; clientesPorLlamar++; }
+        else if (c.estado === "Aprobada") { dineroCerrado += val; cantAprobadas++; }
       });
 
       const totalCots = listaCotizaciones.length;
-      const tasaExito = totalCots > 0 ? Math.round((cantAprobadas / totalCots) * 100) : 0;
-
       document.getElementById("kpi-pendiente").textContent = formatearCOP(dineroPendiente);
       document.getElementById("kpi-aprobado").textContent = formatearCOP(dineroCerrado);
       document.getElementById("kpi-cant-aprobadas").textContent = cantAprobadas;
       document.getElementById("kpi-por-llamar").textContent = clientesPorLlamar;
-      document.getElementById("kpi-tasa").textContent = tasaExito + "%";
+      document.getElementById("kpi-tasa").textContent = (totalCots > 0 ? Math.round((cantAprobadas / totalCots) * 100) : 0) + "%";
 
       const filtradas = listaCotizaciones.filter((c) => {
-        const coincideTexto = (c.cliente || "").toLowerCase().includes(textoFiltro) ||
-                              (c.cedula || "").toLowerCase().includes(textoFiltro);
+        const coincideTexto = (c.cliente || "").toLowerCase().includes(textoFiltro) || (c.cedula || "").toLowerCase().includes(textoFiltro);
         const coincideEstado = estadoFiltro === "TODOS" || c.estado === estadoFiltro;
         return coincideTexto && coincideEstado;
       });
 
       if (filtradas.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:18px; color:#777;">No hay cotizaciones registradas con ese filtro.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:18px; color:#777;">No hay cotizaciones registradas.</td></tr>`;
         return;
       }
 
@@ -1167,8 +1197,8 @@
       filtradas.forEach((c) => {
         const numLimpio = (c.celular || "").replace(/\D/g, "");
         const linkWa = numLimpio
-          ? `<a class="wa-link" href="https://wa.me/57${numLimpio}?text=${encodeURIComponent('Hola ' + c.cliente + ', te compartimos la cotización N° ' + String(c.consecutivo).padStart(3, '0') + ' de Soluciones Integrales M.W. S.A.S. Quedamos atentos.')}" target="_blank">📲 WhatsApp</a>`
-          : `<span style="color:#999;">Sin celular</span>`;
+          ? `<a class="wa-link" href="https://wa.me/57${numLimpio}?text=${encodeURIComponent('Hola ' + c.cliente + ', te compartimos la cotización N° ' + String(c.consecutivo).padStart(3, '0') + ' de Soluciones Integrales M.W. S.A.S.')}" target="_blank">📲 WhatsApp</a>`
+          : `<span style="color:#999;">Sin cel</span>`;
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
@@ -1188,12 +1218,9 @@
           <td data-label="Contacto">${linkWa}</td>
           <td data-label="Acciones">
             <div class="crud-actions">
-              <button class="btn-crud btn-crud-edit" onclick="editarCotizacion('${c.id}')" title="Cargar para editar o descargar PDF">
-                ✏️ Editar
-              </button>
-              <button class="btn-crud btn-crud-del" onclick="eliminarCotizacion('${c.id}')" title="Eliminar cotización">
-                🗑️
-              </button>
+              <button class="btn-crud btn-crud-pdf" onclick="descargarPDFDesdeHistorial('${c.id}')" title="Descargar PDF">📄 PDF</button>
+              <button class="btn-crud btn-crud-edit" onclick="editarCotizacion('${c.id}')" title="Editar">✏️</button>
+              <button class="btn-crud btn-crud-del" onclick="eliminarCotizacion('${c.id}')" title="Eliminar">🗑️</button>
             </div>
           </td>
         `;
@@ -1202,19 +1229,11 @@
     };
 
     window.exportarHistorialExcel = function() {
-      if (listaCotizaciones.length === 0) {
-        alert("Aún no hay cotizaciones para exportar.");
-        return;
-      }
+      if (listaCotizaciones.length === 0) { alert("No hay datos para exportar."); return; }
       const datosExcel = listaCotizaciones.map(c => ({
-        "No. Cotización": c.consecutivo,
-        "Fecha": c.fecha,
-        "Nombre Cliente": c.cliente,
-        "Cédula": c.cedula,
-        "Celular": c.celular,
-        "Dirección": c.direccion || "",
-        "Valor Total": c.valorTotal,
-        "Estado": c.estado
+        "No. Cotización": c.consecutivo, "Fecha": c.fecha, "Nombre Cliente": c.cliente,
+        "Cédula": c.cedula, "Celular": c.celular, "Dirección": c.direccion || "",
+        "Valor Total": c.valorTotal, "Estado": c.estado
       }));
       const ws = XLSX.utils.json_to_sheet(datosExcel);
       const wb = XLSX.utils.book_new();
@@ -1234,7 +1253,7 @@
     for (let i = 0; i < 4; i++) agregarFilaProducto();
 
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./sw.js").catch(err => console.log("SW aviso:", err));
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
     }
   </script>
 </body>
