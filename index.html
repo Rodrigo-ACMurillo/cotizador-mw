@@ -62,6 +62,120 @@
     }
 
     /* =========================================================
+       SISTEMA DE MODALES Y NOTIFICACIONES CENTRADAS
+       ========================================================= */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 41, 30, 0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-box {
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 28px 26px 24px 26px;
+      text-align: center;
+      box-shadow: 0 24px 48px -12px rgba(15, 41, 30, 0.28);
+      border: 1px solid rgba(15, 41, 30, 0.08);
+      transform: scale(0.92) translateY(10px);
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-overlay.active .modal-box {
+      transform: scale(1) translateY(0);
+    }
+    .modal-icon-circle {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      margin: 0 auto 16px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-icon-circle.success {
+      background: #dcfce7;
+      color: #15803d;
+    }
+    .modal-icon-circle.warning {
+      background: #fef3c7;
+      color: #d97706;
+    }
+    .modal-icon-circle.danger {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+    .modal-icon-circle.info {
+      background: #e0f2fe;
+      color: #0284c7;
+    }
+    .modal-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--texto-principal);
+      margin: 0 0 8px 0;
+    }
+    .modal-message {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--texto-secundario);
+      margin: 0 0 22px 0;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .btn-modal {
+      flex: 1;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s ease;
+    }
+    .btn-modal-cancel {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-modal-cancel:hover {
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+    .btn-modal-confirm {
+      background: var(--verde-oscuro);
+      color: #ffffff;
+    }
+    .btn-modal-confirm:hover {
+      background: var(--verde-oscuro-2);
+    }
+    .btn-modal-confirm.danger {
+      background: #dc2626;
+      color: #ffffff;
+    }
+    .btn-modal-confirm.danger:hover {
+      background: #b91c1c;
+    }
+
+    /* =========================================================
        1. PANTALLA DE LOGIN
        ========================================================= */
     #vista-login {
@@ -203,6 +317,7 @@
       border-radius: var(--radio-sm);
       font-size: 13px;
       margin-bottom: 14px;
+      text-align: center;
     }
     .login-footer {
       margin-top: 18px;
@@ -212,7 +327,7 @@
     }
 
     /* =========================================================
-       2. BARRA SUPERIOR (TOPBAR) Y NAVEGACIÓN
+       2. BARRA SUPERIOR (TOPBAR) Y DATOS DE EMPRESA
        ========================================================= */
     #app-shell.hidden {
       display: none !important;
@@ -235,8 +350,8 @@
       gap: 12px;
     }
     .topbar-left .mw-badge {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       font-size: 13px;
       border-radius: 10px;
     }
@@ -253,6 +368,17 @@
     .brand-subtitle {
       font-size: 12px;
       color: var(--texto-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .company-wa-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--verde-corporativo);
+      font-weight: 600;
     }
 
     .topbar-center {
@@ -397,7 +523,7 @@
     }
 
     /* =========================================================
-       4. LAYOUT DE COTIZACIÓN (2 COLUMNAS EN ESCRITORIO)
+       4. LAYOUT DE COTIZACIÓN (2 COLUMNAS + SCROLL INTELIGENTE)
        ========================================================= */
     .cotizador-layout {
       display: grid;
@@ -412,6 +538,27 @@
       box-shadow: var(--sombra-card);
       border: 1px solid var(--borde-suave);
       padding: 26px;
+    }
+
+    /* Cinta informativa de la empresa dentro de la cotización */
+    .empresa-info-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--borde-suave);
+      border-radius: var(--radio-sm);
+      padding: 10px 14px;
+      margin-bottom: 22px;
+      font-size: 12.5px;
+      color: var(--texto-secundario);
+    }
+    .empresa-info-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .section-title {
@@ -432,12 +579,48 @@
       margin-bottom: 24px;
     }
 
-    /* Sección de Ítems */
+    /* Sección de Ítems con Contador y Control de Scroll */
     .items-header-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .items-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .items-count-badge {
+      background: var(--bg-subtle);
+      color: var(--verde-oscuro);
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--borde-suave);
+    }
+    .items-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-toggle-scroll {
+      background: #ffffff;
+      border: 1px solid var(--borde-input);
+      color: var(--texto-secundario);
+      padding: 7px 11px;
+      border-radius: var(--radio-sm);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-toggle-scroll:hover {
+      background: #f8fafc;
+      color: var(--texto-principal);
     }
     .btn-add-item {
       background: #ffffff;
@@ -458,36 +641,134 @@
       color: #ffffff;
     }
 
+    /* Contenedor con Scroll Interno para evitar páginas largas con +10 ítems */
+    .items-scroll-container {
+      max-height: 410px;
+      overflow-y: auto;
+      border: 1px solid var(--borde-suave);
+      border-radius: var(--radio-md) var(--radio-md) 0 0;
+      background: #ffffff;
+      scroll-behavior: smooth;
+    }
+    .items-scroll-container.expanded {
+      max-height: none;
+      overflow-y: visible;
+    }
+    .items-scroll-container::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    .items-scroll-container::-webkit-scrollbar-track {
+      background: #f8fafc;
+    }
+    .items-scroll-container::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 999px;
+    }
+    .items-scroll-container::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
     .modern-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 24px;
     }
     .modern-table thead tr {
       background: var(--bg-subtle);
-      border-top: 1px solid var(--borde-suave);
       border-bottom: 1px solid var(--borde-suave);
     }
     .modern-table th {
-      padding: 10px 12px;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: var(--bg-subtle);
+      padding: 10px 10px;
       font-size: 12.5px;
       font-weight: 700;
       color: var(--texto-secundario);
       text-align: left;
+      box-shadow: 0 1px 0 var(--borde-suave);
     }
     .modern-table td {
-      padding: 10px 8px;
+      padding: 8px 8px;
       border-bottom: 1px solid #f1f5f9;
       vertical-align: middle;
       font-size: 14px;
+    }
+    .modern-table tbody tr:last-child td {
+      border-bottom: none;
     }
     .modern-table tbody tr:hover {
       background-color: #fafcfa;
     }
 
+    /* Botón/Chip selector de IVA por fila */
+    .iva-chip-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      user-select: none;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      border: 1px solid var(--borde-input);
+      background: #f8fafc;
+      color: var(--texto-muted);
+      transition: all 0.15s ease;
+    }
+    .iva-chip-label input {
+      margin: 0;
+      width: 13px;
+      height: 13px;
+      accent-color: var(--verde-corporativo);
+      cursor: pointer;
+    }
+    .iva-chip-label.active {
+      background: #dcfce7;
+      border-color: #86efac;
+      color: #15803d;
+    }
+
+    /* Pie rápido debajo de la tabla para agregar ítems sin subir */
+    .items-Bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      background: #f8faf8;
+      border: 1px solid var(--borde-suave);
+      border-top: none;
+      border-radius: 0 0 var(--radio-md) var(--radio-md);
+      margin-bottom: 24px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-add-bottom {
+      background: transparent;
+      border: 1px dashed var(--verde-corporativo);
+      color: var(--verde-corporativo);
+      padding: 6px 14px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-add-bottom:hover {
+      background: #eaf1dd;
+      border-style: solid;
+    }
+    .items-shortcut-hint {
+      font-size: 12px;
+      color: var(--texto-muted);
+    }
+
     .table-input {
       width: 100%;
-      padding: 8px 10px;
+      padding: 7px 10px;
       font-size: 14px;
       color: var(--texto-principal);
       background: transparent;
@@ -508,7 +789,7 @@
     .item-total-display {
       font-weight: 700;
       color: var(--texto-principal);
-      padding: 8px 10px;
+      padding: 7px 6px;
       white-space: nowrap;
     }
     .btn-delete-row {
@@ -568,6 +849,15 @@
       margin-bottom: 12px;
       font-size: 14px;
       color: #e2e8f0;
+    }
+    .summary-subhint {
+      font-size: 11.5px;
+      color: #a7f3d0;
+      opacity: 0.8;
+      margin-top: -6px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
     }
     .iva-control {
       display: inline-flex;
@@ -856,7 +1146,7 @@
     }
 
     /* =========================================================
-       6. PLANTILLA FANTASMA PDF (Aislada, 760px para 1 página)
+       6. PLANTILLA FANTASMA PDF (Aislada, 760px con margen lateral)
        ========================================================= */
     #contenedor-fantasma-pdf {
       position: absolute;
@@ -870,7 +1160,7 @@
     }
     .pdf-sheet {
       width: 760px;
-      padding: 6px;
+      padding: 10px 18px;
       background: #ffffff;
       color: #000;
     }
@@ -893,6 +1183,12 @@
     .pdf-sheet .bg-verde-claro { background-color: var(--verde-header); }
     .pdf-sheet .bg-azul-header { background-color: var(--azul-tabla); font-weight: bold; text-align: center; }
     .pdf-sheet .cell-readonly { background-color: #f4f6f8; font-weight: bold; color: #1f2937; }
+    .pdf-wa-inline {
+      display: inline-flex;
+      align-items: center;
+      vertical-align: middle;
+      gap: 3px;
+    }
 
     /* =========================================================
        7. DISEÑO RESPONSIVO (MÓVIL / TABLET)
@@ -911,7 +1207,7 @@
         grid-template-columns: 1fr;
       }
       .card-panel {
-        padding: 18px 16px;
+        padding: 18px 14px;
       }
       .cliente-grid {
         grid-template-columns: 1fr 1fr;
@@ -921,7 +1217,22 @@
         grid-column: span 2;
       }
 
-      /* Convertir filas de tabla de ítems en Tarjetas limpias (Estilo Propuesta Móvil) */
+      /* Contenedor con scroll interno cómodo también en móvil */
+      .items-scroll-container {
+        max-height: 460px;
+        border: none;
+        background: transparent;
+      }
+      .items-Bottom-bar {
+        border-radius: var(--radio-md);
+        border-top: 1px solid var(--borde-suave);
+        margin-top: 4px;
+      }
+      .items-shortcut-hint {
+        display: none;
+      }
+
+      /* Convertir filas de tabla de ítems en Tarjetas limpias */
       .modern-table thead {
         display: none;
       }
@@ -931,13 +1242,13 @@
       }
       .modern-table tbody tr {
         display: grid;
-        grid-template-columns: 1fr 1.2fr 1.2fr;
+        grid-template-columns: 0.9fr 1.2fr 0.9fr 1.2fr;
         gap: 8px;
         background: #ffffff;
         border: 1px solid var(--borde-input);
         border-radius: 12px;
-        padding: 12px;
-        margin-bottom: 12px;
+        padding: 10px 12px;
+        margin-bottom: 10px;
         position: relative;
         box-shadow: 0 1px 3px rgba(0,0,0,0.03);
       }
@@ -946,9 +1257,8 @@
         padding: 0;
         display: block;
       }
-      /* Número + Descripción arriba ocupando todo el ancho */
       .modern-table tbody td.col-num {
-        grid-column: 1 / 2;
+        grid-column: 1 / 5;
         display: inline-flex;
         align-items: center;
       }
@@ -965,18 +1275,19 @@
         justify-content: center;
       }
       .modern-table tbody td.col-desc {
-        grid-column: 1 / 4;
-        margin-bottom: 4px;
+        grid-column: 1 / 5;
+        margin-bottom: 2px;
       }
       .modern-table tbody td.col-desc .table-input {
         font-weight: 600;
-        font-size: 15px;
+        font-size: 14.5px;
         border-bottom: 1px solid var(--borde-suave);
         border-radius: 0;
-        padding: 6px 2px;
+        padding: 5px 2px;
       }
       .modern-table tbody td.col-cant::before,
       .modern-table tbody td.col-precio::before,
+      .modern-table tbody td.col-iva::before,
       .modern-table tbody td.col-total::before {
         content: attr(data-label);
         display: block;
@@ -989,16 +1300,19 @@
       .modern-table tbody td.col-precio .table-input {
         background: #f8fafc;
         border: 1px solid var(--borde-input);
-        padding: 7px 8px;
+        padding: 6px 8px;
         font-size: 14px;
+      }
+      .modern-table tbody td.col-iva {
+        text-align: center;
       }
       .modern-table tbody td.col-total {
         text-align: right;
       }
       .modern-table tbody td.col-del {
         position: absolute;
-        top: 10px;
-        right: 10px;
+        top: 8px;
+        right: 8px;
       }
 
       /* Resumen al final del formulario en móvil */
@@ -1117,6 +1431,25 @@
 <body>
 
   <!-- =========================================================
+       VENTANA MODAL CENTRADA (ALERTAS Y CONFIRMACIONES)
+       ========================================================= -->
+  <div id="custom-modal-overlay" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div id="modal-icon-container" class="modal-icon-circle success"></div>
+      <h3 id="modal-title" class="modal-title">Notificación</h3>
+      <p id="modal-message" class="modal-message"></p>
+      <div class="modal-actions">
+        <button type="button" id="modal-btn-cancel" class="btn-modal btn-modal-cancel" style="display:none;">
+          Cancelar
+        </button>
+        <button type="button" id="modal-btn-confirm" class="btn-modal btn-modal-confirm">
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
        PANTALLA DE INICIO DE SESIÓN (LOGIN)
        ========================================================= -->
   <div id="vista-login">
@@ -1171,7 +1504,14 @@
         </div>
         <div class="brand-info">
           <span class="brand-title">Soluciones Integrales M.W. S.A.S.</span>
-          <span class="brand-subtitle">Energía que transforma el campo</span>
+          <span class="brand-subtitle">
+            <span>RUT: 900664844-3</span>
+            <span>•</span>
+            <span class="company-wa-inline">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="#16a34a" xmlns="http://www.w3.org/2000/svg"><path d="M12.031 2C6.508 2 2.023 6.486 2.023 12.008c0 1.766.461 3.49 1.337 5.01L2 22l5.122-1.343a9.975 9.975 0 0 0 4.909 1.298h.004c5.522 0 10.007-4.485 10.007-10.007C22.042 6.486 17.553 2 12.031 2zm5.829 14.129c-.246.693-1.434 1.326-1.995 1.41-.513.077-1.164.109-1.88-.118-.434-.138-.99-.322-1.703-.63-2.997-1.294-4.955-4.312-5.105-4.512-.15-.2-1.218-1.621-1.218-3.093 0-1.471.771-2.194 1.045-2.494.274-.3.598-.375.798-.375.199 0 .399.002.573.01.184.009.43-.07.673.514.249.599.847 2.07.922 2.22.075.15.125.324.025.524-.1.2-.15.324-.299.499-.15.175-.314.39-.449.524-.15.149-.306.311-.131.61.175.3.776 1.281 1.666 2.074 1.145 1.021 2.11 1.338 2.409 1.488.3.15.474.125.649-.075.175-.2.748-.873.948-1.172.2-.3.399-.25.673-.15.275.1 1.746.823 2.045.973.3.15.499.224.574.349.075.125.075.723-.171 1.416z"/></svg>
+              (+57) 314 573 5259
+            </span>
+          </span>
         </div>
       </div>
 
@@ -1225,6 +1565,18 @@
 
           <!-- Columna Izquierda: Formulario + Ítems + Observaciones -->
           <div class="card-panel">
+
+            <!-- Cinta informativa de la empresa con RUT e ícono de WhatsApp -->
+            <div class="empresa-info-strip">
+              <span class="empresa-info-item"><strong>RUT:</strong> 900664844-3</span>
+              <span class="empresa-info-item">📍 Crra. 68 #1 - 26, Barrio El Cambio, Buenaventura</span>
+              <span class="empresa-info-item">
+                ✉️ integralesmw@gmail.com &nbsp;|&nbsp;
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#16a34a" xmlns="http://www.w3.org/2000/svg"><path d="M12.031 2C6.508 2 2.023 6.486 2.023 12.008c0 1.766.461 3.49 1.337 5.01L2 22l5.122-1.343a9.975 9.975 0 0 0 4.909 1.298h.004c5.522 0 10.007-4.485 10.007-10.007C22.042 6.486 17.553 2 12.031 2zm5.829 14.129c-.246.693-1.434 1.326-1.995 1.41-.513.077-1.164.109-1.88-.118-.434-.138-.99-.322-1.703-.63-2.997-1.294-4.955-4.312-5.105-4.512-.15-.2-1.218-1.621-1.218-3.093 0-1.471.771-2.194 1.045-2.494.274-.3.598-.375.798-.375.199 0 .399.002.573.01.184.009.43-.07.673.514.249.599.847 2.07.922 2.22.075.15.125.324.025.524-.1.2-.15.324-.299.499-.15.175-.314.39-.449.524-.15.149-.306.311-.131.61.175.3.776 1.281 1.666 2.074 1.145 1.021 2.11 1.338 2.409 1.488.3.15.474.125.649-.075.175-.2.748-.873.948-1.172.2-.3.399-.25.673-.15.275.1 1.746.823 2.045.973.3.15.499.224.574.349.075.125.075.723-.171 1.416z"/></svg>
+                <strong>(+57) 314 573 5259</strong>
+              </span>
+            </div>
+
             <h2 class="section-title">Cliente</h2>
 
             <div class="cliente-grid">
@@ -1254,27 +1606,47 @@
               </div>
             </div>
 
-            <!-- Tabla de Ítems -->
+            <!-- Barra Superior de Ítems -->
             <div class="items-header-bar">
-              <h2 class="section-title" style="margin:0;">Ítems</h2>
-              <button type="button" class="btn-add-item" onclick="agregarFilaProducto()">
-                + Agregar ítem
-              </button>
+              <div class="items-title-wrap">
+                <h2 class="section-title" style="margin:0;">Ítems</h2>
+                <span id="badge-cantidad-items" class="items-count-badge">4 ítems</span>
+              </div>
+              <div class="items-header-actions">
+                <button type="button" id="btn-expandir-items" class="btn-toggle-scroll" onclick="alternarAlturaItems()" title="Alternar entre caja con scroll o lista expandida">
+                  ↕ Expandir lista
+                </button>
+                <button type="button" class="btn-add-item" onclick="agregarFilaProducto('', '', '', false, true)">
+                  + Agregar ítem
+                </button>
+              </div>
             </div>
 
-            <table class="modern-table" id="tabla-items">
-              <thead>
-                <tr>
-                  <th style="width: 6%;">N°</th>
-                  <th style="width: 44%;">Descripción</th>
-                  <th style="width: 13%; text-align:right;">Cant.</th>
-                  <th style="width: 17%; text-align:right;">Precio unitario</th>
-                  <th style="width: 15%; text-align:right;">Total</th>
-                  <th style="width: 5%;"></th>
-                </tr>
-              </thead>
-              <tbody id="tbody-items"></tbody>
-            </table>
+            <!-- Contenedor con Scroll Interno y Encabezado Fijo -->
+            <div id="contenedor-scroll-items" class="items-scroll-container">
+              <table class="modern-table" id="tabla-items">
+                <thead>
+                  <tr>
+                    <th style="width: 5%;">N°</th>
+                    <th style="width: 39%;">Descripción</th>
+                    <th style="width: 11%; text-align:right;">Cant.</th>
+                    <th style="width: 16%; text-align:right;">Precio unitario</th>
+                    <th style="width: 11%; text-align:center;">IVA</th>
+                    <th style="width: 14%; text-align:right;">Total</th>
+                    <th style="width: 4%;"></th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-items"></tbody>
+              </table>
+            </div>
+
+            <!-- Barra Inferior Rápida para cuando se agregan más de 10 ítems -->
+            <div class="items-Bottom-bar">
+              <button type="button" class="btn-add-bottom" onclick="agregarFilaProducto('', '', '', false, true)">
+                + Agregar otro ítem al final
+              </button>
+              <span class="items-shortcut-hint">💡 Marca la casilla <strong>IVA</strong> solo en los productos gravados</span>
+            </div>
 
             <!-- Observaciones -->
             <div>
@@ -1295,10 +1667,15 @@
               <strong id="cot-subtotal">$ 0</strong>
             </div>
 
+            <div class="summary-subhint">
+              <span>Base con IVA (<span id="cot-cant-items-iva">0</span> ítems)</span>
+              <span id="cot-base-iva">$ 0</span>
+            </div>
+
             <div class="summary-row">
               <div class="iva-control">
                 <span>IVA</span>
-                <input type="number" id="cot-iva-porcentaje" class="iva-input" value="0" min="0" max="100" oninput="recalcularTotales()" />
+                <input type="number" id="cot-iva-porcentaje" class="iva-input" value="19" min="0" max="100" oninput="recalcularTotales()" />
                 <span>%</span>
               </div>
               <strong id="cot-iva-valor">$ 0</strong>
@@ -1316,7 +1693,7 @@
               Exportar PDF
             </button>
 
-            <p class="summary-footnote">El número definitivo se asigna al guardar.</p>
+            <p class="summary-footnote">El IVA se calcula únicamente sobre los productos marcados con IVA.</p>
           </aside>
 
         </div>
@@ -1370,7 +1747,6 @@
             <input type="text" id="filtro-cliente" placeholder="Buscar por nombre o cédula" oninput="renderizarTablaControl()" />
           </div>
 
-          <!-- Select oculto sincronizado por compatibilidad + Píldoras visuales -->
           <select id="filtro-estado" onchange="renderizarTablaControl()" style="display:none;">
             <option value="TODOS">Todos</option>
             <option value="Pendiente">Pendiente</option>
@@ -1444,7 +1820,7 @@
   </div>
 
   <!-- =========================================================
-       PLANTILLA FANTASMA PDF (Intacta a escala 1.8 para 1 página)
+       PLANTILLA FANTASMA PDF (RUT: 900664844-3 + Ícono WhatsApp)
        ========================================================= -->
   <div id="contenedor-fantasma-pdf">
     <div id="lienzo-pdf-excel" class="pdf-sheet">
@@ -1483,7 +1859,7 @@
           <td id="pdf-direccion"></td>
         </tr>
         <tr>
-          <td style="text-align:center; font-size:8.5px;">Doc: 123 4567 8901</td>
+          <td style="text-align:center; font-size:8.5px; font-weight:bold;">RUT: 900664844-3</td>
           <td colspan="4" rowspan="3" class="bg-verde-claro" style="font-size:9.5px; padding:3px;">
             <strong>Propuesta Técnica y Económica:</strong> Detalle de equipos, insumos y/o servicios cotizados.
           </td>
@@ -1492,7 +1868,13 @@
           <td style="text-align:center; font-size:8.5px;">Crra. 68 #1-26, El Cambio, Buenaventura</td>
         </tr>
         <tr>
-          <td style="text-align:center; font-size:8.5px;">integralesmw@gmail.com | 314 573 5259</td>
+          <td style="text-align:center; font-size:8.5px;">
+            integralesmw@gmail.com |
+            <span class="pdf-wa-inline">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="#16a34a" xmlns="http://www.w3.org/2000/svg" style="display:inline-block; vertical-align:middle;"><path d="M12.031 2C6.508 2 2.023 6.486 2.023 12.008c0 1.766.461 3.49 1.337 5.01L2 22l5.122-1.343a9.975 9.975 0 0 0 4.909 1.298h.004c5.522 0 10.007-4.485 10.007-10.007C22.042 6.486 17.553 2 12.031 2zm5.829 14.129c-.246.693-1.434 1.326-1.995 1.41-.513.077-1.164.109-1.88-.118-.434-.138-.99-.322-1.703-.63-2.997-1.294-4.955-4.312-5.105-4.512-.15-.2-1.218-1.621-1.218-3.093 0-1.471.771-2.194 1.045-2.494.274-.3.598-.375.798-.375.199 0 .399.002.573.01.184.009.43-.07.673.514.249.599.847 2.07.922 2.22.075.15.125.324.025.524-.1.2-.15.324-.299.499-.15.175-.314.39-.449.524-.15.149-.306.311-.131.61.175.3.776 1.281 1.666 2.074 1.145 1.021 2.11 1.338 2.409 1.488.3.15.474.125.649-.075.175-.2.748-.873.948-1.172.2-.3.399-.25.673-.15.275.1 1.746.823 2.045.973.3.15.499.224.574.349.075.125.075.723-.171 1.416z"/></svg>
+              314 573 5259
+            </span>
+          </td>
         </tr>
       </table>
 
@@ -1532,7 +1914,7 @@
   </div>
 
   <!-- =========================================================
-       LÓGICA JAVASCRIPT (FIREBASE AUTH + FIRESTORE + PDF + EXCEL)
+       LÓGICA JAVASCRIPT (MODALES + IVA SELECTIVO + FIREBASE + PDF)
        ========================================================= -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
@@ -1555,6 +1937,89 @@
       orderBy
     } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
+    // =========================================================
+    // MOTOR DE MODALES CENTRADOS (REEMPLAZO DE ALERT Y CONFIRM)
+    // =========================================================
+    const ICONOS_MODAL = {
+      success: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+      warning: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+      danger: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`,
+      info: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`
+    };
+
+    function mostrarModalAlerta({ titulo = "Notificación", mensaje = "", tipo = "success", textoBoton = "Aceptar" }) {
+      return new Promise((resolve) => {
+        const overlay = document.getElementById("custom-modal-overlay");
+        const iconContainer = document.getElementById("modal-icon-container");
+        const titleEl = document.getElementById("modal-title");
+        const msgEl = document.getElementById("modal-message");
+        const btnCancel = document.getElementById("modal-btn-cancel");
+        const btnConfirm = document.getElementById("modal-btn-confirm");
+
+        iconContainer.className = `modal-icon-circle ${tipo}`;
+        iconContainer.innerHTML = ICONOS_MODAL[tipo] || ICONOS_MODAL.info;
+        titleEl.textContent = titulo;
+        msgEl.textContent = mensaje;
+
+        btnCancel.style.display = "none";
+        btnConfirm.textContent = textoBoton;
+        btnConfirm.className = `btn-modal btn-modal-confirm ${tipo === "danger" ? "danger" : ""}`;
+
+        const cerrar = () => {
+          overlay.classList.remove("active");
+          btnConfirm.onclick = null;
+          resolve(true);
+        };
+
+        btnConfirm.onclick = cerrar;
+        overlay.classList.add("active");
+        btnConfirm.focus();
+      });
+    }
+
+    function mostrarModalConfirmacion({
+      titulo = "¿Estás seguro?",
+      mensaje = "",
+      tipo = "warning",
+      textoConfirmar = "Sí, continuar",
+      textoCancelar = "Cancelar",
+      peligro = false
+    }) {
+      return new Promise((resolve) => {
+        const overlay = document.getElementById("custom-modal-overlay");
+        const iconContainer = document.getElementById("modal-icon-container");
+        const titleEl = document.getElementById("modal-title");
+        const msgEl = document.getElementById("modal-message");
+        const btnCancel = document.getElementById("modal-btn-cancel");
+        const btnConfirm = document.getElementById("modal-btn-confirm");
+
+        iconContainer.className = `modal-icon-circle ${peligro ? "danger" : tipo}`;
+        iconContainer.innerHTML = ICONOS_MODAL[peligro ? "danger" : tipo] || ICONOS_MODAL.warning;
+        titleEl.textContent = titulo;
+        msgEl.textContent = mensaje;
+
+        btnCancel.style.display = "inline-block";
+        btnCancel.textContent = textoCancelar;
+        btnConfirm.textContent = textoConfirmar;
+        btnConfirm.className = `btn-modal btn-modal-confirm ${peligro ? "danger" : ""}`;
+
+        const finalizar = (resultado) => {
+          overlay.classList.remove("active");
+          btnConfirm.onclick = null;
+          btnCancel.onclick = null;
+          resolve(resultado);
+        };
+
+        btnConfirm.onclick = () => finalizar(true);
+        btnCancel.onclick = () => finalizar(false);
+        overlay.classList.add("active");
+        btnConfirm.focus();
+      });
+    }
+
+    // =========================================================
+    // CONFIGURACIÓN FIREBASE
+    // =========================================================
     const firebaseConfig = {
       apiKey: "AIzaSyAiMACeB4GnB1ycj5L5C0BJCHSXnx1kTIE",
       authDomain: "cotizador-mw-sas.firebaseapp.com",
@@ -1565,7 +2030,6 @@
       measurementId: "G-XWNEDGHZRE"
     };
 
-    // Credenciales de respaldo para el equipo (funciona incluso offline o mientras activas Firebase Auth)
     const CREDENCIAL_EQUIPO_FALLBACK = {
       email: "equipo@integralesmw.com",
       pass: "mw2026*"
@@ -1677,7 +2141,6 @@
           throw new Error("Credenciales inválidas");
         }
       } catch (err) {
-        // Si el usuario usa la credencial de equipo mientras configura Firebase Auth en la consola
         if (email === CREDENCIAL_EQUIPO_FALLBACK.email && pass === CREDENCIAL_EQUIPO_FALLBACK.pass) {
           sessionStorage.setItem("mw_sesion_activa", "true");
           mostrarAplicacion();
@@ -1699,12 +2162,10 @@
       mostrarPantallaLogin();
     };
 
-    // Formateo visual en pantalla (limpio tipo propuesta: $ 9.080.000)
     function formatearCOPPantalla(valor) {
       return "$ " + Math.round(Number(valor || 0)).toLocaleString("es-CO");
     }
 
-    // Formateo para PDF oficial (con decimales exactos como el original)
     function formatearCOP(valor) {
       return "$ " + Number(valor || 0).toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
@@ -1714,7 +2175,47 @@
       document.getElementById("cot-numero").textContent = String(maxNum + 1).padStart(3, "0");
     }
 
-    window.agregarFilaProducto = function(descripcion = "", cantidad = "", precio = "") {
+    function actualizarContadorItems() {
+      const totalFilas = document.getElementById("tbody-items").children.length;
+      const badge = document.getElementById("badge-cantidad-items");
+      if (badge) {
+        badge.textContent = `${totalFilas} ${totalFilas === 1 ? "ítem" : "ítems"}`;
+      }
+    }
+
+    window.alternarAlturaItems = function() {
+      const cont = document.getElementById("contenedor-scroll-items");
+      const btn = document.getElementById("btn-expandir-items");
+      const expandido = cont.classList.toggle("expanded");
+      btn.textContent = expandido ? "↕ Compactar lista" : "↕ Expandir lista";
+    };
+
+    window.manejarEnterPrecio = function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        agregarFilaProducto("", "", "", false, true);
+      }
+    };
+
+    window.cambiarChipIva = function(checkbox) {
+      const label = checkbox.closest(".iva-chip-label");
+      const texto = label.querySelector(".iva-chip-text");
+      if (checkbox.checked) {
+        label.classList.add("active");
+        texto.textContent = "Sí";
+        // Si el usuario activa IVA en un producto y el % estaba en 0, sugerir 19% automáticamente
+        const inputPorc = document.getElementById("cot-iva-porcentaje");
+        if ((parseFloat(inputPorc.value) || 0) === 0) {
+          inputPorc.value = "19";
+        }
+      } else {
+        label.classList.remove("active");
+        texto.textContent = "No";
+      }
+      recalcularTotales();
+    };
+
+    window.agregarFilaProducto = function(descripcion = "", cantidad = "", precio = "", aplicaIva = false, enfocarNueva = false) {
       const tbody = document.getElementById("tbody-items");
       const numFila = tbody.children.length + 1;
       const tr = document.createElement("tr");
@@ -1727,7 +2228,13 @@
           <input type="number" class="table-input item-cant" value="${cantidad}" min="0" step="any" style="text-align:right;" placeholder="0" oninput="recalcularTotales()" />
         </td>
         <td class="col-precio" data-label="Precio unitario">
-          <input type="number" class="table-input item-precio" value="${precio}" min="0" step="any" style="text-align:right;" placeholder="0" oninput="recalcularTotales()" />
+          <input type="number" class="table-input item-precio" value="${precio}" min="0" step="any" style="text-align:right;" placeholder="0" oninput="recalcularTotales()" onkeydown="manejarEnterPrecio(event)" />
+        </td>
+        <td class="col-iva" data-label="¿Lleva IVA?" style="text-align:center;">
+          <label class="iva-chip-label ${aplicaIva ? "active" : ""}" title="Marcar si este producto lleva IVA">
+            <input type="checkbox" class="item-iva" ${aplicaIva ? "checked" : ""} onchange="cambiarChipIva(this)" />
+            <span class="iva-chip-text">${aplicaIva ? "Sí" : "No"}</span>
+          </label>
         </td>
         <td class="col-total" data-label="Total" style="text-align:right;">
           <span class="item-total-display item-total">$ 0</span>
@@ -1739,7 +2246,17 @@
         </td>
       `;
       tbody.appendChild(tr);
+      actualizarContadorItems();
       recalcularTotales();
+
+      if (enfocarNueva) {
+        const contScroll = document.getElementById("contenedor-scroll-items");
+        if (contScroll) {
+          contScroll.scrollTop = contScroll.scrollHeight;
+        }
+        const inputDesc = tr.querySelector(".item-desc");
+        if (inputDesc) inputDesc.focus();
+      }
     };
 
     window.eliminarFila = function(btn) {
@@ -1749,25 +2266,40 @@
         Array.from(tbody.children).forEach((fila, idx) => {
           fila.querySelector(".num-item").textContent = idx + 1;
         });
+        actualizarContadorItems();
         recalcularTotales();
       }
     };
 
+    // Cálculo selectivo: suma el IVA únicamente de los productos con la casilla IVA activa
     window.recalcularTotales = function() {
       let subtotal = 0;
+      let baseGravableIva = 0;
+      let cantItemsConIva = 0;
+
       document.querySelectorAll("#tbody-items tr").forEach((fila) => {
         const cant = parseFloat(fila.querySelector(".item-cant").value) || 0;
         const precio = parseFloat(fila.querySelector(".item-precio").value) || 0;
+        const llevaIva = fila.querySelector(".item-iva")?.checked || false;
         const totalFila = cant * precio;
+
         subtotal += totalFila;
+        if (llevaIva) {
+          baseGravableIva += totalFila;
+          if (totalFila > 0 || fila.querySelector(".item-desc").value.trim() !== "") {
+            cantItemsConIva++;
+          }
+        }
         fila.querySelector(".item-total").textContent = formatearCOPPantalla(totalFila);
       });
 
       const porcIva = parseFloat(document.getElementById("cot-iva-porcentaje").value) || 0;
-      const valorIva = subtotal * (porcIva / 100);
+      const valorIva = baseGravableIva * (porcIva / 100);
       totalActualNumerico = subtotal + valorIva;
 
       document.getElementById("cot-subtotal").textContent = formatearCOPPantalla(subtotal);
+      document.getElementById("cot-cant-items-iva").textContent = cantItemsConIva;
+      document.getElementById("cot-base-iva").textContent = formatearCOPPantalla(baseGravableIva);
       document.getElementById("cot-iva-valor").textContent = formatearCOPPantalla(valorIva);
       document.getElementById("cot-total-general").textContent = formatearCOPPantalla(totalActualNumerico);
 
@@ -1775,7 +2307,7 @@
       if (totalMovil) totalMovil.textContent = formatearCOPPantalla(totalActualNumerico);
     };
 
-    // MOTOR PDF INDEPENDIENTE INTACTO (760px / 26 filas con escala 1.8 en 1 sola página A4)
+    // MOTOR PDF INDEPENDIENTE (Respeta IVA selectivo por producto + márgenes laterales ampliados)
     async function generarArchivoPDFDesdeObjeto(datos) {
       const numStr = String(datos.consecutivo || 1).padStart(3, "0");
       document.getElementById("pdf-numero").textContent = numStr;
@@ -1792,20 +2324,31 @@
 
       const ALTO_FILA_PDF = 24;
       let subtotal = 0;
+      let baseGravableIva = 0;
+      const porcIva = Number(datos.ivaPorcentaje) || 0;
+
       const itemsLista = Array.isArray(datos.items) && datos.items.length > 0
         ? datos.items
-        : [{ descripcion: "Servicios / Equipos cotizados", cantidad: 1, precio: datos.valorTotal || 0 }];
+        : [{ descripcion: "Servicios / Equipos cotizados", cantidad: 1, precio: datos.valorTotal || 0, aplicaIva: false }];
 
       itemsLista.forEach((it, idx) => {
         const cant = Number(it.cantidad) || 0;
         const precio = Number(it.precio) || 0;
         const totalFila = cant * precio;
+        // Compatibilidad con cotizaciones anteriores: si aplicaIva no existe, se infiere según ivaPorcentaje
+        const llevaIva = typeof it.aplicaIva === "boolean" ? it.aplicaIva : (porcIva > 0);
+
         subtotal += totalFila;
+        if (llevaIva) {
+          baseGravableIva += totalFila;
+        }
+
+        const etiquetaIva = (llevaIva && porcIva > 0) ? ` <span style="font-size:8.5px; color:#2e6b34; font-weight:bold;">(+IVA)</span>` : "";
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td style="text-align:center; height:${ALTO_FILA_PDF}px;">${idx + 1}</td>
-          <td>${it.descripcion || ""}</td>
+          <td>${it.descripcion || ""}${etiquetaIva}</td>
           <td style="text-align:center;">${cant || ""}</td>
           <td style="text-align:right;">${precio ? formatearCOP(precio) : ""}</td>
           <td class="cell-readonly" style="text-align:right;">${formatearCOP(totalFila)}</td>
@@ -1823,12 +2366,11 @@
         tbodyPdf.appendChild(trVacio);
       }
 
-      const porcIva = Number(datos.ivaPorcentaje) || 0;
-      const valorIva = subtotal * (porcIva / 100);
+      const valorIva = baseGravableIva * (porcIva / 100);
       const totalGen = subtotal + valorIva;
 
       document.getElementById("pdf-subtotal").textContent = formatearCOP(subtotal);
-      document.getElementById("pdf-iva-label").textContent = `IVA (${porcIva}%):`;
+      document.getElementById("pdf-iva-label").textContent = `IVA (${valorIva > 0 ? porcIva : 0}%):`;
       document.getElementById("pdf-iva-valor").textContent = formatearCOP(valorIva);
       document.getElementById("pdf-total-general").textContent = formatearCOP(totalGen);
 
@@ -1874,9 +2416,12 @@
         const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
         const pageW = pdf.internal.pageSize.getWidth();
         const pageH = pdf.internal.pageSize.getHeight();
-        const margen = 2;
-        const maxW = pageW - margen * 2;
-        const maxH = pageH - margen * 2;
+
+        // Márgenes independientes: 11mm a izquierda y derecha, 6mm arriba y abajo
+        const margenX = 11;
+        const margenY = 6;
+        const maxW = pageW - margenX * 2;
+        const maxH = pageH - margenY * 2;
 
         let w = maxW;
         let h = (canvas.height * w) / canvas.width;
@@ -1886,11 +2431,15 @@
         }
         const posX = (pageW - w) / 2;
 
-        pdf.addImage(canvas.toDataURL("image/jpeg", 0.98), "JPEG", posX, margen, w, h);
+        pdf.addImage(canvas.toDataURL("image/jpeg", 0.98), "JPEG", posX, margenY, w, h);
         pdf.save(nombreArchivo);
       } catch (err) {
         console.error("Error generando PDF:", err);
-        alert("No se pudo generar el PDF: " + (err && err.message ? err.message : err));
+        await mostrarModalAlerta({
+          titulo: "Error al generar PDF",
+          mensaje: "No se pudo generar el archivo PDF: " + (err && err.message ? err.message : err),
+          tipo: "danger"
+        });
       }
     }
 
@@ -1904,8 +2453,9 @@
         const desc = fila.querySelector(".item-desc").value.trim();
         const cant = parseFloat(fila.querySelector(".item-cant").value) || 0;
         const precio = parseFloat(fila.querySelector(".item-precio").value) || 0;
+        const aplicaIva = fila.querySelector(".item-iva")?.checked || false;
         if (desc !== "" || cant > 0 || precio > 0) {
-          itemsActuales.push({ descripcion: desc, cantidad: cant, precio: precio });
+          itemsActuales.push({ descripcion: desc, cantidad: cant, precio: precio, aplicaIva: aplicaIva });
         }
       });
 
@@ -1932,7 +2482,15 @@
 
     window.guardarCotizacion = async function() {
       const cliente = document.getElementById("cot-cliente").value.trim();
-      if (!cliente) { alert("Por favor escribe el nombre del Cliente."); return; }
+      if (!cliente) {
+        await mostrarModalAlerta({
+          titulo: "Falta el nombre del cliente",
+          mensaje: "Por favor escribe el nombre o razón social del cliente antes de guardar la cotización.",
+          tipo: "warning"
+        });
+        document.getElementById("cot-cliente").focus();
+        return;
+      }
 
       const consecutivoNum = parseInt(document.getElementById("cot-numero").textContent, 10);
       const fechaISO = document.getElementById("cot-fecha").value;
@@ -1943,8 +2501,9 @@
         const desc = fila.querySelector(".item-desc").value.trim();
         const cant = parseFloat(fila.querySelector(".item-cant").value) || 0;
         const precio = parseFloat(fila.querySelector(".item-precio").value) || 0;
+        const aplicaIva = fila.querySelector(".item-iva")?.checked || false;
         if (desc !== "" || cant > 0 || precio > 0) {
-          itemsGuardados.push({ descripcion: desc, cantidad: cant, precio: precio });
+          itemsGuardados.push({ descripcion: desc, cantidad: cant, precio: precio, aplicaIva: aplicaIva });
         }
       });
 
@@ -1963,20 +2522,32 @@
         valorTotal: totalActualNumerico
       };
 
+      const numFormateado = String(consecutivoNum).padStart(3, "0");
+
       if (cotizacionEditandoId) {
         if (usarFirebase && db) {
           try {
             await updateDoc(doc(db, "cotizaciones", cotizacionEditandoId), datosCotizacion);
-            alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} actualizada.`);
+            await mostrarModalAlerta({
+              titulo: "Cotización actualizada",
+              mensaje: `Los cambios de la Cotización N° ${numFormateado} para ${cliente} se guardaron correctamente.`,
+              tipo: "success"
+            });
             cancelarModoEdicion();
-          } catch (err) { alert("Error: " + err.message); }
+          } catch (err) {
+            await mostrarModalAlerta({ titulo: "Error al actualizar", mensaje: err.message, tipo: "danger" });
+          }
         } else {
           const idx = listaCotizaciones.findIndex(c => c.id === cotizacionEditandoId);
           if (idx !== -1) {
             listaCotizaciones[idx] = { ...listaCotizaciones[idx], ...datosCotizacion };
             localStorage.setItem("cotizaciones_mw", JSON.stringify(listaCotizaciones));
             renderizarTablaControl();
-            alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} actualizada.`);
+            await mostrarModalAlerta({
+              titulo: "Cotización actualizada",
+              mensaje: `Los cambios de la Cotización N° ${numFormateado} para ${cliente} se guardaron correctamente.`,
+              tipo: "success"
+            });
             cancelarModoEdicion();
           }
         }
@@ -1989,16 +2560,26 @@
       if (usarFirebase && db) {
         try {
           await addDoc(collection(db, "cotizaciones"), datosCotizacion);
-          alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} guardada.`);
+          await mostrarModalAlerta({
+            titulo: "Cotización guardada con éxito",
+            mensaje: `La Cotización N° ${numFormateado} para ${cliente} ya quedó registrada en el historial.`,
+            tipo: "success"
+          });
           limpiarFormularioSinConfirmar();
-        } catch (err) { alert("Error: " + err.message); }
+        } catch (err) {
+          await mostrarModalAlerta({ titulo: "Error al guardar", mensaje: err.message, tipo: "danger" });
+        }
       } else {
         datosCotizacion.id = "local_" + Date.now();
         listaCotizaciones.push(datosCotizacion);
         localStorage.setItem("cotizaciones_mw", JSON.stringify(listaCotizaciones));
         actualizarConsecutivoAutomatico();
         renderizarTablaControl();
-        alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} guardada.`);
+        await mostrarModalAlerta({
+          titulo: "Cotización guardada con éxito",
+          mensaje: `La Cotización N° ${numFormateado} para ${cliente} quedó registrada correctamente.`,
+          tipo: "success"
+        });
         limpiarFormularioSinConfirmar();
       }
     };
@@ -2028,14 +2609,19 @@
       document.getElementById("cot-celular").value = cot.celular || "";
       document.getElementById("cot-direccion").value = cot.direccion || "";
       document.getElementById("cot-observaciones").value = cot.observaciones || "";
-      document.getElementById("cot-iva-porcentaje").value = cot.ivaPorcentaje || 0;
+
+      const porcGuardado = Number(cot.ivaPorcentaje);
+      document.getElementById("cot-iva-porcentaje").value = !isNaN(porcGuardado) && porcGuardado > 0 ? porcGuardado : 19;
 
       const tbody = document.getElementById("tbody-items");
       tbody.innerHTML = "";
       if (Array.isArray(cot.items) && cot.items.length > 0) {
-        cot.items.forEach(item => agregarFilaProducto(item.descripcion, item.cantidad, item.precio));
+        cot.items.forEach(item => {
+          const aplica = typeof item.aplicaIva === "boolean" ? item.aplicaIva : (porcGuardado > 0);
+          agregarFilaProducto(item.descripcion, item.cantidad, item.precio, aplica, false);
+        });
       } else {
-        agregarFilaProducto("Servicios / Equipos según cotización", 1, cot.valorTotal || 0);
+        agregarFilaProducto("Servicios / Equipos según cotización", 1, cot.valorTotal || 0, false, false);
       }
       recalcularTotales();
       cambiarPestana("cotizacion");
@@ -2050,16 +2636,40 @@
     };
 
     window.eliminarCotizacion = async function(id) {
-      if (!confirm(`⚠️ ¿Deseas eliminar esta cotización?`)) return;
+      const cot = listaCotizaciones.find(c => c.id === id);
+      const numStr = cot ? String(cot.consecutivo).padStart(3, "0") : "";
+      const confirmado = await mostrarModalConfirmacion({
+        titulo: `¿Eliminar Cotización N° ${numStr}?`,
+        mensaje: `Esta acción eliminará permanentemente la cotización de "${cot?.cliente || "Cliente"}" del historial.`,
+        textoConfirmar: "Sí, eliminar",
+        textoCancelar: "Cancelar",
+        peligro: true
+      });
+      if (!confirmado) return;
+
       if (cotizacionEditandoId === id) cancelarModoEdicion();
 
       if (usarFirebase && db) {
-        try { await deleteDoc(doc(db, "cotizaciones", id)); } catch (err) { alert("Error: " + err.message); }
+        try {
+          await deleteDoc(doc(db, "cotizaciones", id));
+          await mostrarModalAlerta({
+            titulo: "Cotización eliminada",
+            mensaje: `La Cotización N° ${numStr} fue eliminada correctamente.`,
+            tipo: "info"
+          });
+        } catch (err) {
+          await mostrarModalAlerta({ titulo: "Error al eliminar", mensaje: err.message, tipo: "danger" });
+        }
       } else {
         listaCotizaciones = listaCotizaciones.filter(c => c.id !== id);
         localStorage.setItem("cotizaciones_mw", JSON.stringify(listaCotizaciones));
         if (!cotizacionEditandoId) actualizarConsecutivoAutomatico();
         renderizarTablaControl();
+        await mostrarModalAlerta({
+          titulo: "Cotización eliminada",
+          mensaje: `La Cotización N° ${numStr} fue eliminada correctamente.`,
+          tipo: "info"
+        });
       }
     };
 
@@ -2071,15 +2681,22 @@
       document.getElementById("cot-direccion").value = "";
       document.getElementById("cot-valida").value = "";
       document.getElementById("cot-observaciones").value = "";
-      document.getElementById("cot-iva-porcentaje").value = "0";
+      document.getElementById("cot-iva-porcentaje").value = "19";
       const tbody = document.getElementById("tbody-items");
       tbody.innerHTML = "";
       for (let i = 0; i < 4; i++) agregarFilaProducto();
       actualizarConsecutivoAutomatico();
     }
 
-    window.limpiarCotizacion = function() {
-      if (!confirm("¿Deseas limpiar todos los datos para una nueva cotización?")) return;
+    window.limpiarCotizacion = async function() {
+      const confirmado = await mostrarModalConfirmacion({
+        titulo: "¿Limpiar datos del formulario?",
+        mensaje: "Se vaciarán todos los campos actuales para empezar una cotización nueva desde cero.",
+        tipo: "warning",
+        textoConfirmar: "Sí, limpiar todo",
+        textoCancelar: "Seguir editando"
+      });
+      if (!confirmado) return;
       cancelarModoEdicion();
     };
 
@@ -2130,13 +2747,11 @@
       document.getElementById("kpi-por-llamar").textContent = clientesPorLlamar;
       document.getElementById("kpi-tasa").textContent = (totalCots > 0 ? Math.round((cantAprobadas / totalCots) * 100) : 0) + "%";
 
-      // Actualizar contadores de las píldoras
       document.getElementById("count-todas").textContent = totalCots;
       document.getElementById("count-pendientes").textContent = clientesPorLlamar;
       document.getElementById("count-aprobadas").textContent = cantAprobadas;
       document.getElementById("count-rechazadas").textContent = cantRechazadas;
 
-      // Ordenar de más reciente a más antigua en la vista de historial
       const filtradas = [...listaCotizaciones]
         .sort((a, b) => (Number(b.consecutivo) || 0) - (Number(a.consecutivo) || 0))
         .filter((c) => {
@@ -2190,8 +2805,15 @@
       });
     };
 
-    window.exportarHistorialExcel = function() {
-      if (listaCotizaciones.length === 0) { alert("No hay datos para exportar."); return; }
+    window.exportarHistorialExcel = async function() {
+      if (listaCotizaciones.length === 0) {
+        await mostrarModalAlerta({
+          titulo: "Sin datos para exportar",
+          mensaje: "Todavía no hay cotizaciones registradas en el historial para generar el archivo Excel.",
+          tipo: "info"
+        });
+        return;
+      }
       const datosExcel = listaCotizaciones.map(c => ({
         "No. Cotización": c.consecutivo,
         "Fecha": c.fecha,
@@ -2219,7 +2841,6 @@
       document.getElementById("tab-movil-cotizacion").classList.toggle("active", esCot);
       document.getElementById("tab-movil-control").classList.toggle("active", !esCot);
 
-      // En móvil, mostrar la barra verde del total solo cuando se está en la pestaña Cotización
       document.getElementById("mobile-quote-summary").classList.toggle("hidden", !esCot);
       window.scrollTo(0, 0);
     };
