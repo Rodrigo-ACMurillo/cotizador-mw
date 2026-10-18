@@ -5,7 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Sistema de Cotizaciones - Soluciones Integrales M.W. S.A.S.</title>
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#2e6b34" />
+  <meta name="theme-color" content="#0f291e" />
+
+  <!-- Tipografía moderna Inter + Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 
   <!-- Librerías para exportar a PDF (captura directa + generación del PDF) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -15,217 +20,843 @@
 
   <style>
     :root {
-      --verde-header: #eaf1dd;
+      /* Paleta Moderna M.W. (Fusión Propuesta + UI SaaS) */
+      --bg-app: #f4f6f3;
+      --bg-card: #ffffff;
+      --bg-subtle: #eff3ee;
+      --verde-oscuro: #0f291e;
+      --verde-oscuro-2: #163829;
       --verde-corporativo: #2e6b34;
+      --verde-acento: #22c55e;
+      --amarillo-cta: #f2b729;
+      --amarillo-cta-hover: #e0a61b;
+      --texto-principal: #111827;
+      --texto-secundario: #4b5563;
+      --texto-muted: #6b7280;
+      --borde-suave: #e2e8f0;
+      --borde-input: #cbd5e1;
+      --sombra-card: 0 4px 20px -2px rgba(15, 41, 30, 0.06), 0 2px 6px -1px rgba(15, 41, 30, 0.04);
+      --sombra-sticky: 0 14px 30px -5px rgba(15, 41, 30, 0.25);
+      --radio-lg: 14px;
+      --radio-md: 10px;
+      --radio-sm: 8px;
+
+      /* Variables exclusivas para la Plantilla Fantasma PDF original */
+      --verde-header: #eaf1dd;
       --azul-tabla: #c5d9f1;
-      --morado-kpi: #e6e0ec;
-      --rosa-kpi: #f2dcdb;
       --borde-celda: #808080;
     }
 
     * {
       box-sizing: border-box;
-      font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
     body {
       margin: 0;
-      padding: 0 0 65px 0;
-      background-color: #f3f4f6;
-      color: #111;
+      padding: 0;
+      background-color: var(--bg-app);
+      color: var(--texto-principal);
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Barra superior */
+    /* =========================================================
+       1. PANTALLA DE LOGIN
+       ========================================================= */
+    #vista-login {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: radial-gradient(circle at top left, #e6efe6 0%, #f4f6f3 60%, #e9f0ec 100%);
+    }
+    #vista-login.hidden {
+      display: none !important;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--bg-card);
+      border-radius: 18px;
+      padding: 36px 32px;
+      box-shadow: 0 12px 35px rgba(15, 41, 30, 0.08);
+      border: 1px solid rgba(15, 41, 30, 0.08);
+    }
+    .login-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+    .mw-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--verde-oscuro);
+      color: var(--amarillo-cta);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      letter-spacing: -0.5px;
+      overflow: hidden;
+    }
+    .mw-badge img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #fff;
+    }
+    .login-brand-text h2 {
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--texto-principal);
+      line-height: 1.25;
+    }
+    .login-brand-text p {
+      margin: 2px 0 0 0;
+      font-size: 13px;
+      color: var(--texto-muted);
+    }
+    .login-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      margin: 0 0 22px 0;
+      color: var(--texto-principal);
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--texto-secundario);
+      margin-bottom: 6px;
+    }
+    .modern-input {
+      width: 100%;
+      padding: 11px 14px;
+      font-size: 14px;
+      color: var(--texto-principal);
+      background: #ffffff;
+      border: 1px solid var(--borde-input);
+      border-radius: var(--radio-sm);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .modern-input:focus {
+      border-color: var(--verde-corporativo);
+      box-shadow: 0 0 0 3px rgba(46, 107, 52, 0.14);
+    }
+    .modern-input::placeholder {
+      color: #9ca3af;
+    }
+    .password-wrapper {
+      position: relative;
+    }
+    .toggle-pass-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--texto-muted);
+      cursor: pointer;
+      font-size: 13px;
+      padding: 4px 6px;
+    }
+    .btn-login {
+      width: 100%;
+      margin-top: 8px;
+      padding: 13px 18px;
+      background: var(--verde-oscuro);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radio-sm);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-login:hover {
+      background: var(--verde-oscuro-2);
+    }
+    .btn-login:active {
+      transform: scale(0.99);
+    }
+    .login-error {
+      display: none;
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+      padding: 10px 12px;
+      border-radius: var(--radio-sm);
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+    .login-footer {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 12.5px;
+      color: var(--texto-muted);
+    }
+
+    /* =========================================================
+       2. BARRA SUPERIOR (TOPBAR) Y NAVEGACIÓN
+       ========================================================= */
+    #app-shell.hidden {
+      display: none !important;
+    }
     .topbar {
-      background: var(--verde-corporativo);
-      color: white;
-      padding: 10px 16px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--borde-suave);
+      padding: 12px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      font-size: 13px;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 900;
     }
-    .status-badge {
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-weight: bold;
-      background: #1b4320;
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .topbar-left .mw-badge {
+      width: 38px;
+      height: 38px;
+      font-size: 13px;
+      border-radius: 10px;
+    }
+    .brand-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .brand-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--texto-principal);
+    }
+    .brand-subtitle {
       font-size: 12px;
+      color: var(--texto-muted);
     }
 
-    /* Contenedor Principal */
-    .workspace {
-      max-width: 1180px;
-      margin: 15px auto;
-      background: white;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
-      border: 1px solid var(--borde-celda);
+    .topbar-center {
+      display: flex;
+      align-items: center;
+      background: var(--bg-subtle);
+      padding: 4px;
+      border-radius: 10px;
+      gap: 4px;
+    }
+    .nav-tab {
+      border: none;
+      background: transparent;
+      padding: 8px 18px;
+      border-radius: 7px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--texto-secundario);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-tab.active {
+      background: #ffffff;
+      color: var(--texto-principal);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #15803d;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .btn-salir {
+      background: transparent;
+      border: 1px solid var(--borde-input);
+      color: var(--texto-secundario);
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-salir:hover {
+      background: #f1f5f9;
+      color: #111827;
+    }
+
+    /* =========================================================
+       3. CONTENEDOR PRINCIPAL Y ENCABEZADO DE VISTA
+       ========================================================= */
+    .main-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px 28px 90px 28px;
+    }
+    .sheet-view {
+      display: none;
+    }
+    .sheet-view.active {
+      display: block;
     }
 
     /* Banner de Modo Edición */
     .edit-banner {
       display: none;
-      background-color: #fff3cd;
-      color: #856404;
-      border-bottom: 2px solid #ffeeba;
-      padding: 10px 15px;
+      background-color: #fffbeb;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      border-radius: var(--radio-md);
+      padding: 12px 18px;
+      margin-bottom: 18px;
       font-size: 14px;
-      font-weight: bold;
+      font-weight: 600;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
       flex-wrap: wrap;
     }
-    .edit-banner.active { display: flex; }
+    .edit-banner.active {
+      display: flex;
+    }
 
-    /* Barra de Macros */
-    .macro-toolbar {
-      background: #f8f9fa;
-      padding: 12px 15px;
-      border-bottom: 2px solid var(--borde-celda);
+    /* Cabecera de Cotización */
+    .page-header {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
       justify-content: space-between;
-    }
-    .macro-buttons {
-      display: flex;
+      align-items: flex-end;
+      margin-bottom: 22px;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
     }
-    .btn-macro {
+    .quote-title-group {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .quote-main-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0;
+      color: var(--texto-principal);
+      letter-spacing: -0.5px;
+    }
+    .quote-status-hint {
+      font-size: 13.5px;
+      color: var(--texto-muted);
+      font-weight: 500;
+    }
+    .btn-ghost {
+      background: #ffffff;
+      border: 1px solid var(--borde-input);
+      color: var(--texto-secundario);
+      padding: 8px 14px;
+      border-radius: var(--radio-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-ghost:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+      color: var(--texto-principal);
+    }
+
+    /* =========================================================
+       4. LAYOUT DE COTIZACIÓN (2 COLUMNAS EN ESCRITORIO)
+       ========================================================= */
+    .cotizador-layout {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .card-panel {
+      background: var(--bg-card);
+      border-radius: var(--radio-lg);
+      box-shadow: var(--sombra-card);
+      border: 1px solid var(--borde-suave);
+      padding: 26px;
+    }
+
+    .section-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--texto-principal);
+      margin: 0 0 18px 0;
+    }
+
+    /* Grilla de datos del Cliente */
+    .cliente-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--borde-suave);
+      margin-bottom: 24px;
+    }
+
+    /* Sección de Ítems */
+    .items-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .btn-add-item {
+      background: #ffffff;
+      border: 1.5px solid var(--verde-oscuro);
+      color: var(--verde-oscuro);
+      padding: 8px 15px;
+      border-radius: var(--radio-sm);
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .btn-add-item:hover {
+      background: var(--verde-oscuro);
+      color: #ffffff;
+    }
+
+    .modern-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+    .modern-table thead tr {
+      background: var(--bg-subtle);
+      border-top: 1px solid var(--borde-suave);
+      border-bottom: 1px solid var(--borde-suave);
+    }
+    .modern-table th {
+      padding: 10px 12px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--texto-secundario);
+      text-align: left;
+    }
+    .modern-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+      font-size: 14px;
+    }
+    .modern-table tbody tr:hover {
+      background-color: #fafcfa;
+    }
+
+    .table-input {
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 14px;
+      color: var(--texto-principal);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      outline: none;
+      transition: all 0.15s;
+    }
+    .table-input:hover {
+      border-color: var(--borde-suave);
+      background: #ffffff;
+    }
+    .table-input:focus {
+      border-color: var(--verde-corporativo);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(46, 107, 52, 0.12);
+    }
+    .item-total-display {
+      font-weight: 700;
+      color: var(--texto-principal);
+      padding: 8px 10px;
+      white-space: nowrap;
+    }
+    .btn-delete-row {
+      background: transparent;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.75;
+      transition: all 0.15s;
+    }
+    .btn-delete-row:hover {
+      opacity: 1;
+      background: #fef2f2;
+    }
+
+    /* Panel Derecho: Resumen Sticky en Verde Bosque */
+    .summary-sticky-card {
+      background: var(--verde-oscuro);
+      color: #ffffff;
+      border-radius: var(--radio-lg);
+      padding: 28px 24px;
+      position: sticky;
+      top: 84px;
+      box-shadow: var(--sombra-sticky);
+    }
+    .summary-label {
+      font-size: 13.5px;
+      color: #a7f3d0;
+      opacity: 0.85;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    .summary-big-total {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin: 0 0 22px 0;
+      color: #ffffff;
+      word-break: break-word;
+    }
+    .summary-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.12);
+      margin: 16px 0;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #e2e8f0;
+    }
+    .iva-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .iva-input {
+      width: 58px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: #ffffff;
+      color: #111827;
+      font-weight: 700;
+      font-size: 14px;
+      text-align: center;
+      outline: none;
+    }
+
+    .btn-cta-save {
+      width: 100%;
+      margin-top: 14px;
+      padding: 14px 18px;
+      background: var(--amarillo-cta);
+      color: #111827;
+      border: none;
+      border-radius: var(--radio-sm);
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-cta-save:hover {
+      background: var(--amarillo-cta-hover);
+    }
+    .btn-cta-save:active {
+      transform: scale(0.99);
+    }
+
+    .btn-cta-pdf {
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px 18px;
+      background: transparent;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: var(--radio-sm);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    .btn-cta-pdf:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .summary-footnote {
+      margin: 14px 0 0 0;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: left;
+    }
+
+    /* =========================================================
+       5. VISTA DE HISTORIAL Y KPIs
+       ========================================================= */
+    .historial-header-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-primary-dark {
+      background: var(--verde-oscuro);
+      color: #ffffff;
       border: none;
       padding: 10px 16px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 13px;
+      border-radius: var(--radio-sm);
+      font-size: 13.5px;
+      font-weight: 700;
       cursor: pointer;
-      color: white;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 6px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
     }
-    .btn-orange { background-color: #e67e22; }
-    .btn-purple { background-color: #6c3483; }
-    .btn-blue   { background-color: #2980b9; }
-    .btn-red    { background-color: #c0392b; }
-    .btn-green  { background-color: #27ae60; }
+    .btn-primary-dark:hover {
+      background: var(--verde-oscuro-2);
+    }
 
-    /* Botones CRUD */
-    .crud-actions {
+    .kpi-grid-modern {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .kpi-card-modern {
+      background: var(--bg-card);
+      border: 1px solid var(--borde-suave);
+      border-radius: var(--radio-md);
+      padding: 18px 20px;
+      box-shadow: var(--sombra-card);
+    }
+    .kpi-card-label {
+      font-size: 12.5px;
+      color: var(--texto-muted);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .kpi-card-value {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--texto-principal);
+    }
+    .kpi-card-value.green {
+      color: #15803d;
+    }
+
+    /* Barra de búsqueda y píldoras de filtro */
+    .filters-bar {
       display: flex;
-      gap: 5px;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
       flex-wrap: wrap;
     }
-    .btn-crud {
-      border: 1px solid #ccc;
-      padding: 5px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: bold;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
+    .search-box {
+      position: relative;
+      flex: 1;
+      max-width: 380px;
+      min-width: 240px;
     }
-    .btn-crud-pdf { background-color: #fff3e0; color: #e65100; border-color: #ffb74d; }
-    .btn-crud-edit { background-color: #e8f4fd; color: #0d47a1; border-color: #90caf9; }
-    .btn-crud-del { background-color: #fdecea; color: #b71c1c; border-color: #f5c6cb; }
+    .search-box input {
+      width: 100%;
+      padding: 10px 14px 10px 36px;
+      border: 1px solid var(--borde-input);
+      border-radius: var(--radio-sm);
+      background: #ffffff;
+      font-size: 14px;
+      outline: none;
+    }
+    .search-box svg {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9ca3af;
+    }
 
-    /* Cuadrícula tipo Excel */
-    .excel-grid {
+    .filter-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .filter-pill {
+      background: #ffffff;
+      border: 1px solid var(--borde-suave);
+      color: var(--texto-secundario);
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-pill.active {
+      background: var(--verde-oscuro);
+      color: #ffffff;
+      border-color: var(--verde-oscuro);
+    }
+
+    /* Tabla de Historial */
+    .historial-table-card {
+      background: var(--bg-card);
+      border-radius: var(--radio-lg);
+      border: 1px solid var(--borde-suave);
+      box-shadow: var(--sombra-card);
+      overflow: hidden;
+    }
+    .tabla-historial {
       width: 100%;
       border-collapse: collapse;
     }
-    .excel-grid td, .excel-grid th {
-      border: 1px solid var(--borde-celda);
-      padding: 6px 8px;
-      font-size: 13px;
+    .tabla-historial thead tr {
+      background: var(--bg-subtle);
+      border-bottom: 1px solid var(--borde-suave);
+    }
+    .tabla-historial th {
+      padding: 13px 16px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--texto-secundario);
+      text-align: left;
+    }
+    .tabla-historial td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 14px;
       vertical-align: middle;
     }
-
-    .empresa-box { text-align: center; width: 32%; }
-    .logo-container img { max-height: 80px; max-width: 170px; object-fit: contain; }
-    .empresa-nombre { color: var(--verde-corporativo); font-weight: 800; font-size: 16px; margin: 4px 0 2px 0; }
-    .empresa-lema { color: var(--verde-corporativo); font-style: italic; font-size: 12px; margin-bottom: 6px; }
-
-    .cell-input {
-      width: 100%;
-      border: none;
-      outline: none;
-      background: transparent;
-      font-size: 13px;
-      padding: 4px;
+    .cliente-cell-name {
+      font-weight: 700;
+      color: var(--texto-principal);
     }
-    .cell-input:focus { background: #fffde7; box-shadow: inset 0 0 0 2px #2e6b34; }
-    .cell-readonly { background-color: #f4f6f8; font-weight: bold; color: #1f2937; user-select: none; }
-
-    .bg-verde-claro { background-color: var(--verde-header); }
-    .bg-azul-header { background-color: var(--azul-tabla); font-weight: bold; text-align: center; }
-
-    /* Dashboard KPIs */
-    .kpi-grid-container {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr) 180px;
-      border-bottom: 1px solid var(--borde-celda);
-    }
-    .kpi-card { border-right: 1px solid var(--borde-celda); display: flex; flex-direction: column; }
-    .kpi-card:last-child { border-right: none; }
-    .kpi-title {
-      background-color: var(--morado-kpi);
-      font-weight: bold;
-      text-align: center;
+    .cliente-cell-doc {
       font-size: 12px;
-      padding: 10px 6px;
-      border-bottom: 1px solid var(--borde-celda);
-      flex: 1;
+      color: var(--texto-muted);
+      margin-top: 2px;
+    }
+
+    /* Selector de Estado tipo Píldora */
+    .estado-select {
+      appearance: none;
+      -webkit-appearance: none;
+      border: 1px solid transparent;
+      padding: 5px 12px;
+      font-weight: 700;
+      font-size: 12.5px;
+      border-radius: 999px;
+      cursor: pointer;
+      text-align: center;
+      outline: none;
+    }
+    .estado-Pendiente {
+      background-color: #fef3c7;
+      color: #b45309;
+      border-color: #fde68a;
+    }
+    .estado-Aprobada {
+      background-color: #dcfce7;
+      color: #15803d;
+      border-color: #bbf7d0;
+    }
+    .estado-Rechazada {
+      background-color: #fee2e2;
+      color: #b91c1c;
+      border-color: #fecaca;
+    }
+
+    .crud-actions {
       display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+      align-items: center;
+    }
+    .btn-icon-action {
+      background: #ffffff;
+      border: 1px solid var(--borde-suave);
+      color: var(--texto-secundario);
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
     }
-    .kpi-val { background-color: var(--rosa-kpi); text-align: center; font-size: 16px; font-weight: 700; padding: 16px 8px; }
-    .kpi-actions { background-color: var(--verde-header); padding: 10px; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
-
-    .estado-select { width: 100%; border: none; padding: 6px; font-weight: bold; border-radius: 3px; cursor: pointer; text-align: center; }
-    .estado-Pendiente { background-color: #ffeb9c; color: #9c6500; }
-    .estado-Aprobada  { background-color: #c6efce; color: #006100; }
-    .estado-Rechazada { background-color: #ffc7ce; color: #9c0006; }
-
-    .wa-link { color: #111; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
-
-    .excel-tabs-bar {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: #e1dfdd;
-      border-top: 1px solid #adadad;
-      display: flex;
-      align-items: center;
-      padding: 0 10px;
-      height: 46px;
-      z-index: 1000;
-      gap: 6px;
+    .btn-icon-action:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      color: var(--texto-principal);
     }
-    .sheet-tab {
-      flex: 1; max-width: 240px; text-align: center; padding: 10px 12px;
-      background: #f3f2f1; border: 1px solid #adadad; border-bottom: none;
-      cursor: pointer; font-size: 13px; font-weight: 600; color: #333;
-      border-radius: 6px 6px 0 0; white-space: nowrap;
+    .btn-icon-action.wa:hover {
+      background: #dcfce7;
+      border-color: #86efac;
+      color: #15803d;
     }
-    .sheet-tab.active { background: #ffffff; color: var(--verde-corporativo); font-weight: bold; border-bottom: 3px solid var(--verde-corporativo); }
+    .btn-icon-action.del:hover {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #dc2626;
+    }
 
-    .sheet-view { display: none; }
-    .sheet-view.active { display: block; }
+    /* Barra fija inferior móvil (oculta en escritorio) */
+    .mobile-bottom-dock {
+      display: none;
+    }
 
     /* =========================================================
-       PLANTILLA FANTASMA PDF (Aislada, 760px compacta para 1 página)
+       6. PLANTILLA FANTASMA PDF (Aislada, 760px para 1 página)
        ========================================================= */
     #contenedor-fantasma-pdf {
       position: absolute;
@@ -254,258 +885,567 @@
       font-size: 10px;
       vertical-align: middle;
       word-wrap: break-word;
+      font-family: 'Segoe UI', Calibri, Arial, sans-serif;
     }
+    .pdf-sheet .empresa-nombre { color: var(--verde-corporativo); font-weight: 800; font-size: 12px; margin: 4px 0 2px 0; }
+    .pdf-sheet .empresa-lema { color: var(--verde-corporativo); font-style: italic; font-size: 9px; margin-bottom: 6px; }
+    .pdf-sheet .logo-container img { max-height: 65px; max-width: 150px; object-fit: contain; }
+    .pdf-sheet .bg-verde-claro { background-color: var(--verde-header); }
+    .pdf-sheet .bg-azul-header { background-color: var(--azul-tabla); font-weight: bold; text-align: center; }
+    .pdf-sheet .cell-readonly { background-color: #f4f6f8; font-weight: bold; color: #1f2937; }
 
     /* =========================================================
-       DISEÑO RESPONSIVO EN PANTALLA (MÓVIL / TABLET)
+       7. DISEÑO RESPONSIVO (MÓVIL / TABLET)
        ========================================================= */
-    @media screen and (max-width: 850px) {
-      .workspace { margin: 0; border: none; box-shadow: none; }
-      .macro-toolbar { flex-direction: column; align-items: stretch; padding: 10px; }
-      .macro-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-      .macro-buttons .btn-red { grid-column: span 2; }
-      .btn-macro { width: 100%; padding: 12px 10px; font-size: 13px; }
+    @media screen and (max-width: 960px) {
+      .topbar {
+        padding: 12px 16px;
+      }
+      .brand-subtitle, .topbar-center {
+        display: none;
+      }
+      .main-container {
+        padding: 16px 14px 155px 14px;
+      }
+      .cotizador-layout {
+        grid-template-columns: 1fr;
+      }
+      .card-panel {
+        padding: 18px 16px;
+      }
+      .cliente-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .cliente-grid .full-mobile {
+        grid-column: span 2;
+      }
 
-      .formulario-pantalla .tabla-encabezado,
-      .formulario-pantalla .tabla-encabezado tbody,
-      .formulario-pantalla .tabla-encabezado tr,
-      .formulario-pantalla .tabla-encabezado td { display: block; width: 100% !important; }
-      .formulario-pantalla .tabla-encabezado tr { margin-bottom: 6px; border: 1px solid var(--borde-celda); border-radius: 6px; overflow: hidden; }
-      .formulario-pantalla .tabla-encabezado td { border: none; border-bottom: 1px solid #ddd; text-align: left !important; padding: 8px 10px; }
-      .formulario-pantalla .empresa-box { text-align: center !important; background: #fff; }
-      .formulario-pantalla .cell-input { font-size: 16px; padding: 6px 4px; background: #fafafa; border: 1px solid #ccc; border-radius: 4px; }
+      /* Convertir filas de tabla de ítems en Tarjetas limpias (Estilo Propuesta Móvil) */
+      .modern-table thead {
+        display: none;
+      }
+      .modern-table, .modern-table tbody {
+        display: block;
+        width: 100%;
+      }
+      .modern-table tbody tr {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr 1.2fr;
+        gap: 8px;
+        background: #ffffff;
+        border: 1px solid var(--borde-input);
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 12px;
+        position: relative;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      }
+      .modern-table tbody td {
+        border: none;
+        padding: 0;
+        display: block;
+      }
+      /* Número + Descripción arriba ocupando todo el ancho */
+      .modern-table tbody td.col-num {
+        grid-column: 1 / 2;
+        display: inline-flex;
+        align-items: center;
+      }
+      .modern-table tbody td.col-num .num-item {
+        background: var(--bg-subtle);
+        color: var(--texto-secundario);
+        font-weight: 700;
+        font-size: 12px;
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .modern-table tbody td.col-desc {
+        grid-column: 1 / 4;
+        margin-bottom: 4px;
+      }
+      .modern-table tbody td.col-desc .table-input {
+        font-weight: 600;
+        font-size: 15px;
+        border-bottom: 1px solid var(--borde-suave);
+        border-radius: 0;
+        padding: 6px 2px;
+      }
+      .modern-table tbody td.col-cant::before,
+      .modern-table tbody td.col-precio::before,
+      .modern-table tbody td.col-total::before {
+        content: attr(data-label);
+        display: block;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--texto-muted);
+        margin-bottom: 3px;
+      }
+      .modern-table tbody td.col-cant .table-input,
+      .modern-table tbody td.col-precio .table-input {
+        background: #f8fafc;
+        border: 1px solid var(--borde-input);
+        padding: 7px 8px;
+        font-size: 14px;
+      }
+      .modern-table tbody td.col-total {
+        text-align: right;
+      }
+      .modern-table tbody td.col-del {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
 
-      .formulario-pantalla #tabla-items thead { display: none; }
-      .formulario-pantalla #tabla-items,
-      .formulario-pantalla #tabla-items tbody,
-      .formulario-pantalla #tabla-items tfoot,
-      .formulario-pantalla #tabla-items tr,
-      .formulario-pantalla #tabla-items td { display: block; width: 100% !important; }
-      .formulario-pantalla #tbody-items tr { background: #fff; border: 2px solid var(--verde-corporativo); border-radius: 8px; margin-bottom: 12px; padding: 6px; }
-      .formulario-pantalla #tbody-items td { border: none; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; text-align: right !important; }
-      .formulario-pantalla #tbody-items td:last-child { border-bottom: none; justify-content: flex-end; }
-      .formulario-pantalla #tbody-items td::before { content: attr(data-label); font-weight: bold; color: #333; text-align: left; margin-right: 10px; min-width: 110px; }
-      .formulario-pantalla #tabla-items tfoot tr { border: 1px solid var(--borde-celda); margin-bottom: 6px; border-radius: 6px; overflow: hidden; }
+      /* Resumen al final del formulario en móvil */
+      .summary-sticky-card {
+        position: static;
+      }
 
-      .kpi-grid-container { grid-template-columns: 1fr 1fr; }
-      .kpi-card { border-bottom: 1px solid var(--borde-celda); }
-      .kpi-actions { grid-column: span 2; flex-direction: row; }
+      /* KPIs en 2 columnas en móvil */
+      .kpi-grid-modern {
+        grid-template-columns: 1fr 1fr;
+      }
+      .kpi-grid-modern .kpi-card-modern:last-child {
+        grid-column: span 2;
+      }
 
-      .tabla-historial thead { display: none; }
-      .tabla-historial, .tabla-historial tbody, .tabla-historial tr, .tabla-historial td { display: block; width: 100% !important; }
-      .tabla-historial tbody tr { margin: 10px; width: calc(100% - 20px) !important; border: 1px solid var(--borde-celda); border-radius: 8px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.08); overflow: hidden; }
-      .tabla-historial tbody td { border: none; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; text-align: right !important; font-size: 14px; }
-      .tabla-historial tbody td::before { content: attr(data-label); font-weight: bold; color: #444; text-align: left; }
-      .tabla-historial .estado-select { max-width: 160px; font-size: 14px; }
+      /* Tabla Historial como tarjetas en móvil */
+      .tabla-historial thead {
+        display: none;
+      }
+      .tabla-historial, .tabla-historial tbody, .tabla-historial tr, .tabla-historial td {
+        display: block;
+        width: 100%;
+      }
+      .tabla-historial tbody tr {
+        padding: 14px;
+        border-bottom: 1px solid var(--borde-suave);
+      }
+      .tabla-historial tbody td {
+        border: none;
+        padding: 5px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right;
+      }
+      .tabla-historial tbody td::before {
+        content: attr(data-label);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--texto-muted);
+        text-align: left;
+      }
+
+      /* Barra Inferior Fija Móvil (Total + Guardar + Pestañas) */
+      .mobile-bottom-dock {
+        display: block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 950;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
+      }
+      .mobile-quote-bar {
+        background: var(--verde-oscuro);
+        color: #ffffff;
+        padding: 10px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .mobile-quote-bar.hidden {
+        display: none;
+      }
+      .mobile-quote-bar-label {
+        font-size: 11px;
+        color: #a7f3d0;
+      }
+      .mobile-quote-bar-total {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 20px;
+        font-weight: 800;
+      }
+      .btn-mobile-save {
+        background: var(--amarillo-cta);
+        color: #111827;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-weight: 800;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .mobile-tabs-nav {
+        background: #ffffff;
+        border-top: 1px solid var(--borde-suave);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        height: 48px;
+      }
+      .mobile-tab-btn {
+        background: none;
+        border: none;
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--texto-muted);
+        cursor: pointer;
+        position: relative;
+      }
+      .mobile-tab-btn.active {
+        color: var(--verde-oscuro);
+      }
+      .mobile-tab-btn.active::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 20%;
+        right: 20%;
+        height: 3px;
+        background: var(--verde-oscuro);
+        border-radius: 0 0 4px 4px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Barra superior -->
-  <div class="topbar">
-    <div><strong>Soluciones Integrales M.W. S.A.S.</strong></div>
-    <div id="conexion-status" class="status-badge">🟢 En línea (Sincronizado)</div>
+  <!-- =========================================================
+       PANTALLA DE INICIO DE SESIÓN (LOGIN)
+       ========================================================= -->
+  <div id="vista-login">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="mw-badge">
+          <img src="logo.png" alt="M.W." onerror="this.style.display='none'; this.parentElement.textContent='M.W.';" />
+        </div>
+        <div class="login-brand-text">
+          <h2>Soluciones Integrales M.W. S.A.S.</h2>
+          <p>Energía que transforma el campo</p>
+        </div>
+      </div>
+
+      <h1 class="login-title">Iniciar sesión</h1>
+
+      <div id="login-error" class="login-error"></div>
+
+      <form id="form-login" onsubmit="iniciarSesion(event)">
+        <div class="form-group">
+          <label class="form-label" for="login-email">Correo</label>
+          <input type="email" id="login-email" class="modern-input" placeholder="equipo@integralesmw.com" required autocomplete="email" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="login-password">Contraseña</label>
+          <div class="password-wrapper">
+            <input type="password" id="login-password" class="modern-input" placeholder="••••••••••••" required autocomplete="current-password" />
+            <button type="button" class="toggle-pass-btn" onclick="alternarPassword()">Ver</button>
+          </div>
+        </div>
+
+        <button type="submit" id="btn-login-submit" class="btn-login">Entrar</button>
+      </form>
+
+      <div class="login-footer">
+        Acceso solo para el equipo de Soluciones Integrales M.W.
+      </div>
+    </div>
   </div>
 
-  <!-- HOJA 1: COTIZACIÓN -->
-  <div id="vista-cotizacion" class="workspace sheet-view active">
-    
-    <div id="banner-edicion" class="edit-banner">
-      <span id="texto-banner-edicion">✏️ Editando Cotización N° 001</span>
-      <button class="btn-crud btn-crud-del" onclick="cancelarModoEdicion()">
-        ✕ Cancelar edición y crear nueva
-      </button>
-    </div>
+  <!-- =========================================================
+       APLICACIÓN PRINCIPAL
+       ========================================================= -->
+  <div id="app-shell" class="hidden">
 
-    <div class="macro-toolbar">
-      <div class="macro-buttons">
-        <button class="btn-macro btn-orange" onclick="exportarCotizacionActualPDF()">
-          📄 EXPORTAR A PDF (CARTA)
-        </button>
-        <button id="btn-guardar-principal" class="btn-macro btn-purple" onclick="guardarCotizacion()">
-          💾 GUARDAR HISTORIAL
-        </button>
-        <button class="btn-macro btn-red" onclick="limpiarCotizacion()">
-          🧹 NUEVA / LIMPIAR DATOS
-        </button>
+    <!-- Barra Superior -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="mw-badge">
+          <img src="logo.png" alt="M.W." onerror="this.style.display='none'; this.parentElement.textContent='M.W.';" />
+        </div>
+        <div class="brand-info">
+          <span class="brand-title">Soluciones Integrales M.W. S.A.S.</span>
+          <span class="brand-subtitle">Energía que transforma el campo</span>
+        </div>
       </div>
-      <div>
-        <button class="btn-macro btn-green" onclick="agregarFilaProducto()">
-          ➕ Agregar Ítem
-        </button>
-      </div>
-    </div>
 
-    <div class="formulario-pantalla" style="padding: 15px;">
-      <table class="excel-grid tabla-encabezado">
-        <tr>
-          <td rowspan="4" class="empresa-box">
-            <div class="logo-container">
-              <img src="logo.png" alt="Logo M.W." onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='block';" />
-              <div id="logo-fallback" style="display:none; font-size:34px;">🌱☀️</div>
+      <nav class="topbar-center">
+        <button id="tab-cotizacion" class="nav-tab active" onclick="cambiarPestana('cotizacion')">
+          Cotización
+        </button>
+        <button id="tab-control" class="nav-tab" onclick="cambiarPestana('control')">
+          Historial
+        </button>
+      </nav>
+
+      <div class="topbar-right">
+        <div id="conexion-status" class="status-badge">
+          <span class="status-dot"></span> Sincronizado
+        </div>
+        <button class="btn-salir" onclick="cerrarSesion()">Salir</button>
+      </div>
+    </header>
+
+    <main class="main-container">
+
+      <!-- =====================================================
+           VISTA 1: COTIZACIÓN
+           ===================================================== -->
+      <section id="vista-cotizacion" class="sheet-view active">
+
+        <!-- Banner de Modo Edición -->
+        <div id="banner-edicion" class="edit-banner">
+          <span id="texto-banner-edicion">✏️ Editando Cotización N° 001</span>
+          <button class="btn-ghost" onclick="cancelarModoEdicion()">
+            ✕ Cancelar edición y crear nueva
+          </button>
+        </div>
+
+        <!-- Encabezado de la Cotización -->
+        <div class="page-header">
+          <div class="quote-title-group">
+            <h1 class="quote-main-title">Cotización N° <span id="cot-numero">001</span></h1>
+            <span id="subtitulo-estado-cot" class="quote-status-hint">Nueva cotización, todavía sin guardar</span>
+          </div>
+          <div>
+            <button class="btn-ghost" onclick="limpiarCotizacion()">
+              Limpiar datos
+            </button>
+          </div>
+        </div>
+
+        <!-- Layout de 2 Columnas -->
+        <div class="cotizador-layout">
+
+          <!-- Columna Izquierda: Formulario + Ítems + Observaciones -->
+          <div class="card-panel">
+            <h2 class="section-title">Cliente</h2>
+
+            <div class="cliente-grid">
+              <div class="full-mobile">
+                <label class="form-label" for="cot-cliente">Nombre o razón social</label>
+                <input type="text" id="cot-cliente" class="modern-input" placeholder="Ej: Finca La Esperanza" />
+              </div>
+              <div>
+                <label class="form-label" for="cot-documento">Cédula o NIT</label>
+                <input type="text" id="cot-documento" class="modern-input" placeholder="12.345.678" />
+              </div>
+              <div>
+                <label class="form-label" for="cot-celular">Celular (WhatsApp)</label>
+                <input type="tel" id="cot-celular" class="modern-input" placeholder="310 000 0000" />
+              </div>
+              <div class="full-mobile">
+                <label class="form-label" for="cot-direccion">Dirección o correo</label>
+                <input type="text" id="cot-direccion" class="modern-input" placeholder="Vereda, Ciudad o Email" />
+              </div>
+              <div>
+                <label class="form-label" for="cot-fecha">Fecha</label>
+                <input type="date" id="cot-fecha" class="modern-input" />
+              </div>
+              <div>
+                <label class="form-label" for="cot-valida">Válida hasta</label>
+                <input type="date" id="cot-valida" class="modern-input" />
+              </div>
             </div>
-            <div class="empresa-nombre">Soluciones Integrales M.W. S.A.S.</div>
-            <div class="empresa-lema">Energía que transforma el campo</div>
-          </td>
-          <td colspan="2" class="bg-verde-claro" style="text-align:center; font-size:18px; font-weight:bold;">
-            COTIZACIÓN COMERCIAL
-          </td>
-          <td class="bg-azul-header" style="width:15%;">COTIZACIÓN N°</td>
-          <td class="cell-readonly" style="width:18%; text-align:center; font-size:16px; color:#c0392b;" id="cot-numero">
-            001
-          </td>
-        </tr>
-        <tr>
-          <td class="bg-azul-header" style="width:15%;">Fecha:</td>
-          <td style="width:20%;"><input type="date" id="cot-fecha" class="cell-input" /></td>
-          <td class="bg-azul-header">Válida hasta:</td>
-          <td><input type="date" id="cot-valida" class="cell-input" /></td>
-        </tr>
-        <tr>
-          <td class="bg-azul-header">Cliente:</td>
-          <td><input type="text" id="cot-cliente" class="cell-input" placeholder="Nombre o Razón Social" /></td>
-          <td class="bg-azul-header">Documento / NIT:</td>
-          <td><input type="text" id="cot-documento" class="cell-input" placeholder="Cédula o NIT" /></td>
-        </tr>
-        <tr>
-          <td class="bg-azul-header">Celular (WhatsApp):</td>
-          <td><input type="tel" id="cot-celular" class="cell-input" placeholder="Ej: 3103861429" /></td>
-          <td class="bg-azul-header">Dirección / Correo:</td>
-          <td><input type="text" id="cot-direccion" class="cell-input" placeholder="Ciudad, Vereda o Email" /></td>
-        </tr>
-        <tr>
-          <td style="text-align:center; font-size:12px;">Documento: 123 4567 8901</td>
-          <td colspan="4" rowspan="3" class="bg-verde-claro" style="font-size:12px; padding:10px;">
-            <strong>Propuesta Técnica y Económica:</strong> A continuación presentamos la cotización detallada de equipos, insumos y/o servicios solicitados.
-          </td>
-        </tr>
-        <tr>
-          <td style="text-align:center; font-size:12px;">Crra. 68 #1 - 26, Barrio El Cambio, Buenaventura</td>
-        </tr>
-        <tr>
-          <td style="text-align:center; font-size:12px;">integralesmw@gmail.com | (+57) 314 573 5259</td>
-        </tr>
-      </table>
 
-      <br />
+            <!-- Tabla de Ítems -->
+            <div class="items-header-bar">
+              <h2 class="section-title" style="margin:0;">Ítems</h2>
+              <button type="button" class="btn-add-item" onclick="agregarFilaProducto()">
+                + Agregar ítem
+              </button>
+            </div>
 
-      <table class="excel-grid" id="tabla-items">
-        <thead>
-          <tr class="bg-azul-header">
-            <th style="width: 6%;">#</th>
-            <th style="width: 46%;">DESCRIPCIÓN / DESCRIPTION</th>
-            <th style="width: 12%;">CANTIDAD</th>
-            <th style="width: 16%;">PRECIO UNITARIO (COP)</th>
-            <th style="width: 16%;">TOTAL (COP) 🔒</th>
-            <th style="width: 4%;"></th>
-          </tr>
-        </thead>
-        <tbody id="tbody-items"></tbody>
-        <tfoot>
-          <tr>
-            <td colspan="2" rowspan="3" style="vertical-align: top;">
-              <strong>OBSERVACIONES / CONDICIONES:</strong>
-              <textarea id="cot-observaciones" class="cell-input" rows="3" placeholder="Tiempo de entrega, forma de pago, garantía..."></textarea>
-            </td>
-            <td colspan="2" class="bg-azul-header" style="text-align:right;">SUBTOTAL:</td>
-            <td class="cell-readonly" style="text-align:right;" id="cot-subtotal">$ 0,00</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td colspan="2" class="bg-azul-header" style="text-align:right;">
-              IVA (%): <input type="number" id="cot-iva-porcentaje" value="0" min="0" max="100" style="width:55px; text-align:center; font-size:14px;" oninput="recalcularTotales()" />
-            </td>
-            <td class="cell-readonly" style="text-align:right;" id="cot-iva-valor">$ 0,00</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td colspan="2" class="bg-azul-header" style="text-align:right; font-size:14px;">TOTAL COTIZACIÓN:</td>
-            <td class="cell-readonly" style="text-align:right; font-size:16px; background:#d9ead3;" id="cot-total-general">$ 0,00</td>
-            <td></td>
-          </tr>
-        </tfoot>
-      </table>
+            <table class="modern-table" id="tabla-items">
+              <thead>
+                <tr>
+                  <th style="width: 6%;">N°</th>
+                  <th style="width: 44%;">Descripción</th>
+                  <th style="width: 13%; text-align:right;">Cant.</th>
+                  <th style="width: 17%; text-align:right;">Precio unitario</th>
+                  <th style="width: 15%; text-align:right;">Total</th>
+                  <th style="width: 5%;"></th>
+                </tr>
+              </thead>
+              <tbody id="tbody-items"></tbody>
+            </table>
+
+            <!-- Observaciones -->
+            <div>
+              <h2 class="section-title" style="margin-bottom: 10px;">Observaciones y condiciones</h2>
+              <textarea id="cot-observaciones" class="modern-input" rows="3" placeholder="Tiempo de entrega, forma de pago (50% anticipo y 50% contra entrega), garantía de fábrica..."></textarea>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Tarjeta Sticky de Totales y Acciones -->
+          <aside class="summary-sticky-card">
+            <div class="summary-label">Total de la cotización</div>
+            <div class="summary-big-total" id="cot-total-general">$ 0</div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <strong id="cot-subtotal">$ 0</strong>
+            </div>
+
+            <div class="summary-row">
+              <div class="iva-control">
+                <span>IVA</span>
+                <input type="number" id="cot-iva-porcentaje" class="iva-input" value="0" min="0" max="100" oninput="recalcularTotales()" />
+                <span>%</span>
+              </div>
+              <strong id="cot-iva-valor">$ 0</strong>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <button id="btn-guardar-principal" class="btn-cta-save" onclick="guardarCotizacion()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              <span id="texto-btn-guardar">Guardar cotización</span>
+            </button>
+
+            <button class="btn-cta-pdf" onclick="exportarCotizacionActualPDF()">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              Exportar PDF
+            </button>
+
+            <p class="summary-footnote">El número definitivo se asigna al guardar.</p>
+          </aside>
+
+        </div>
+      </section>
+
+      <!-- =====================================================
+           VISTA 2: HISTORIAL DE COTIZACIONES
+           ===================================================== -->
+      <section id="vista-control" class="sheet-view">
+
+        <div class="page-header">
+          <h1 class="quote-main-title">Historial de cotizaciones</h1>
+          <div class="historial-header-actions">
+            <button class="btn-ghost" onclick="exportarHistorialExcel()">
+              ⬇ Descargar Excel
+            </button>
+            <button class="btn-primary-dark" onclick="irANuevaCotizacion()">
+              + Nueva cotización
+            </button>
+          </div>
+        </div>
+
+        <!-- Tarjetas de KPIs -->
+        <div class="kpi-grid-modern">
+          <div class="kpi-card-modern">
+            <div class="kpi-card-label">Dinero pendiente</div>
+            <div class="kpi-card-value" id="kpi-pendiente">$ 0</div>
+          </div>
+          <div class="kpi-card-modern">
+            <div class="kpi-card-label">Dinero cerrado</div>
+            <div class="kpi-card-value green" id="kpi-aprobado">$ 0</div>
+          </div>
+          <div class="kpi-card-modern">
+            <div class="kpi-card-label">Cotizaciones aprobadas</div>
+            <div class="kpi-card-value" id="kpi-cant-aprobadas">0</div>
+          </div>
+          <div class="kpi-card-modern">
+            <div class="kpi-card-label">Clientes por llamar</div>
+            <div class="kpi-card-value" id="kpi-por-llamar">0</div>
+          </div>
+          <div class="kpi-card-modern">
+            <div class="kpi-card-label">Tasa de éxito</div>
+            <div class="kpi-card-value" id="kpi-tasa">0%</div>
+          </div>
+        </div>
+
+        <!-- Buscador y Píldoras de Filtro -->
+        <div class="filters-bar">
+          <div class="search-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="filtro-cliente" placeholder="Buscar por nombre o cédula" oninput="renderizarTablaControl()" />
+          </div>
+
+          <!-- Select oculto sincronizado por compatibilidad + Píldoras visuales -->
+          <select id="filtro-estado" onchange="renderizarTablaControl()" style="display:none;">
+            <option value="TODOS">Todos</option>
+            <option value="Pendiente">Pendiente</option>
+            <option value="Aprobada">Aprobada</option>
+            <option value="Rechazada">Rechazada</option>
+          </select>
+
+          <div class="filter-pills">
+            <button type="button" class="filter-pill active" data-estado="TODOS" onclick="seleccionarFiltroEstado('TODOS')">
+              Todas <span id="count-todas">0</span>
+            </button>
+            <button type="button" class="filter-pill" data-estado="Pendiente" onclick="seleccionarFiltroEstado('Pendiente')">
+              Pendientes <span id="count-pendientes">0</span>
+            </button>
+            <button type="button" class="filter-pill" data-estado="Aprobada" onclick="seleccionarFiltroEstado('Aprobada')">
+              Aprobadas <span id="count-aprobadas">0</span>
+            </button>
+            <button type="button" class="filter-pill" data-estado="Rechazada" onclick="seleccionarFiltroEstado('Rechazada')">
+              Rechazadas <span id="count-rechazadas">0</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabla de Historial -->
+        <div class="historial-table-card">
+          <table class="tabla-historial">
+            <thead>
+              <tr>
+                <th style="width: 8%;">N°</th>
+                <th style="width: 11%;">Fecha</th>
+                <th style="width: 26%;">Cliente</th>
+                <th style="width: 14%;">Celular</th>
+                <th style="width: 15%; text-align:right;">Valor total</th>
+                <th style="width: 13%; text-align:center;">Estado</th>
+                <th style="width: 13%; text-align:right;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-control">
+              <tr>
+                <td colspan="7" style="text-align:center; padding:28px; color:#6b7280;">Cargando historial de cotizaciones...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Barra Fija Inferior para Móviles -->
+    <div class="mobile-bottom-dock">
+      <div id="mobile-quote-summary" class="mobile-quote-bar">
+        <div>
+          <div class="mobile-quote-bar-label">Total de la cotización</div>
+          <div id="cot-total-movil" class="mobile-quote-bar-total">$ 0</div>
+        </div>
+        <button type="button" class="btn-mobile-save" onclick="guardarCotizacion()">
+          Guardar
+        </button>
+      </div>
+      <div class="mobile-tabs-nav">
+        <button id="tab-movil-cotizacion" class="mobile-tab-btn active" onclick="cambiarPestana('cotizacion')">
+          Cotización
+        </button>
+        <button id="tab-movil-control" class="mobile-tab-btn" onclick="cambiarPestana('control')">
+          Historial
+        </button>
+      </div>
     </div>
+
   </div>
 
-  <!-- HOJA 2: CONTROL_COTIZACIONES -->
-  <div id="vista-control" class="workspace sheet-view">
-    
-    <div style="background: var(--verde-header); padding: 14px; text-align: center; border-bottom: 1px solid var(--borde-celda);">
-      <div style="font-size: 19px; font-weight: bold; color: #111;">Control de Consecutivos de Cotizaciones</div>
-      <div style="font-size: 12px; color: var(--verde-corporativo); font-weight: bold;">Soluciones Integrales M.W. S.A.S. — Crra. 68 #1 - 26, Barrio El Cambio, Buenaventura</div>
-    </div>
-
-    <div class="kpi-grid-container">
-      <div class="kpi-card">
-        <div class="kpi-title">Dinero Pendiente</div>
-        <div class="kpi-val" id="kpi-pendiente">$ 0,00</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Dinero Cerrado</div>
-        <div class="kpi-val" id="kpi-aprobado" style="background-color:#d9ead3;">$ 0,00</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Cotizaciones Aprobadas</div>
-        <div class="kpi-val" id="kpi-cant-aprobadas">0</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Clientes por Llamar</div>
-        <div class="kpi-val" id="kpi-por-llamar">0</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Tasa de Éxito</div>
-        <div class="kpi-val" id="kpi-tasa">0%</div>
-      </div>
-      <div class="kpi-actions">
-        <button class="btn-macro btn-green" onclick="irANuevaCotizacion()">
-          ➕ Nueva
-        </button>
-        <button class="btn-macro btn-purple" onclick="exportarHistorialExcel()">
-          📥 Excel
-        </button>
-      </div>
-    </div>
-
-    <div class="bg-verde-claro" style="padding: 10px 14px; border-bottom: 1px solid var(--borde-celda); display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-      <strong>🔍 Buscar:</strong>
-      <input type="text" id="filtro-cliente" placeholder="Nombre o cédula..." oninput="renderizarTablaControl()" style="padding:8px 10px; border:1px solid #888; border-radius:4px; flex:1; min-width:160px; font-size:15px;" />
-      <strong>Estado:</strong>
-      <select id="filtro-estado" onchange="renderizarTablaControl()" style="padding:8px 10px; border:1px solid #888; border-radius:4px; font-size:15px;">
-        <option value="TODOS">Todos</option>
-        <option value="Pendiente">🟡 Pendiente</option>
-        <option value="Aprobada">🟢 Aprobada</option>
-        <option value="Rechazada">🔴 Rechazada</option>
-      </select>
-    </div>
-
-    <table class="excel-grid tabla-historial">
-      <thead>
-        <tr class="bg-azul-header">
-          <th style="width: 7%;">No. Cot.</th>
-          <th style="width: 9%;">Fecha</th>
-          <th style="width: 18%;">Nombre Cliente</th>
-          <th style="width: 11%;">Cédula</th>
-          <th style="width: 10%;">Celular</th>
-          <th style="width: 13%;">Valor Total</th>
-          <th style="width: 10%;">Estado</th>
-          <th style="width: 9%;">WhatsApp</th>
-          <th style="width: 13%;">Acciones / PDF</th>
-        </tr>
-      </thead>
-      <tbody id="tbody-control">
-        <tr>
-          <td colspan="9" style="text-align:center; padding:20px; color:#666;">Cargando historial de cotizaciones...</td>
-        </tr>
-      </tbody>
-    </table>
-
-  </div>
-
-  <!-- ========================================================= -->
-  <!-- PLANTILLA FANTASMA PDF (Ajustada a escala 1.8 para 1 página)-->
-  <!-- ========================================================= -->
+  <!-- =========================================================
+       PLANTILLA FANTASMA PDF (Intacta a escala 1.8 para 1 página)
+       ========================================================= -->
   <div id="contenedor-fantasma-pdf">
     <div id="lienzo-pdf-excel" class="pdf-sheet">
       <table class="pdf-table">
@@ -515,8 +1455,8 @@
               <img src="logo.png" alt="Logo M.W." onerror="this.style.display='none'; document.getElementById('logo-pdf-fallback').style.display='block';" />
               <div id="logo-pdf-fallback" style="display:none; font-size:26px;">🌱☀️</div>
             </div>
-            <div class="empresa-nombre" style="font-size: 12px;">Soluciones Integrales M.W. S.A.S.</div>
-            <div class="empresa-lema" style="font-size: 9px;">Energía que transforma el campo</div>
+            <div class="empresa-nombre">Soluciones Integrales M.W. S.A.S.</div>
+            <div class="empresa-lema">Energía que transforma el campo</div>
           </td>
           <td colspan="2" class="bg-verde-claro" style="width:36%; text-align:center; font-size:14px; font-weight:bold;">
             COTIZACIÓN COMERCIAL
@@ -591,43 +1531,50 @@
     </div>
   </div>
 
-  <!-- Barra Inferior de Pestañas -->
-  <div class="excel-tabs-bar">
-    <div id="tab-cotizacion" class="sheet-tab active" onclick="cambiarPestana('cotizacion')">
-      📑 Cotización
-    </div>
-    <div id="tab-control" class="sheet-tab" onclick="cambiarPestana('control')">
-      📊 Control_Cotizaciones
-    </div>
-  </div>
-
-  <!-- LÓGICA JAVASCRIPT -->
+  <!-- =========================================================
+       LÓGICA JAVASCRIPT (FIREBASE AUTH + FIRESTORE + PDF + EXCEL)
+       ========================================================= -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-    import { 
-      getFirestore, 
-      enableIndexedDbPersistence, 
-      collection, 
-      addDoc, 
-      onSnapshot, 
-      doc, 
-      updateDoc, 
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    import {
+      getFirestore,
+      enableIndexedDbPersistence,
+      collection,
+      addDoc,
+      onSnapshot,
+      doc,
+      updateDoc,
       deleteDoc,
-      query, 
-      orderBy 
+      query,
+      orderBy
     } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
     const firebaseConfig = {
-        apiKey: "AIzaSyAiMACeB4GnB1ycj5L5C0BJCHSXnx1kTIE",
-        authDomain: "cotizador-mw-sas.firebaseapp.com",
-        projectId: "cotizador-mw-sas",
-        storageBucket: "cotizador-mw-sas.firebasestorage.app",
-        messagingSenderId: "667219263104",
-        appId: "1:667219263104:web:9781825a8061ab2992b065",
-        measurementId: "G-XWNEDGHZRE"
+      apiKey: "AIzaSyAiMACeB4GnB1ycj5L5C0BJCHSXnx1kTIE",
+      authDomain: "cotizador-mw-sas.firebaseapp.com",
+      projectId: "cotizador-mw-sas",
+      storageBucket: "cotizador-mw-sas.firebasestorage.app",
+      messagingSenderId: "667219263104",
+      appId: "1:667219263104:web:9781825a8061ab2992b065",
+      measurementId: "G-XWNEDGHZRE"
     };
 
+    // Credenciales de respaldo para el equipo (funciona incluso offline o mientras activas Firebase Auth)
+    const CREDENCIAL_EQUIPO_FALLBACK = {
+      email: "equipo@integralesmw.com",
+      pass: "mw2026*"
+    };
+
+    let app = null;
+    let auth = null;
     let db = null;
+    let unsubscribeSnapshot = null;
     let usarFirebase = firebaseConfig.apiKey !== "REEMPLAZAR_CON_TU_API_KEY";
     let listaCotizaciones = [];
     let totalActualNumerico = 0;
@@ -635,26 +1582,129 @@
 
     if (usarFirebase) {
       try {
-        const app = initializeApp(firebaseConfig);
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
         db = getFirestore(app);
         enableIndexedDbPersistence(db).catch(() => {});
+
+        onAuthStateChanged(auth, (user) => {
+          const sesionLocal = sessionStorage.getItem("mw_sesion_activa") === "true";
+          if (user || sesionLocal) {
+            mostrarAplicacion();
+          } else {
+            mostrarPantallaLogin();
+          }
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      document.getElementById("conexion-status").innerHTML = `<span class="status-dot" style="background:#f59e0b;"></span> Modo Local`;
+      if (sessionStorage.getItem("mw_sesion_activa") === "true") {
+        mostrarAplicacion();
+      }
+    }
+
+    function iniciarEscuchaDatos() {
+      if (usarFirebase && db) {
+        if (unsubscribeSnapshot) return;
         const q = query(collection(db, "cotizaciones"), orderBy("consecutivo", "asc"));
-        onSnapshot(q, (snapshot) => {
+        unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
           listaCotizaciones = [];
           snapshot.forEach((docSnap) => {
             listaCotizaciones.push({ id: docSnap.id, ...docSnap.data() });
           });
           if (!cotizacionEditandoId) actualizarConsecutivoAutomatico();
           renderizarTablaControl();
+        }, (err) => {
+          console.warn("Cargando respaldo local:", err);
+          cargarDatosLocalStorage();
         });
-      } catch (e) { console.error(e); }
-    } else {
-      document.getElementById("conexion-status").innerHTML = "⚠️ Modo Local";
+      } else {
+        cargarDatosLocalStorage();
+      }
+    }
+
+    function cargarDatosLocalStorage() {
       listaCotizaciones = JSON.parse(localStorage.getItem("cotizaciones_mw") || "[]");
-      actualizarConsecutivoAutomatico();
+      if (!cotizacionEditandoId) actualizarConsecutivoAutomatico();
       renderizarTablaControl();
     }
 
+    function mostrarAplicacion() {
+      document.getElementById("vista-login").classList.add("hidden");
+      document.getElementById("app-shell").classList.remove("hidden");
+      iniciarEscuchaDatos();
+    }
+
+    function mostrarPantallaLogin() {
+      document.getElementById("app-shell").classList.add("hidden");
+      document.getElementById("vista-login").classList.remove("hidden");
+    }
+
+    window.alternarPassword = function() {
+      const input = document.getElementById("login-password");
+      const btn = input.nextElementSibling;
+      if (input.type === "password") {
+        input.type = "text";
+        btn.textContent = "Ocultar";
+      } else {
+        input.type = "password";
+        btn.textContent = "Ver";
+      }
+    };
+
+    window.iniciarSesion = async function(e) {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value.trim().toLowerCase();
+      const pass = document.getElementById("login-password").value;
+      const errorBox = document.getElementById("login-error");
+      const btn = document.getElementById("btn-login-submit");
+
+      errorBox.style.display = "none";
+      btn.disabled = true;
+      btn.textContent = "Verificando...";
+
+      try {
+        if (usarFirebase && auth) {
+          await signInWithEmailAndPassword(auth, email, pass);
+          sessionStorage.setItem("mw_sesion_activa", "true");
+          mostrarAplicacion();
+        } else if (email === CREDENCIAL_EQUIPO_FALLBACK.email && pass === CREDENCIAL_EQUIPO_FALLBACK.pass) {
+          sessionStorage.setItem("mw_sesion_activa", "true");
+          mostrarAplicacion();
+        } else {
+          throw new Error("Credenciales inválidas");
+        }
+      } catch (err) {
+        // Si el usuario usa la credencial de equipo mientras configura Firebase Auth en la consola
+        if (email === CREDENCIAL_EQUIPO_FALLBACK.email && pass === CREDENCIAL_EQUIPO_FALLBACK.pass) {
+          sessionStorage.setItem("mw_sesion_activa", "true");
+          mostrarAplicacion();
+        } else {
+          errorBox.textContent = "Correo o contraseña incorrectos. Verifica tus datos de acceso.";
+          errorBox.style.display = "block";
+        }
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Entrar";
+      }
+    };
+
+    window.cerrarSesion = async function() {
+      sessionStorage.removeItem("mw_sesion_activa");
+      if (usarFirebase && auth) {
+        try { await signOut(auth); } catch (e) {}
+      }
+      mostrarPantallaLogin();
+    };
+
+    // Formateo visual en pantalla (limpio tipo propuesta: $ 9.080.000)
+    function formatearCOPPantalla(valor) {
+      return "$ " + Math.round(Number(valor || 0)).toLocaleString("es-CO");
+    }
+
+    // Formateo para PDF oficial (con decimales exactos como el original)
     function formatearCOP(valor) {
       return "$ " + Number(valor || 0).toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
@@ -669,13 +1719,23 @@
       const numFila = tbody.children.length + 1;
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td data-label="Ítem #" style="text-align:center;" class="num-item">${numFila}</td>
-        <td data-label="Descripción"><input type="text" class="cell-input item-desc" value="${descripcion}" placeholder="Descripción del producto o servicio..." /></td>
-        <td data-label="Cantidad"><input type="number" class="cell-input item-cant" value="${cantidad}" min="0" step="any" style="text-align:center;" oninput="recalcularTotales()" /></td>
-        <td data-label="Precio Unit."><input type="number" class="cell-input item-precio" value="${precio}" min="0" step="any" style="text-align:right;" oninput="recalcularTotales()" /></td>
-        <td data-label="Total 🔒" class="cell-readonly item-total" style="text-align:right;">$ 0,00</td>
-        <td style="text-align:center;">
-          <button onclick="eliminarFila(this)" style="border:none; background:#fee2e2; color:#c0392b; padding:4px 8px; border-radius:4px; cursor:pointer; font-weight:bold;">✕</button>
+        <td class="col-num"><span class="num-item">${numFila}</span></td>
+        <td class="col-desc">
+          <input type="text" class="table-input item-desc" value="${descripcion}" placeholder="Descripción del producto o servicio" />
+        </td>
+        <td class="col-cant" data-label="Cant.">
+          <input type="number" class="table-input item-cant" value="${cantidad}" min="0" step="any" style="text-align:right;" placeholder="0" oninput="recalcularTotales()" />
+        </td>
+        <td class="col-precio" data-label="Precio unitario">
+          <input type="number" class="table-input item-precio" value="${precio}" min="0" step="any" style="text-align:right;" placeholder="0" oninput="recalcularTotales()" />
+        </td>
+        <td class="col-total" data-label="Total" style="text-align:right;">
+          <span class="item-total-display item-total">$ 0</span>
+        </td>
+        <td class="col-del" style="text-align:center;">
+          <button type="button" class="btn-delete-row" onclick="eliminarFila(this)" title="Eliminar ítem">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          </button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -700,19 +1760,22 @@
         const precio = parseFloat(fila.querySelector(".item-precio").value) || 0;
         const totalFila = cant * precio;
         subtotal += totalFila;
-        fila.querySelector(".item-total").textContent = formatearCOP(totalFila);
+        fila.querySelector(".item-total").textContent = formatearCOPPantalla(totalFila);
       });
 
       const porcIva = parseFloat(document.getElementById("cot-iva-porcentaje").value) || 0;
       const valorIva = subtotal * (porcIva / 100);
       totalActualNumerico = subtotal + valorIva;
 
-      document.getElementById("cot-subtotal").textContent = formatearCOP(subtotal);
-      document.getElementById("cot-iva-valor").textContent = formatearCOP(valorIva);
-      document.getElementById("cot-total-general").textContent = formatearCOP(totalActualNumerico);
+      document.getElementById("cot-subtotal").textContent = formatearCOPPantalla(subtotal);
+      document.getElementById("cot-iva-valor").textContent = formatearCOPPantalla(valorIva);
+      document.getElementById("cot-total-general").textContent = formatearCOPPantalla(totalActualNumerico);
+
+      const totalMovil = document.getElementById("cot-total-movil");
+      if (totalMovil) totalMovil.textContent = formatearCOPPantalla(totalActualNumerico);
     };
 
-    // MOTOR PDF INDEPENDIENTE (760px / 26 filas con altura compacta 15px y escala 1.8 para entrar completo)
+    // MOTOR PDF INDEPENDIENTE INTACTO (760px / 26 filas con escala 1.8 en 1 sola página A4)
     async function generarArchivoPDFDesdeObjeto(datos) {
       const numStr = String(datos.consecutivo || 1).padStart(3, "0");
       document.getElementById("pdf-numero").textContent = numStr;
@@ -727,9 +1790,7 @@
       const tbodyPdf = document.getElementById("pdf-tbody-items");
       tbodyPdf.innerHTML = "";
 
-      // Alto de cada fila de productos en el PDF (antes 15px). Súbelo o bájalo aquí si lo quieres distinto.
       const ALTO_FILA_PDF = 24;
-
       let subtotal = 0;
       const itemsLista = Array.isArray(datos.items) && datos.items.length > 0
         ? datos.items
@@ -752,7 +1813,6 @@
         tbodyPdf.appendChild(tr);
       });
 
-      // Rellenar exactamente hasta las 26 filas con altura compacta de 15px
       const filasMinimas = 26;
       for (let i = itemsLista.length; i < filasMinimas; i++) {
         const trVacio = document.createElement("tr");
@@ -774,12 +1834,8 @@
 
       const clienteLimpio = (datos.cliente || "Cliente").trim().replace(/\s+/g, "_");
       const nombreArchivo = `Cotizacion_${numStr}_${clienteLimpio}.pdf`;
-
       const lienzo = document.getElementById("lienzo-pdf-excel");
 
-      // CORRECCIÓN: ya no se usa html2pdf (que clonaba la plantilla dentro de una capa del
-      // tamaño de la ventana y recortaba el final). Se captura la plantilla directamente
-      // con su altura REAL y se coloca en una sola hoja A4 sin que nada quede fuera.
       try {
         const { jsPDF } = window.jspdf;
         const anchoLienzo = 760;
@@ -798,7 +1854,6 @@
           windowWidth: anchoLienzo,
           windowHeight: altoLienzo,
           onclone: (docClon) => {
-            // En la copia que se fotografía, la plantilla fantasma se muestra completa y sin recortes
             const cont = docClon.getElementById("contenedor-fantasma-pdf");
             if (cont) {
               cont.style.opacity = "1";
@@ -819,13 +1874,13 @@
         const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
         const pageW = pdf.internal.pageSize.getWidth();
         const pageH = pdf.internal.pageSize.getHeight();
-        const margen = 2; // Márgenes mínimos, igual que antes
+        const margen = 2;
         const maxW = pageW - margen * 2;
         const maxH = pageH - margen * 2;
 
         let w = maxW;
         let h = (canvas.height * w) / canvas.width;
-        if (h > maxH) { // Si el contenido es más alto que la hoja, se ajusta para que entre completo
+        if (h > maxH) {
           h = maxH;
           w = (canvas.width * h) / canvas.height;
         }
@@ -933,8 +1988,9 @@
 
       if (usarFirebase && db) {
         try {
-          addDoc(collection(db, "cotizaciones"), datosCotizacion);
+          await addDoc(collection(db, "cotizaciones"), datosCotizacion);
           alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} guardada.`);
+          limpiarFormularioSinConfirmar();
         } catch (err) { alert("Error: " + err.message); }
       } else {
         datosCotizacion.id = "local_" + Date.now();
@@ -943,6 +1999,7 @@
         actualizarConsecutivoAutomatico();
         renderizarTablaControl();
         alert(`✅ Cotización N° ${String(consecutivoNum).padStart(3, "0")} guardada.`);
+        limpiarFormularioSinConfirmar();
       }
     };
 
@@ -952,15 +2009,13 @@
       cotizacionEditandoId = cot.id;
 
       const numFormateado = String(cot.consecutivo).padStart(3, "0");
-      document.getElementById("texto-banner-edicion").textContent = `✏️ Editando N° ${numFormateado} (${cot.cliente})`;
+      document.getElementById("texto-banner-edicion").textContent = `✏️ Editando Cotización N° ${numFormateado} (${cot.cliente})`;
       document.getElementById("banner-edicion").classList.add("active");
+      document.getElementById("subtitulo-estado-cot").textContent = `Modo edición activo`;
 
-      const btnGuardar = document.getElementById("btn-guardar-principal");
-      btnGuardar.innerHTML = `💾 ACTUALIZAR #${numFormateado}`;
-      btnGuardar.classList.remove("btn-purple");
-      btnGuardar.classList.add("btn-blue");
-
+      document.getElementById("texto-btn-guardar").textContent = `Actualizar #${numFormateado}`;
       document.getElementById("cot-numero").textContent = numFormateado;
+
       if (cot.fechaISO) {
         document.getElementById("cot-fecha").value = cot.fechaISO;
       } else if (cot.fecha && cot.fecha.includes("/")) {
@@ -989,15 +2044,12 @@
     window.cancelarModoEdicion = function() {
       cotizacionEditandoId = null;
       document.getElementById("banner-edicion").classList.remove("active");
-      const btnGuardar = document.getElementById("btn-guardar-principal");
-      btnGuardar.innerHTML = `💾 GUARDAR HISTORIAL`;
-      btnGuardar.classList.remove("btn-blue");
-      btnGuardar.classList.add("btn-purple");
+      document.getElementById("subtitulo-estado-cot").textContent = "Nueva cotización, todavía sin guardar";
+      document.getElementById("texto-btn-guardar").textContent = "Guardar cotización";
       limpiarFormularioSinConfirmar();
     };
 
     window.eliminarCotizacion = async function(id) {
-      const cot = listaCotizaciones.find(c => c.id === id);
       if (!confirm(`⚠️ ¿Deseas eliminar esta cotización?`)) return;
       if (cotizacionEditandoId === id) cancelarModoEdicion();
 
@@ -1036,6 +2088,14 @@
       cambiarPestana("cotizacion");
     };
 
+    window.seleccionarFiltroEstado = function(estado) {
+      document.getElementById("filtro-estado").value = estado;
+      document.querySelectorAll(".filter-pill").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.estado === estado);
+      });
+      renderizarTablaControl();
+    };
+
     window.cambiarEstadoCotizacion = async function(id, nuevoEstado) {
       if (usarFirebase && db) {
         await updateDoc(doc(db, "cotizaciones", id), { estado: nuevoEstado });
@@ -1054,60 +2114,75 @@
       const textoFiltro = (document.getElementById("filtro-cliente")?.value || "").toLowerCase();
       const estadoFiltro = document.getElementById("filtro-estado")?.value || "TODOS";
 
-      let dineroPendiente = 0, dineroCerrado = 0, cantAprobadas = 0, clientesPorLlamar = 0;
+      let dineroPendiente = 0, dineroCerrado = 0, cantAprobadas = 0, clientesPorLlamar = 0, cantRechazadas = 0;
 
       listaCotizaciones.forEach((c) => {
         const val = Number(c.valorTotal) || 0;
         if (c.estado === "Pendiente") { dineroPendiente += val; clientesPorLlamar++; }
         else if (c.estado === "Aprobada") { dineroCerrado += val; cantAprobadas++; }
+        else if (c.estado === "Rechazada") { cantRechazadas++; }
       });
 
       const totalCots = listaCotizaciones.length;
-      document.getElementById("kpi-pendiente").textContent = formatearCOP(dineroPendiente);
-      document.getElementById("kpi-aprobado").textContent = formatearCOP(dineroCerrado);
+      document.getElementById("kpi-pendiente").textContent = formatearCOPPantalla(dineroPendiente);
+      document.getElementById("kpi-aprobado").textContent = formatearCOPPantalla(dineroCerrado);
       document.getElementById("kpi-cant-aprobadas").textContent = cantAprobadas;
       document.getElementById("kpi-por-llamar").textContent = clientesPorLlamar;
       document.getElementById("kpi-tasa").textContent = (totalCots > 0 ? Math.round((cantAprobadas / totalCots) * 100) : 0) + "%";
 
-      const filtradas = listaCotizaciones.filter((c) => {
-        const coincideTexto = (c.cliente || "").toLowerCase().includes(textoFiltro) || (c.cedula || "").toLowerCase().includes(textoFiltro);
-        const coincideEstado = estadoFiltro === "TODOS" || c.estado === estadoFiltro;
-        return coincideTexto && coincideEstado;
-      });
+      // Actualizar contadores de las píldoras
+      document.getElementById("count-todas").textContent = totalCots;
+      document.getElementById("count-pendientes").textContent = clientesPorLlamar;
+      document.getElementById("count-aprobadas").textContent = cantAprobadas;
+      document.getElementById("count-rechazadas").textContent = cantRechazadas;
+
+      // Ordenar de más reciente a más antigua en la vista de historial
+      const filtradas = [...listaCotizaciones]
+        .sort((a, b) => (Number(b.consecutivo) || 0) - (Number(a.consecutivo) || 0))
+        .filter((c) => {
+          const coincideTexto = (c.cliente || "").toLowerCase().includes(textoFiltro) || (c.cedula || "").toLowerCase().includes(textoFiltro);
+          const coincideEstado = estadoFiltro === "TODOS" || c.estado === estadoFiltro;
+          return coincideTexto && coincideEstado;
+        });
 
       if (filtradas.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:18px; color:#777;">No hay cotizaciones registradas.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:28px; color:#6b7280;">No hay cotizaciones registradas para este filtro.</td></tr>`;
         return;
       }
 
       tbody.innerHTML = "";
       filtradas.forEach((c) => {
+        const numStr = String(c.consecutivo).padStart(3, "0");
         const numLimpio = (c.celular || "").replace(/\D/g, "");
-        const linkWa = numLimpio
-          ? `<a class="wa-link" href="https://wa.me/57${numLimpio}?text=${encodeURIComponent('Hola ' + c.cliente + ', te compartimos la cotización N° ' + String(c.consecutivo).padStart(3, '0') + ' de Soluciones Integrales M.W. S.A.S.')}" target="_blank">📲 WhatsApp</a>`
-          : `<span style="color:#999;">Sin cel</span>`;
+        const urlWa = numLimpio
+          ? `https://wa.me/57${numLimpio}?text=${encodeURIComponent('Hola ' + c.cliente + ', te compartimos la cotización N° ' + numStr + ' de Soluciones Integrales M.W. S.A.S.')}`
+          : null;
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td data-label="No. Cotización" style="text-align:right; font-weight:bold;">#${String(c.consecutivo).padStart(3, "0")}</td>
-          <td data-label="Fecha" style="text-align:right;">${c.fecha || ""}</td>
-          <td data-label="Cliente">${c.cliente || ""}</td>
-          <td data-label="Cédula / NIT" style="text-align:right;">${c.cedula || ""}</td>
-          <td data-label="Celular">${c.celular || ""}</td>
-          <td data-label="Valor Total" style="text-align:right; font-weight:bold;">${formatearCOP(c.valorTotal)}</td>
-          <td data-label="Estado" class="estado-${c.estado}">
+          <td data-label="N°" style="font-weight:700; color:#4b5563;">${numStr}</td>
+          <td data-label="Fecha" style="color:#4b5563;">${c.fecha || ""}</td>
+          <td data-label="Cliente">
+            <div>
+              <div class="cliente-cell-name">${c.cliente || ""}</div>
+              ${c.cedula ? `<div class="cliente-cell-doc">${c.cedula}</div>` : ""}
+            </div>
+          </td>
+          <td data-label="Celular" style="color:#374151;">${c.celular || "—"}</td>
+          <td data-label="Valor total" style="text-align:right; font-weight:800;">${formatearCOPPantalla(c.valorTotal)}</td>
+          <td data-label="Estado" style="text-align:center;">
             <select class="estado-select estado-${c.estado}" onchange="cambiarEstadoCotizacion('${c.id}', this.value)">
-              <option value="Pendiente" ${c.estado === "Pendiente" ? "selected" : ""}>Pendiente</option>
-              <option value="Aprobada" ${c.estado === "Aprobada" ? "selected" : ""}>Aprobada</option>
-              <option value="Rechazada" ${c.estado === "Rechazada" ? "selected" : ""}>Rechazada</option>
+              <option value="Pendiente" ${c.estado === "Pendiente" ? "selected" : ""}>• Pendiente</option>
+              <option value="Aprobada" ${c.estado === "Aprobada" ? "selected" : ""}>✓ Aprobada</option>
+              <option value="Rechazada" ${c.estado === "Rechazada" ? "selected" : ""}>✕ Rechazada</option>
             </select>
           </td>
-          <td data-label="Contacto">${linkWa}</td>
           <td data-label="Acciones">
             <div class="crud-actions">
-              <button class="btn-crud btn-crud-pdf" onclick="descargarPDFDesdeHistorial('${c.id}')" title="Descargar PDF">📄 PDF</button>
-              <button class="btn-crud btn-crud-edit" onclick="editarCotizacion('${c.id}')" title="Editar">✏️</button>
-              <button class="btn-crud btn-crud-del" onclick="eliminarCotizacion('${c.id}')" title="Eliminar">🗑️</button>
+              ${urlWa ? `<a class="btn-icon-action wa" href="${urlWa}" target="_blank" title="Enviar WhatsApp">💬</a>` : ""}
+              <button class="btn-icon-action" onclick="descargarPDFDesdeHistorial('${c.id}')" title="Descargar PDF">📄</button>
+              <button class="btn-icon-action" onclick="editarCotizacion('${c.id}')" title="Editar cotización">✏️</button>
+              <button class="btn-icon-action del" onclick="eliminarCotizacion('${c.id}')" title="Eliminar cotización">🗑️</button>
             </div>
           </td>
         `;
@@ -1118,9 +2193,14 @@
     window.exportarHistorialExcel = function() {
       if (listaCotizaciones.length === 0) { alert("No hay datos para exportar."); return; }
       const datosExcel = listaCotizaciones.map(c => ({
-        "No. Cotización": c.consecutivo, "Fecha": c.fecha, "Nombre Cliente": c.cliente,
-        "Cédula": c.cedula, "Celular": c.celular, "Dirección": c.direccion || "",
-        "Valor Total": c.valorTotal, "Estado": c.estado
+        "No. Cotización": c.consecutivo,
+        "Fecha": c.fecha,
+        "Nombre Cliente": c.cliente,
+        "Cédula / NIT": c.cedula,
+        "Celular": c.celular,
+        "Dirección": c.direccion || "",
+        "Valor Total": c.valorTotal,
+        "Estado": c.estado
       }));
       const ws = XLSX.utils.json_to_sheet(datosExcel);
       const wb = XLSX.utils.book_new();
@@ -1129,13 +2209,22 @@
     };
 
     window.cambiarPestana = function(nombre) {
-      document.getElementById("vista-cotizacion").classList.toggle("active", nombre === "cotizacion");
-      document.getElementById("vista-control").classList.toggle("active", nombre === "control");
-      document.getElementById("tab-cotizacion").classList.toggle("active", nombre === "cotizacion");
-      document.getElementById("tab-control").classList.toggle("active", nombre === "control");
+      const esCot = nombre === "cotizacion";
+      document.getElementById("vista-cotizacion").classList.toggle("active", esCot);
+      document.getElementById("vista-control").classList.toggle("active", !esCot);
+
+      document.getElementById("tab-cotizacion").classList.toggle("active", esCot);
+      document.getElementById("tab-control").classList.toggle("active", !esCot);
+
+      document.getElementById("tab-movil-cotizacion").classList.toggle("active", esCot);
+      document.getElementById("tab-movil-control").classList.toggle("active", !esCot);
+
+      // En móvil, mostrar la barra verde del total solo cuando se está en la pestaña Cotización
+      document.getElementById("mobile-quote-summary").classList.toggle("hidden", !esCot);
       window.scrollTo(0, 0);
     };
 
+    // Inicialización por defecto
     document.getElementById("cot-fecha").valueAsDate = new Date();
     for (let i = 0; i < 4; i++) agregarFilaProducto();
 
