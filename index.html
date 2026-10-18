@@ -224,7 +224,7 @@
     .sheet-view.active { display: block; }
 
     /* =========================================================
-       PLANTILLA FANTASMA PDF (Aislada, 760px con margen seguro)
+       PLANTILLA FANTASMA PDF (Aislada, 760px compacta para 1 página)
        ========================================================= */
     #contenedor-fantasma-pdf {
       position: absolute;
@@ -238,7 +238,7 @@
     }
     .pdf-sheet {
       width: 760px;
-      padding: 8px;
+      padding: 6px;
       background: #ffffff;
       color: #000;
     }
@@ -249,8 +249,8 @@
     }
     .pdf-table td, .pdf-table th {
       border: 1px solid #444444;
-      padding: 3px 5px;
-      font-size: 10.5px;
+      padding: 2px 4px;
+      font-size: 10px;
       vertical-align: middle;
       word-wrap: break-word;
     }
@@ -503,7 +503,7 @@
   </div>
 
   <!-- ========================================================= -->
-  <!-- PLANTILLA FANTASMA PDF (Ajustada con 26 filas y margen seguro) -->
+  <!-- PLANTILLA FANTASMA PDF (Ajustada a escala 1.8 para 1 página)-->
   <!-- ========================================================= -->
   <div id="contenedor-fantasma-pdf">
     <div id="lienzo-pdf-excel" class="pdf-sheet">
@@ -512,10 +512,10 @@
           <td rowspan="4" style="width:32%; text-align:center;">
             <div class="logo-container">
               <img src="logo.png" alt="Logo M.W." onerror="this.style.display='none'; document.getElementById('logo-pdf-fallback').style.display='block';" />
-              <div id="logo-pdf-fallback" style="display:none; font-size:28px;">🌱☀️</div>
+              <div id="logo-pdf-fallback" style="display:none; font-size:26px;">🌱☀️</div>
             </div>
             <div class="empresa-nombre" style="font-size: 12px;">Soluciones Integrales M.W. S.A.S.</div>
-            <div class="empresa-lema" style="font-size: 9.5px;">Energía que transforma el campo</div>
+            <div class="empresa-lema" style="font-size: 9px;">Energía que transforma el campo</div>
           </td>
           <td colspan="2" class="bg-verde-claro" style="width:36%; text-align:center; font-size:14px; font-weight:bold;">
             COTIZACIÓN COMERCIAL
@@ -542,20 +542,20 @@
           <td id="pdf-direccion"></td>
         </tr>
         <tr>
-          <td style="text-align:center; font-size:9px;">Doc: 123 4567 8901</td>
-          <td colspan="4" rowspan="3" class="bg-verde-claro" style="font-size:10px; padding:4px;">
+          <td style="text-align:center; font-size:8.5px;">Doc: 123 4567 8901</td>
+          <td colspan="4" rowspan="3" class="bg-verde-claro" style="font-size:9.5px; padding:3px;">
             <strong>Propuesta Técnica y Económica:</strong> Detalle de equipos, insumos y/o servicios cotizados.
           </td>
         </tr>
         <tr>
-          <td style="text-align:center; font-size:9px;">Crra. 68 #1-26, El Cambio, Buenaventura</td>
+          <td style="text-align:center; font-size:8.5px;">Crra. 68 #1-26, El Cambio, Buenaventura</td>
         </tr>
         <tr>
-          <td style="text-align:center; font-size:9px;">integralesmw@gmail.com | 314 573 5259</td>
+          <td style="text-align:center; font-size:8.5px;">integralesmw@gmail.com | 314 573 5259</td>
         </tr>
       </table>
 
-      <div style="height: 3px;"></div>
+      <div style="height: 2px;"></div>
 
       <table class="pdf-table">
         <thead>
@@ -570,9 +570,9 @@
         <tbody id="pdf-tbody-items"></tbody>
         <tfoot>
           <tr>
-            <td colspan="2" rowspan="3" style="vertical-align: top; font-size: 10px;">
+            <td colspan="2" rowspan="3" style="vertical-align: top; font-size: 9.5px;">
               <strong>OBSERVACIONES / CONDICIONES:</strong>
-              <div id="pdf-observaciones" style="margin-top:2px; white-space:pre-wrap;"></div>
+              <div id="pdf-observaciones" style="margin-top:1px; white-space:pre-wrap;"></div>
             </td>
             <td colspan="2" class="bg-azul-header" style="text-align:right;">SUBTOTAL:</td>
             <td class="cell-readonly" style="text-align:right;" id="pdf-subtotal">$ 0,00</td>
@@ -582,8 +582,8 @@
             <td class="cell-readonly" style="text-align:right;" id="pdf-iva-valor">$ 0,00</td>
           </tr>
           <tr>
-            <td colspan="2" class="bg-azul-header" style="text-align:right; font-size:11.5px;">TOTAL COTIZACIÓN:</td>
-            <td class="cell-readonly" style="text-align:right; font-size:12.5px; background:#d9ead3;" id="pdf-total-general">$ 0,00</td>
+            <td colspan="2" class="bg-azul-header" style="text-align:right; font-size:11px;">TOTAL COTIZACIÓN:</td>
+            <td class="cell-readonly" style="text-align:right; font-size:12px; background:#d9ead3;" id="pdf-total-general">$ 0,00</td>
           </tr>
         </tfoot>
       </table>
@@ -711,7 +711,7 @@
       document.getElementById("cot-total-general").textContent = formatearCOP(totalActualNumerico);
     };
 
-    // MOTOR PDF INDEPENDIENTE (760px / 26 filas con altura ajustada para que el total no se corte)
+    // MOTOR PDF INDEPENDIENTE (760px / 26 filas con altura compacta 15px y escala 1.8 para entrar completo)
     function generarArchivoPDFDesdeObjeto(datos) {
       const numStr = String(datos.consecutivo || 1).padStart(3, "0");
       document.getElementById("pdf-numero").textContent = numStr;
@@ -739,7 +739,7 @@
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td style="text-align:center; height:18px;">${idx + 1}</td>
+          <td style="text-align:center; height:15px;">${idx + 1}</td>
           <td>${it.descripcion || ""}</td>
           <td style="text-align:center;">${cant || ""}</td>
           <td style="text-align:right;">${precio ? formatearCOP(precio) : ""}</td>
@@ -748,12 +748,12 @@
         tbodyPdf.appendChild(tr);
       });
 
-      // Rellenar exactamente hasta las 26 filas con altura compacta de 18px
+      // Rellenar exactamente hasta las 26 filas con altura compacta de 15px
       const filasMinimas = 26;
       for (let i = itemsLista.length; i < filasMinimas; i++) {
         const trVacio = document.createElement("tr");
         trVacio.innerHTML = `
-          <td style="text-align:center; height:18px; color:#aaa;">${i + 1}</td>
+          <td style="text-align:center; height:15px; color:#aaa;">${i + 1}</td>
           <td></td><td></td><td></td><td></td>
         `;
         tbodyPdf.appendChild(trVacio);
@@ -773,10 +773,10 @@
 
       const lienzo = document.getElementById("lienzo-pdf-excel");
       const opciones = {
-        margin:       [4, 4, 2, 4], // Margen inferior reducido para garantizar que el total salga completo
+        margin:       [2, 2, 2, 2], // Márgenes mínimos para que entre todo verticalmente
         filename:     nombreArchivo,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, width: 760, windowWidth: 760, x: 0, y: 0 },
+        html2canvas:  { scale: 1.8, useCORS: true, width: 760, windowWidth: 760, x: 0, y: 0 },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
