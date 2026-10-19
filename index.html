@@ -15,8 +15,9 @@
   <!-- Librerías para exportar a PDF (captura directa + generación del PDF) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <!-- Librería SheetJS para descargar backup en Excel (.xlsx) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  
+  <!-- Librería ExcelJS para generación de Excel empresarial con diseño y colores corporativos -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 
   <style>
     :root {
@@ -107,22 +108,11 @@
       align-items: center;
       justify-content: center;
     }
-    .modal-icon-circle.success {
-      background: #dcfce7;
-      color: #15803d;
-    }
-    .modal-icon-circle.warning {
-      background: #fef3c7;
-      color: #d97706;
-    }
-    .modal-icon-circle.danger {
-      background: #fee2e2;
-      color: #dc2626;
-    }
-    .modal-icon-circle.info {
-      background: #e0f2fe;
-      color: #0284c7;
-    }
+    .modal-icon-circle.success { background: #dcfce7; color: #15803d; }
+    .modal-icon-circle.warning { background: #fef3c7; color: #d97706; }
+    .modal-icon-circle.danger  { background: #fee2e2; color: #dc2626; }
+    .modal-icon-circle.info    { background: #e0f2fe; color: #0284c7; }
+
     .modal-title {
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 19px;
@@ -156,24 +146,11 @@
       color: #475569;
       border: 1px solid #cbd5e1;
     }
-    .btn-modal-cancel:hover {
-      background: #e2e8f0;
-      color: #1e293b;
-    }
-    .btn-modal-confirm {
-      background: var(--verde-oscuro);
-      color: #ffffff;
-    }
-    .btn-modal-confirm:hover {
-      background: var(--verde-oscuro-2);
-    }
-    .btn-modal-confirm.danger {
-      background: #dc2626;
-      color: #ffffff;
-    }
-    .btn-modal-confirm.danger:hover {
-      background: #b91c1c;
-    }
+    .btn-modal-cancel:hover { background: #e2e8f0; color: #1e293b; }
+    .btn-modal-confirm { background: var(--verde-oscuro); color: #ffffff; }
+    .btn-modal-confirm:hover { background: var(--verde-oscuro-2); }
+    .btn-modal-confirm.danger { background: #dc2626; color: #ffffff; }
+    .btn-modal-confirm.danger:hover { background: #b91c1c; }
 
     /* =========================================================
        1. PANTALLA DE LOGIN
@@ -186,9 +163,7 @@
       padding: 20px;
       background: radial-gradient(circle at top left, #e6efe6 0%, #f4f6f3 60%, #e9f0ec 100%);
     }
-    #vista-login.hidden {
-      display: none !important;
-    }
+    #vista-login.hidden { display: none !important; }
     .login-card {
       width: 100%;
       max-width: 420px;
@@ -220,12 +195,7 @@
       letter-spacing: -0.5px;
       overflow: hidden;
     }
-    .mw-badge img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: #fff;
-    }
+    .mw-badge img { width: 100%; height: 100%; object-fit: contain; background: #fff; }
     .login-brand-text h2 {
       margin: 0;
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -234,11 +204,7 @@
       color: var(--texto-principal);
       line-height: 1.25;
     }
-    .login-brand-text p {
-      margin: 2px 0 0 0;
-      font-size: 13px;
-      color: var(--texto-muted);
-    }
+    .login-brand-text p { margin: 2px 0 0 0; font-size: 13px; color: var(--texto-muted); }
     .login-title {
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 26px;
@@ -246,9 +212,7 @@
       margin: 0 0 22px 0;
       color: var(--texto-principal);
     }
-    .form-group {
-      margin-bottom: 16px;
-    }
+    .form-group { margin-bottom: 16px; }
     .form-label {
       display: block;
       font-size: 13px;
@@ -271,12 +235,8 @@
       border-color: var(--verde-corporativo);
       box-shadow: 0 0 0 3px rgba(46, 107, 52, 0.14);
     }
-    .modern-input::placeholder {
-      color: #9ca3af;
-    }
-    .password-wrapper {
-      position: relative;
-    }
+    .modern-input::placeholder { color: #9ca3af; }
+    .password-wrapper { position: relative; }
     .toggle-pass-btn {
       position: absolute;
       right: 10px;
@@ -302,12 +262,8 @@
       cursor: pointer;
       transition: background 0.2s, transform 0.1s;
     }
-    .btn-login:hover {
-      background: var(--verde-oscuro-2);
-    }
-    .btn-login:active {
-      transform: scale(0.99);
-    }
+    .btn-login:hover { background: var(--verde-oscuro-2); }
+    .btn-login:active { transform: scale(0.99); }
     .login-error {
       display: none;
       background: #fef2f2;
@@ -329,9 +285,7 @@
     /* =========================================================
        2. BARRA SUPERIOR (TOPBAR) Y DATOS DE EMPRESA
        ========================================================= */
-    #app-shell.hidden {
-      display: none !important;
-    }
+    #app-shell.hidden { display: none !important; }
     .topbar {
       background: #ffffff;
       border-bottom: 1px solid var(--borde-suave);
@@ -344,21 +298,9 @@
       top: 0;
       z-index: 900;
     }
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .topbar-left .mw-badge {
-      width: 40px;
-      height: 40px;
-      font-size: 13px;
-      border-radius: 10px;
-    }
-    .brand-info {
-      display: flex;
-      flex-direction: column;
-    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-left .mw-badge { width: 40px; height: 40px; font-size: 13px; border-radius: 10px; }
+    .brand-info { display: flex; flex-direction: column; }
     .brand-title {
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-weight: 800;
@@ -406,11 +348,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
 
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+    .topbar-right { display: flex; align-items: center; gap: 14px; }
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -437,27 +375,19 @@
       cursor: pointer;
       transition: all 0.15s;
     }
-    .btn-salir:hover {
-      background: #f1f5f9;
-      color: #111827;
-    }
+    .btn-salir:hover { background: #f1f5f9; color: #111827; }
 
     /* =========================================================
-       3. CONTENEDOR PRINCIPAL Y ENCABEZADO DE VISTA
+       3. CONTENEDOR PRINCIPAL Y ENCABEZADOS
        ========================================================= */
     .main-container {
       max-width: 1240px;
       margin: 0 auto;
       padding: 24px 28px 90px 28px;
     }
-    .sheet-view {
-      display: none;
-    }
-    .sheet-view.active {
-      display: block;
-    }
+    .sheet-view { display: none; }
+    .sheet-view.active { display: block; }
 
-    /* Banner de Modo Edición */
     .edit-banner {
       display: none;
       background-color: #fffbeb;
@@ -473,11 +403,8 @@
       gap: 10px;
       flex-wrap: wrap;
     }
-    .edit-banner.active {
-      display: flex;
-    }
+    .edit-banner.active { display: flex; }
 
-    /* Cabecera de Cotización */
     .page-header {
       display: flex;
       justify-content: space-between;
@@ -486,12 +413,7 @@
       flex-wrap: wrap;
       gap: 12px;
     }
-    .quote-title-group {
-      display: flex;
-      align-items: baseline;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
+    .quote-title-group { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
     .quote-main-title {
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 28px;
@@ -500,11 +422,7 @@
       color: var(--texto-principal);
       letter-spacing: -0.5px;
     }
-    .quote-status-hint {
-      font-size: 13.5px;
-      color: var(--texto-muted);
-      font-weight: 500;
-    }
+    .quote-status-hint { font-size: 13.5px; color: var(--texto-muted); font-weight: 500; }
     .btn-ghost {
       background: #ffffff;
       border: 1px solid var(--borde-input);
@@ -531,7 +449,6 @@
       gap: 24px;
       align-items: start;
     }
-
     .card-panel {
       background: var(--bg-card);
       border-radius: var(--radio-lg);
@@ -540,7 +457,6 @@
       padding: 26px;
     }
 
-    /* Cinta informativa de la empresa dentro de la cotización */
     .empresa-info-strip {
       display: flex;
       flex-wrap: wrap;
@@ -555,11 +471,7 @@
       font-size: 12.5px;
       color: var(--texto-secundario);
     }
-    .empresa-info-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
+    .empresa-info-item { display: inline-flex; align-items: center; gap: 5px; }
 
     .section-title {
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -569,7 +481,6 @@
       margin: 0 0 18px 0;
     }
 
-    /* Grilla de datos del Cliente */
     .cliente-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -579,7 +490,6 @@
       margin-bottom: 24px;
     }
 
-    /* Sección de Ítems con Contador y Control de Scroll */
     .items-header-bar {
       display: flex;
       justify-content: space-between;
@@ -588,11 +498,7 @@
       gap: 10px;
       flex-wrap: wrap;
     }
-    .items-title-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .items-title-wrap { display: flex; align-items: center; gap: 10px; }
     .items-count-badge {
       background: var(--bg-subtle);
       color: var(--verde-oscuro);
@@ -602,11 +508,7 @@
       border-radius: 999px;
       border: 1px solid var(--borde-suave);
     }
-    .items-header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .items-header-actions { display: flex; align-items: center; gap: 8px; }
     .btn-toggle-scroll {
       background: #ffffff;
       border: 1px solid var(--borde-input);
@@ -618,10 +520,7 @@
       cursor: pointer;
       transition: all 0.15s;
     }
-    .btn-toggle-scroll:hover {
-      background: #f8fafc;
-      color: var(--texto-principal);
-    }
+    .btn-toggle-scroll:hover { background: #f8fafc; color: var(--texto-principal); }
     .btn-add-item {
       background: #ffffff;
       border: 1.5px solid var(--verde-oscuro);
@@ -636,12 +535,8 @@
       gap: 6px;
       transition: all 0.15s;
     }
-    .btn-add-item:hover {
-      background: var(--verde-oscuro);
-      color: #ffffff;
-    }
+    .btn-add-item:hover { background: var(--verde-oscuro); color: #ffffff; }
 
-    /* Contenedor con Scroll Interno para evitar páginas largas con +10 ítems */
     .items-scroll-container {
       max-height: 410px;
       overflow-y: auto;
@@ -650,33 +545,14 @@
       background: #ffffff;
       scroll-behavior: smooth;
     }
-    .items-scroll-container.expanded {
-      max-height: none;
-      overflow-y: visible;
-    }
-    .items-scroll-container::-webkit-scrollbar {
-      width: 7px;
-      height: 7px;
-    }
-    .items-scroll-container::-webkit-scrollbar-track {
-      background: #f8fafc;
-    }
-    .items-scroll-container::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 999px;
-    }
-    .items-scroll-container::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
+    .items-scroll-container.expanded { max-height: none; overflow-y: visible; }
+    .items-scroll-container::-webkit-scrollbar { width: 7px; height: 7px; }
+    .items-scroll-container::-webkit-scrollbar-track { background: #f8fafc; }
+    .items-scroll-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+    .items-scroll-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-    .modern-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .modern-table thead tr {
-      background: var(--bg-subtle);
-      border-bottom: 1px solid var(--borde-suave);
-    }
+    .modern-table { width: 100%; border-collapse: collapse; }
+    .modern-table thead tr { background: var(--bg-subtle); border-bottom: 1px solid var(--borde-suave); }
     .modern-table th {
       position: sticky;
       top: 0;
@@ -695,14 +571,9 @@
       vertical-align: middle;
       font-size: 14px;
     }
-    .modern-table tbody tr:last-child td {
-      border-bottom: none;
-    }
-    .modern-table tbody tr:hover {
-      background-color: #fafcfa;
-    }
+    .modern-table tbody tr:last-child td { border-bottom: none; }
+    .modern-table tbody tr:hover { background-color: #fafcfa; }
 
-    /* Botón/Chip selector de IVA por fila */
     .iva-chip-label {
       display: inline-flex;
       align-items: center;
@@ -719,20 +590,9 @@
       color: var(--texto-muted);
       transition: all 0.15s ease;
     }
-    .iva-chip-label input {
-      margin: 0;
-      width: 13px;
-      height: 13px;
-      accent-color: var(--verde-corporativo);
-      cursor: pointer;
-    }
-    .iva-chip-label.active {
-      background: #dcfce7;
-      border-color: #86efac;
-      color: #15803d;
-    }
+    .iva-chip-label input { margin: 0; width: 13px; height: 13px; accent-color: var(--verde-corporativo); cursor: pointer; }
+    .iva-chip-label.active { background: #dcfce7; border-color: #86efac; color: #15803d; }
 
-    /* Pie rápido debajo de la tabla para agregar ítems sin subir */
     .items-Bottom-bar {
       display: flex;
       justify-content: space-between;
@@ -757,14 +617,8 @@
       cursor: pointer;
       transition: all 0.15s;
     }
-    .btn-add-bottom:hover {
-      background: #eaf1dd;
-      border-style: solid;
-    }
-    .items-shortcut-hint {
-      font-size: 12px;
-      color: var(--texto-muted);
-    }
+    .btn-add-bottom:hover { background: #eaf1dd; border-style: solid; }
+    .items-shortcut-hint { font-size: 12px; color: var(--texto-muted); }
 
     .table-input {
       width: 100%;
@@ -777,10 +631,7 @@
       outline: none;
       transition: all 0.15s;
     }
-    .table-input:hover {
-      border-color: var(--borde-suave);
-      background: #ffffff;
-    }
+    .table-input:hover { border-color: var(--borde-suave); background: #ffffff; }
     .table-input:focus {
       border-color: var(--verde-corporativo);
       background: #ffffff;
@@ -805,12 +656,8 @@
       opacity: 0.75;
       transition: all 0.15s;
     }
-    .btn-delete-row:hover {
-      opacity: 1;
-      background: #fef2f2;
-    }
+    .btn-delete-row:hover { opacity: 1; background: #fef2f2; }
 
-    /* Panel Derecho: Resumen Sticky en Verde Bosque */
     .summary-sticky-card {
       background: var(--verde-oscuro);
       color: #ffffff;
@@ -837,11 +684,7 @@
       color: #ffffff;
       word-break: break-word;
     }
-    .summary-divider {
-      height: 1px;
-      background: rgba(255, 255, 255, 0.12);
-      margin: 16px 0;
-    }
+    .summary-divider { height: 1px; background: rgba(255, 255, 255, 0.12); margin: 16px 0; }
     .summary-row {
       display: flex;
       justify-content: space-between;
@@ -859,11 +702,7 @@
       display: flex;
       justify-content: space-between;
     }
-    .iva-control {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .iva-control { display: inline-flex; align-items: center; gap: 8px; }
     .iva-input {
       width: 58px;
       padding: 6px 8px;
@@ -894,12 +733,8 @@
       gap: 8px;
       transition: background 0.2s, transform 0.1s;
     }
-    .btn-cta-save:hover {
-      background: var(--amarillo-cta-hover);
-    }
-    .btn-cta-save:active {
-      transform: scale(0.99);
-    }
+    .btn-cta-save:hover { background: var(--amarillo-cta-hover); }
+    .btn-cta-save:active { transform: scale(0.99); }
 
     .btn-cta-pdf {
       width: 100%;
@@ -918,9 +753,7 @@
       gap: 8px;
       transition: background 0.2s;
     }
-    .btn-cta-pdf:hover {
-      background: rgba(255, 255, 255, 0.08);
-    }
+    .btn-cta-pdf:hover { background: rgba(255, 255, 255, 0.08); }
     .summary-footnote {
       margin: 14px 0 0 0;
       font-size: 12px;
@@ -929,13 +762,9 @@
     }
 
     /* =========================================================
-       5. VISTA DE HISTORIAL Y KPIs
+       5. VISTA DE HISTORIAL
        ========================================================= */
-    .historial-header-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    .historial-header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
     .btn-primary-dark {
       background: var(--verde-oscuro);
       color: #ffffff;
@@ -949,9 +778,7 @@
       align-items: center;
       gap: 6px;
     }
-    .btn-primary-dark:hover {
-      background: var(--verde-oscuro-2);
-    }
+    .btn-primary-dark:hover { background: var(--verde-oscuro-2); }
 
     .kpi-grid-modern {
       display: grid;
@@ -978,11 +805,8 @@
       font-weight: 800;
       color: var(--texto-principal);
     }
-    .kpi-card-value.green {
-      color: #15803d;
-    }
+    .kpi-card-value.green { color: #15803d; }
 
-    /* Barra de búsqueda y píldoras de filtro */
     .filters-bar {
       display: flex;
       justify-content: space-between;
@@ -1014,11 +838,7 @@
       color: #9ca3af;
     }
 
-    .filter-pills {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
+    .filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
     .filter-pill {
       background: #ffffff;
       border: 1px solid var(--borde-suave);
@@ -1036,7 +856,6 @@
       border-color: var(--verde-oscuro);
     }
 
-    /* Tabla de Historial */
     .historial-table-card {
       background: var(--bg-card);
       border-radius: var(--radio-lg);
@@ -1044,14 +863,8 @@
       box-shadow: var(--sombra-card);
       overflow: hidden;
     }
-    .tabla-historial {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .tabla-historial thead tr {
-      background: var(--bg-subtle);
-      border-bottom: 1px solid var(--borde-suave);
-    }
+    .tabla-historial { width: 100%; border-collapse: collapse; }
+    .tabla-historial thead tr { background: var(--bg-subtle); border-bottom: 1px solid var(--borde-suave); }
     .tabla-historial th {
       padding: 13px 16px;
       font-size: 12.5px;
@@ -1065,17 +878,9 @@
       font-size: 14px;
       vertical-align: middle;
     }
-    .cliente-cell-name {
-      font-weight: 700;
-      color: var(--texto-principal);
-    }
-    .cliente-cell-doc {
-      font-size: 12px;
-      color: var(--texto-muted);
-      margin-top: 2px;
-    }
+    .cliente-cell-name { font-weight: 700; color: var(--texto-principal); }
+    .cliente-cell-doc { font-size: 12px; color: var(--texto-muted); margin-top: 2px; }
 
-    /* Selector de Estado tipo Píldora */
     .estado-select {
       appearance: none;
       -webkit-appearance: none;
@@ -1088,28 +893,11 @@
       text-align: center;
       outline: none;
     }
-    .estado-Pendiente {
-      background-color: #fef3c7;
-      color: #b45309;
-      border-color: #fde68a;
-    }
-    .estado-Aprobada {
-      background-color: #dcfce7;
-      color: #15803d;
-      border-color: #bbf7d0;
-    }
-    .estado-Rechazada {
-      background-color: #fee2e2;
-      color: #b91c1c;
-      border-color: #fecaca;
-    }
+    .estado-Pendiente { background-color: #fef3c7; color: #b45309; border-color: #fde68a; }
+    .estado-Aprobada  { background-color: #dcfce7; color: #15803d; border-color: #bbf7d0; }
+    .estado-Rechazada { background-color: #fee2e2; color: #b91c1c; border-color: #fecaca; }
 
-    .crud-actions {
-      display: flex;
-      gap: 6px;
-      justify-content: flex-end;
-      align-items: center;
-    }
+    .crud-actions { display: flex; gap: 6px; justify-content: flex-end; align-items: center; }
     .btn-icon-action {
       background: #ffffff;
       border: 1px solid var(--borde-suave);
@@ -1124,29 +912,14 @@
       text-decoration: none;
       transition: all 0.15s;
     }
-    .btn-icon-action:hover {
-      background: #f8fafc;
-      border-color: #cbd5e1;
-      color: var(--texto-principal);
-    }
-    .btn-icon-action.wa:hover {
-      background: #dcfce7;
-      border-color: #86efac;
-      color: #15803d;
-    }
-    .btn-icon-action.del:hover {
-      background: #fef2f2;
-      border-color: #fecaca;
-      color: #dc2626;
-    }
+    .btn-icon-action:hover { background: #f8fafc; border-color: #cbd5e1; color: var(--texto-principal); }
+    .btn-icon-action.wa:hover  { background: #dcfce7; border-color: #86efac; color: #15803d; }
+    .btn-icon-action.del:hover { background: #fef2f2; border-color: #fecaca; color: #dc2626; }
 
-    /* Barra fija inferior móvil (oculta en escritorio) */
-    .mobile-bottom-dock {
-      display: none;
-    }
+    .mobile-bottom-dock { display: none; }
 
     /* =========================================================
-       6. PLANTILLA FANTASMA PDF (Aislada, 760px con margen lateral)
+       6. PLANTILLA FANTASMA PDF (Aislada, 760px)
        ========================================================= */
     #contenedor-fantasma-pdf {
       position: absolute;
@@ -1183,63 +956,26 @@
     .pdf-sheet .bg-verde-claro { background-color: var(--verde-header); }
     .pdf-sheet .bg-azul-header { background-color: var(--azul-tabla); font-weight: bold; text-align: center; }
     .pdf-sheet .cell-readonly { background-color: #f4f6f8; font-weight: bold; color: #1f2937; }
-    .pdf-wa-inline {
-      display: inline-flex;
-      align-items: center;
-      vertical-align: middle;
-      gap: 3px;
-    }
+    .pdf-wa-inline { display: inline-flex; align-items: center; vertical-align: middle; gap: 3px; }
 
     /* =========================================================
        7. DISEÑO RESPONSIVO (MÓVIL / TABLET)
        ========================================================= */
     @media screen and (max-width: 960px) {
-      .topbar {
-        padding: 12px 16px;
-      }
-      .brand-subtitle, .topbar-center {
-        display: none;
-      }
-      .main-container {
-        padding: 16px 14px 155px 14px;
-      }
-      .cotizador-layout {
-        grid-template-columns: 1fr;
-      }
-      .card-panel {
-        padding: 18px 14px;
-      }
-      .cliente-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-      }
-      .cliente-grid .full-mobile {
-        grid-column: span 2;
-      }
+      .topbar { padding: 12px 16px; }
+      .brand-subtitle, .topbar-center { display: none; }
+      .main-container { padding: 16px 14px 155px 14px; }
+      .cotizador-layout { grid-template-columns: 1fr; }
+      .card-panel { padding: 18px 14px; }
+      .cliente-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .cliente-grid .full-mobile { grid-column: span 2; }
 
-      /* Contenedor con scroll interno cómodo también en móvil */
-      .items-scroll-container {
-        max-height: 460px;
-        border: none;
-        background: transparent;
-      }
-      .items-Bottom-bar {
-        border-radius: var(--radio-md);
-        border-top: 1px solid var(--borde-suave);
-        margin-top: 4px;
-      }
-      .items-shortcut-hint {
-        display: none;
-      }
+      .items-scroll-container { max-height: 460px; border: none; background: transparent; }
+      .items-Bottom-bar { border-radius: var(--radio-md); border-top: 1px solid var(--borde-suave); margin-top: 4px; }
+      .items-shortcut-hint { display: none; }
 
-      /* Convertir filas de tabla de ítems en Tarjetas limpias */
-      .modern-table thead {
-        display: none;
-      }
-      .modern-table, .modern-table tbody {
-        display: block;
-        width: 100%;
-      }
+      .modern-table thead { display: none; }
+      .modern-table, .modern-table tbody { display: block; width: 100%; }
       .modern-table tbody tr {
         display: grid;
         grid-template-columns: 0.9fr 1.2fr 0.9fr 1.2fr;
@@ -1252,11 +988,7 @@
         position: relative;
         box-shadow: 0 1px 3px rgba(0,0,0,0.03);
       }
-      .modern-table tbody td {
-        border: none;
-        padding: 0;
-        display: block;
-      }
+      .modern-table tbody td { border: none; padding: 0; display: block; }
       .modern-table tbody td.col-num {
         grid-column: 1 / 5;
         display: inline-flex;
@@ -1274,10 +1006,7 @@
         align-items: center;
         justify-content: center;
       }
-      .modern-table tbody td.col-desc {
-        grid-column: 1 / 5;
-        margin-bottom: 2px;
-      }
+      .modern-table tbody td.col-desc { grid-column: 1 / 5; margin-bottom: 2px; }
       .modern-table tbody td.col-desc .table-input {
         font-weight: 600;
         font-size: 14.5px;
@@ -1303,43 +1032,17 @@
         padding: 6px 8px;
         font-size: 14px;
       }
-      .modern-table tbody td.col-iva {
-        text-align: center;
-      }
-      .modern-table tbody td.col-total {
-        text-align: right;
-      }
-      .modern-table tbody td.col-del {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-      }
+      .modern-table tbody td.col-iva { text-align: center; }
+      .modern-table tbody td.col-total { text-align: right; }
+      .modern-table tbody td.col-del { position: absolute; top: 8px; right: 8px; }
 
-      /* Resumen al final del formulario en móvil */
-      .summary-sticky-card {
-        position: static;
-      }
+      .summary-sticky-card { position: static; }
+      .kpi-grid-modern { grid-template-columns: 1fr 1fr; }
+      .kpi-grid-modern .kpi-card-modern:last-child { grid-column: span 2; }
 
-      /* KPIs en 2 columnas en móvil */
-      .kpi-grid-modern {
-        grid-template-columns: 1fr 1fr;
-      }
-      .kpi-grid-modern .kpi-card-modern:last-child {
-        grid-column: span 2;
-      }
-
-      /* Tabla Historial como tarjetas en móvil */
-      .tabla-historial thead {
-        display: none;
-      }
-      .tabla-historial, .tabla-historial tbody, .tabla-historial tr, .tabla-historial td {
-        display: block;
-        width: 100%;
-      }
-      .tabla-historial tbody tr {
-        padding: 14px;
-        border-bottom: 1px solid var(--borde-suave);
-      }
+      .tabla-historial thead { display: none; }
+      .tabla-historial, .tabla-historial tbody, .tabla-historial tr, .tabla-historial td { display: block; width: 100%; }
+      .tabla-historial tbody tr { padding: 14px; border-bottom: 1px solid var(--borde-suave); }
       .tabla-historial tbody td {
         border: none;
         padding: 5px 0;
@@ -1356,7 +1059,6 @@
         text-align: left;
       }
 
-      /* Barra Inferior Fija Móvil (Total + Guardar + Pestañas) */
       .mobile-bottom-dock {
         display: block;
         position: fixed;
@@ -1374,18 +1076,9 @@
         justify-content: space-between;
         align-items: center;
       }
-      .mobile-quote-bar.hidden {
-        display: none;
-      }
-      .mobile-quote-bar-label {
-        font-size: 11px;
-        color: #a7f3d0;
-      }
-      .mobile-quote-bar-total {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 20px;
-        font-weight: 800;
-      }
+      .mobile-quote-bar.hidden { display: none; }
+      .mobile-quote-bar-label { font-size: 11px; color: #a7f3d0; }
+      .mobile-quote-bar-total { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 800; }
       .btn-mobile-save {
         background: var(--amarillo-cta);
         color: #111827;
@@ -1412,9 +1105,7 @@
         cursor: pointer;
         position: relative;
       }
-      .mobile-tab-btn.active {
-        color: var(--verde-oscuro);
-      }
+      .mobile-tab-btn.active { color: var(--verde-oscuro); }
       .mobile-tab-btn.active::before {
         content: "";
         position: absolute;
@@ -1426,6 +1117,8 @@
         border-radius: 0 0 4px 4px;
       }
     }
+
+    /* Estilos del Toast de Seguimiento */
     .toast-seguimiento-box {
       display: none;
       position: fixed;
@@ -1462,15 +1155,14 @@
     .toast-close-btn {
       background: none;
       border: none;
-      font-size: 14px;
+      font-size: 16px;
       color: #9ca3af;
       cursor: pointer;
+      line-height: 1;
+      padding: 2px 6px;
     }
-    .toast-body-text {
-      margin: 0 0 10px 0;
-      font-size: 13px;
-      color: #4b5563;
-    }
+    .toast-close-btn:hover { color: #111827; }
+    .toast-body-text { margin: 0 0 10px 0; font-size: 13px; color: #4b5563; }
     .toast-cliente-item {
       display: flex;
       justify-content: space-between;
@@ -1494,12 +1186,13 @@
       align-items: center;
       gap: 4px;
     }
+    .btn-wa-toast:hover { background: #15803d; }
   </style>
 </head>
 <body>
 
   <!-- =========================================================
-       VENTANA MODAL CENTRADA (ALERTAS Y CONFIRMACIONES)
+       VENTANA MODAL CENTRADA
        ========================================================= -->
   <div id="custom-modal-overlay" class="modal-overlay" role="dialog" aria-modal="true">
     <div class="modal-box">
@@ -1507,18 +1200,14 @@
       <h3 id="modal-title" class="modal-title">Notificación</h3>
       <p id="modal-message" class="modal-message"></p>
       <div class="modal-actions">
-        <button type="button" id="modal-btn-cancel" class="btn-modal btn-modal-cancel" style="display:none;">
-          Cancelar
-        </button>
-        <button type="button" id="modal-btn-confirm" class="btn-modal btn-modal-confirm">
-          Aceptar
-        </button>
+        <button type="button" id="modal-btn-cancel" class="btn-modal btn-modal-cancel" style="display:none;">Cancelar</button>
+        <button type="button" id="modal-btn-confirm" class="btn-modal btn-modal-confirm">Aceptar</button>
       </div>
     </div>
   </div>
 
   <!-- =========================================================
-       PANTALLA DE INICIO DE SESIÓN (LOGIN)
+       PANTALLA DE LOGIN
        ========================================================= -->
   <div id="vista-login">
     <div class="login-card">
@@ -1560,7 +1249,7 @@
   </div>
 
   <!-- =========================================================
-       APLICACIÓN PRINCIPAL
+       APLICACIÓN PRINCIPAL (APP-SHELL)
        ========================================================= -->
   <div id="app-shell" class="hidden">
 
@@ -1584,12 +1273,8 @@
       </div>
 
       <nav class="topbar-center">
-        <button id="tab-cotizacion" class="nav-tab active" onclick="cambiarPestana('cotizacion')">
-          Cotización
-        </button>
-        <button id="tab-control" class="nav-tab" onclick="cambiarPestana('control')">
-          Historial
-        </button>
+        <button id="tab-cotizacion" class="nav-tab active" onclick="cambiarPestana('cotizacion')">Cotización</button>
+        <button id="tab-control" class="nav-tab" onclick="cambiarPestana('control')">Historial</button>
       </nav>
 
       <div class="topbar-right">
@@ -1602,39 +1287,25 @@
 
     <main class="main-container">
 
-      <!-- =====================================================
-           VISTA 1: COTIZACIÓN
-           ===================================================== -->
+      <!-- VISTA 1: COTIZACIÓN -->
       <section id="vista-cotizacion" class="sheet-view active">
-
-        <!-- Banner de Modo Edición -->
         <div id="banner-edicion" class="edit-banner">
           <span id="texto-banner-edicion">✏️ Editando Cotización N° 001</span>
-          <button class="btn-ghost" onclick="cancelarModoEdicion()">
-            ✕ Cancelar edición y crear nueva
-          </button>
+          <button class="btn-ghost" onclick="cancelarModoEdicion()">✕ Cancelar edición y crear nueva</button>
         </div>
 
-        <!-- Encabezado de la Cotización -->
         <div class="page-header">
           <div class="quote-title-group">
             <h1 class="quote-main-title">Cotización N° <span id="cot-numero">001</span></h1>
             <span id="subtitulo-estado-cot" class="quote-status-hint">Nueva cotización, todavía sin guardar</span>
           </div>
           <div>
-            <button class="btn-ghost" onclick="limpiarCotizacion()">
-              Limpiar datos
-            </button>
+            <button class="btn-ghost" onclick="limpiarCotizacion()">Limpiar datos</button>
           </div>
         </div>
 
-        <!-- Layout de 2 Columnas -->
         <div class="cotizador-layout">
-
-          <!-- Columna Izquierda: Formulario + Ítems + Observaciones -->
           <div class="card-panel">
-
-            <!-- Cinta informativa de la empresa con RUT e ícono de WhatsApp -->
             <div class="empresa-info-strip">
               <span class="empresa-info-item"><strong>NIT:</strong> 900664844-3</span>
               <span class="empresa-info-item">📍 Crra. 68 #1 - 26, Barrio El Cambio, Buenaventura</span>
@@ -1646,7 +1317,6 @@
             </div>
 
             <h2 class="section-title">Cliente</h2>
-
             <div class="cliente-grid">
               <div class="full-mobile">
                 <label class="form-label" for="cot-cliente">Nombre o razón social</label>
@@ -1674,23 +1344,17 @@
               </div>
             </div>
 
-            <!-- Barra Superior de Ítems -->
             <div class="items-header-bar">
               <div class="items-title-wrap">
                 <h2 class="section-title" style="margin:0;">Ítems</h2>
                 <span id="badge-cantidad-items" class="items-count-badge">4 ítems</span>
               </div>
               <div class="items-header-actions">
-                <button type="button" id="btn-expandir-items" class="btn-toggle-scroll" onclick="alternarAlturaItems()" title="Alternar entre caja con scroll o lista expandida">
-                  ↕ Expandir lista
-                </button>
-                <button type="button" class="btn-add-item" onclick="agregarFilaProducto('', '', '', false, true)">
-                  + Agregar ítem
-                </button>
+                <button type="button" id="btn-expandir-items" class="btn-toggle-scroll" onclick="alternarAlturaItems()">↕ Expandir lista</button>
+                <button type="button" class="btn-add-item" onclick="agregarFilaProducto('', '', '', false, true)">+ Agregar ítem</button>
               </div>
             </div>
 
-            <!-- Contenedor con Scroll Interno y Encabezado Fijo -->
             <div id="contenedor-scroll-items" class="items-scroll-container">
               <table class="modern-table" id="tabla-items">
                 <thead>
@@ -1708,22 +1372,17 @@
               </table>
             </div>
 
-            <!-- Barra Inferior Rápida para cuando se agregan más de 10 ítems -->
             <div class="items-Bottom-bar">
-              <button type="button" class="btn-add-bottom" onclick="agregarFilaProducto('', '', '', false, true)">
-                + Agregar otro ítem al final
-              </button>
+              <button type="button" class="btn-add-bottom" onclick="agregarFilaProducto('', '', '', false, true)">+ Agregar otro ítem al final</button>
               <span class="items-shortcut-hint">💡 Marca la casilla <strong>IVA</strong> solo en los productos gravados</span>
             </div>
 
-            <!-- Observaciones -->
             <div>
               <h2 class="section-title" style="margin-bottom: 10px;">Observaciones y condiciones</h2>
               <textarea id="cot-observaciones" class="modern-input" rows="3" placeholder="Tiempo de entrega, forma de pago (50% anticipo y 50% contra entrega), garantía de fábrica..."></textarea>
             </div>
           </div>
 
-          <!-- Columna Derecha: Tarjeta Sticky de Totales y Acciones -->
           <aside class="summary-sticky-card">
             <div class="summary-label">Total de la cotización</div>
             <div class="summary-big-total" id="cot-total-general">$ 0</div>
@@ -1763,28 +1422,19 @@
 
             <p class="summary-footnote">El IVA se calcula únicamente sobre los productos marcados con IVA.</p>
           </aside>
-
         </div>
       </section>
 
-      <!-- =====================================================
-           VISTA 2: HISTORIAL DE COTIZACIONES
-           ===================================================== -->
+      <!-- VISTA 2: HISTORIAL -->
       <section id="vista-control" class="sheet-view">
-
         <div class="page-header">
           <h1 class="quote-main-title">Historial de cotizaciones</h1>
           <div class="historial-header-actions">
-            <button class="btn-ghost" onclick="exportarHistorialExcel()">
-              ⬇ Descargar Excel
-            </button>
-            <button class="btn-primary-dark" onclick="irANuevaCotizacion()">
-              + Nueva cotización
-            </button>
+            <button class="btn-ghost" onclick="exportarHistorialExcel()">⬇ Descargar Excel</button>
+            <button class="btn-primary-dark" onclick="irANuevaCotizacion()">+ Nueva cotización</button>
           </div>
         </div>
 
-        <!-- Tarjetas de KPIs -->
         <div class="kpi-grid-modern">
           <div class="kpi-card-modern">
             <div class="kpi-card-label">Dinero pendiente</div>
@@ -1808,7 +1458,6 @@
           </div>
         </div>
 
-        <!-- Buscador y Píldoras de Filtro -->
         <div class="filters-bar">
           <div class="search-box">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -1823,22 +1472,13 @@
           </select>
 
           <div class="filter-pills">
-            <button type="button" class="filter-pill active" data-estado="TODOS" onclick="seleccionarFiltroEstado('TODOS')">
-              Todas <span id="count-todas">0</span>
-            </button>
-            <button type="button" class="filter-pill" data-estado="Pendiente" onclick="seleccionarFiltroEstado('Pendiente')">
-              Pendientes <span id="count-pendientes">0</span>
-            </button>
-            <button type="button" class="filter-pill" data-estado="Aprobada" onclick="seleccionarFiltroEstado('Aprobada')">
-              Aprobadas <span id="count-aprobadas">0</span>
-            </button>
-            <button type="button" class="filter-pill" data-estado="Rechazada" onclick="seleccionarFiltroEstado('Rechazada')">
-              Rechazadas <span id="count-rechazadas">0</span>
-            </button>
+            <button type="button" class="filter-pill active" data-estado="TODOS" onclick="seleccionarFiltroEstado('TODOS')">Todas <span id="count-todas">0</span></button>
+            <button type="button" class="filter-pill" data-estado="Pendiente" onclick="seleccionarFiltroEstado('Pendiente')">Pendientes <span id="count-pendientes">0</span></button>
+            <button type="button" class="filter-pill" data-estado="Aprobada" onclick="seleccionarFiltroEstado('Aprobada')">Aprobadas <span id="count-aprobadas">0</span></button>
+            <button type="button" class="filter-pill" data-estado="Rechazada" onclick="seleccionarFiltroEstado('Rechazada')">Rechazadas <span id="count-rechazadas">0</span></button>
           </div>
         </div>
 
-        <!-- Tabla de Historial -->
         <div class="historial-table-card">
           <table class="tabla-historial">
             <thead>
@@ -1859,7 +1499,6 @@
             </tbody>
           </table>
         </div>
-
       </section>
 
     </main>
@@ -1871,24 +1510,33 @@
           <div class="mobile-quote-bar-label">Total de la cotización</div>
           <div id="cot-total-movil" class="mobile-quote-bar-total">$ 0</div>
         </div>
-        <button type="button" class="btn-mobile-save" onclick="guardarCotizacion()">
-          Guardar
-        </button>
+        <button type="button" class="btn-mobile-save" onclick="guardarCotizacion()">Guardar</button>
       </div>
       <div class="mobile-tabs-nav">
-        <button id="tab-movil-cotizacion" class="mobile-tab-btn active" onclick="cambiarPestana('cotizacion')">
-          Cotización
-        </button>
-        <button id="tab-movil-control" class="mobile-tab-btn" onclick="cambiarPestana('control')">
-          Historial
-        </button>
+        <button id="tab-movil-cotizacion" class="mobile-tab-btn active" onclick="cambiarPestana('cotizacion')">Cotización</button>
+        <button id="tab-movil-control" class="mobile-tab-btn" onclick="cambiarPestana('control')">Historial</button>
       </div>
+    </div>
+
+    <!-- NOTIFICACIÓN FLOTANTE DE SEGUIMIENTO (Correctamente situada dentro de app-shell) -->
+    <div id="toast-seguimiento" class="toast-seguimiento-box">
+      <div class="toast-header">
+        <div class="toast-title-wrap">
+          <span style="font-size:18px;">🔔</span>
+          <strong>Recordatorio de Seguimiento</strong>
+        </div>
+        <button type="button" class="toast-close-btn" onclick="cerrarToastSeguimiento()" title="Cerrar aviso">✕</button>
+      </div>
+      <p id="toast-mensaje-texto" class="toast-body-text">
+        Tienes cotizaciones pendientes hace más de 3 días.
+      </p>
+      <div id="toast-lista-clientes"></div>
     </div>
 
   </div>
 
   <!-- =========================================================
-       PLANTILLA FANTASMA PDF (RUT: 900664844-3 + Ícono WhatsApp)
+       PLANTILLA FANTASMA PDF (Aislada, 760px)
        ========================================================= -->
   <div id="contenedor-fantasma-pdf">
     <div id="lienzo-pdf-excel" class="pdf-sheet">
@@ -1982,7 +1630,7 @@
   </div>
 
   <!-- =========================================================
-       LÓGICA JAVASCRIPT (MODALES + IVA SELECTIVO + FIREBASE + PDF)
+       LÓGICA JAVASCRIPT
        ========================================================= -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
@@ -2005,70 +1653,7 @@
       orderBy
     } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-    window.revisarSeguimientoPendientes = function(diasMinimos = 3) {
-      const hoy = new Date();
-      const clientesPorLlamar = [];
-    
-      listaCotizaciones.forEach(c => {
-        if (c.estado === "Pendiente") {
-          let fechaCot = null;
-          if (c.fechaISO) {
-            fechaCot = new Date(c.fechaISO);
-          } else if (c.fecha && c.fecha.includes("/")) {
-            const [d, m, y] = c.fecha.split("/");
-            fechaCot = new Date(`${y}-${m}-${d}`);
-          }
-          
-          if (fechaCot && !isNaN(fechaCot.getTime())) {
-            const diffTiempo = hoy.getTime() - fechaCot.getTime();
-            const diasTranscurridos = Math.floor(diffTiempo / (1000 * 60 * 60 * 24));
-            
-            if (diasTranscurridos >= diasMinimos) {
-              clientesPorLlamar.push({ ...c, dias: diasTranscurridos });
-            }
-          }
-        }
-      });
-    
-      const toast = document.getElementById("toast-seguimiento");
-      const listaCont = document.getElementById("toast-lista-clientes");
-      const textoMsg = document.getElementById("toast-mensaje-texto");
-    
-      if (clientesPorLlamar.length === 0) {
-        toast.style.display = "none";
-        return;
-      }
-    
-      textoMsg.textContent = `Tienes ${clientesPorLlamar.length} cotización(es) con más de ${diasMinimos} días sin cerrar:`;
-      listaCont.innerHTML = "";
-    
-      clientesPorLlamar.slice(0, 3).forEach(c => {
-        const celLimpio = (c.celular || "").replace(/\D/g, "");
-        const numCot = String(c.consecutivo).padStart(3, "0");
-        const mensajeWa = `Hola ${c.cliente}, le escribimos de Soluciones Integrales M.W. S.A.S. Queríamos hacer seguimiento a la cotización N° ${numCot} enviada hace ${c.dias} días para conocer sus dudas o comentarios.`;
-        const urlWa = celLimpio ? `https://wa.me/57${celLimpio}?text=${encodeURIComponent(mensajeWa)}` : null;
-    
-        const div = document.createElement("div");
-        div.className = "toast-cliente-item";
-        div.innerHTML = `
-          <div>
-            <strong>#${numCot} - ${c.cliente}</strong>
-            <div style="color:#b45309; font-size:11px;">Hace ${c.dias} días</div>
-          </div>
-          ${urlWa ? `<a href="${urlWa}" target="_blank" class="btn-wa-toast">💬 Seguir</a>` : `<span style="color:#999; font-size:11px;">Sin cel</span>`}
-        `;
-        listaCont.appendChild(div);
-      });
-    
-      toast.style.display = "block";
-    };
-    
-    window.cerrarToastSeguimiento = function() {
-      document.getElementById("toast-seguimiento").style.display = "none";
-    };
-    // =========================================================
-    // MOTOR DE MODALES CENTRADOS (REEMPLAZO DE ALERT Y CONFIRM)
-    // =========================================================
+    // MOTOR DE MODALES CENTRADOS
     const ICONOS_MODAL = {
       success: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
       warning: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
@@ -2146,9 +1731,7 @@
       });
     }
 
-    // =========================================================
-    // CONFIGURACIÓN FIREBASE
-    // =========================================================
+    // FIREBASE & CONFIGURACIÓN LOCAL
     const firebaseConfig = {
       apiKey: "AIzaSyAiMACeB4GnB1ycj5L5C0BJCHSXnx1kTIE",
       authDomain: "cotizador-mw-sas.firebaseapp.com",
@@ -2233,6 +1816,7 @@
     function mostrarPantallaLogin() {
       document.getElementById("app-shell").classList.add("hidden");
       document.getElementById("vista-login").classList.remove("hidden");
+      cerrarToastSeguimiento();
     }
 
     window.alternarPassword = function() {
@@ -2332,7 +1916,6 @@
       if (checkbox.checked) {
         label.classList.add("active");
         texto.textContent = "Sí";
-        // Si el usuario activa IVA en un producto y el % estaba en 0, sugerir 19% automáticamente
         const inputPorc = document.getElementById("cot-iva-porcentaje");
         if ((parseFloat(inputPorc.value) || 0) === 0) {
           inputPorc.value = "19";
@@ -2380,9 +1963,7 @@
 
       if (enfocarNueva) {
         const contScroll = document.getElementById("contenedor-scroll-items");
-        if (contScroll) {
-          contScroll.scrollTop = contScroll.scrollHeight;
-        }
+        if (contScroll) contScroll.scrollTop = contScroll.scrollHeight;
         const inputDesc = tr.querySelector(".item-desc");
         if (inputDesc) inputDesc.focus();
       }
@@ -2400,7 +1981,6 @@
       }
     };
 
-    // Cálculo selectivo: suma el IVA únicamente de los productos con la casilla IVA activa
     window.recalcularTotales = function() {
       let subtotal = 0;
       let baseGravableIva = 0;
@@ -2436,7 +2016,7 @@
       if (totalMovil) totalMovil.textContent = formatearCOPPantalla(totalActualNumerico);
     };
 
-    // MOTOR PDF INDEPENDIENTE (Respeta IVA selectivo por producto + márgenes laterales ampliados)
+    // MOTOR PDF INDEPENDIENTE
     async function generarArchivoPDFDesdeObjeto(datos) {
       const numStr = String(datos.consecutivo || 1).padStart(3, "0");
       document.getElementById("pdf-numero").textContent = numStr;
@@ -2464,13 +2044,10 @@
         const cant = Number(it.cantidad) || 0;
         const precio = Number(it.precio) || 0;
         const totalFila = cant * precio;
-        // Compatibilidad con cotizaciones anteriores: si aplicaIva no existe, se infiere según ivaPorcentaje
         const llevaIva = typeof it.aplicaIva === "boolean" ? it.aplicaIva : (porcIva > 0);
 
         subtotal += totalFila;
-        if (llevaIva) {
-          baseGravableIva += totalFila;
-        }
+        if (llevaIva) baseGravableIva += totalFila;
 
         const etiquetaIva = (llevaIva && porcIva > 0) ? ` <span style="font-size:8.5px; color:#2e6b34; font-weight:bold;">(+IVA)</span>` : "";
 
@@ -2546,7 +2123,6 @@
         const pageW = pdf.internal.pageSize.getWidth();
         const pageH = pdf.internal.pageSize.getHeight();
 
-        // Márgenes independientes: 11mm a izquierda y derecha, 6mm arriba y abajo
         const margenX = 11;
         const margenY = 6;
         const maxW = pageW - margenX * 2;
@@ -2855,6 +2431,74 @@
       }
     };
 
+    // LÓGICA DE RECORDATORIO DE SEGUIMIENTO AUTOMÁTICO
+    window.revisarSeguimientoPendientes = function(diasMinimos = 3) {
+      const hoy = new Date();
+      const clientesPorLlamar = [];
+
+      listaCotizaciones.forEach(c => {
+        if (c.estado === "Pendiente") {
+          let fechaCot = null;
+          if (c.fechaISO) {
+            fechaCot = new Date(c.fechaISO + "T00:00:00");
+          } else if (c.creadoEn) {
+            fechaCot = new Date(c.creadoEn);
+          } else if (c.fecha && c.fecha.includes("/")) {
+            const [d, m, y] = c.fecha.split("/");
+            fechaCot = new Date(`${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}T00:00:00`);
+          }
+
+          if (fechaCot && !isNaN(fechaCot.getTime())) {
+            const diffTiempo = hoy.getTime() - fechaCot.getTime();
+            const diasTranscurridos = Math.floor(diffTiempo / (1000 * 60 * 60 * 24));
+
+            if (diasTranscurridos >= diasMinimos) {
+              clientesPorLlamar.push({ ...c, dias: diasTranscurridos });
+            }
+          }
+        }
+      });
+
+      const toast = document.getElementById("toast-seguimiento");
+      const listaCont = document.getElementById("toast-lista-clientes");
+      const textoMsg = document.getElementById("toast-mensaje-texto");
+
+      if (!toast || !listaCont || !textoMsg) return;
+
+      if (clientesPorLlamar.length === 0) {
+        toast.style.display = "none";
+        return;
+      }
+
+      textoMsg.textContent = `Tienes ${clientesPorLlamar.length} cotización(es) con más de ${diasMinimos} días sin cerrar:`;
+      listaCont.innerHTML = "";
+
+      clientesPorLlamar.slice(0, 3).forEach(c => {
+        const celLimpio = (c.celular || "").replace(/\D/g, "");
+        const numCot = String(c.consecutivo).padStart(3, "0");
+        const mensajeWa = `Hola ${c.cliente}, le escribimos de Soluciones Integrales M.W. S.A.S. Queríamos hacer seguimiento a la cotización N° ${numCot} enviada hace ${c.dias} días para conocer sus dudas o comentarios.`;
+        const urlWa = celLimpio ? `https://wa.me/57${celLimpio}?text=${encodeURIComponent(mensajeWa)}` : null;
+
+        const div = document.createElement("div");
+        div.className = "toast-cliente-item";
+        div.innerHTML = `
+          <div>
+            <strong>#${numCot} - ${c.cliente}</strong>
+            <div style="color:#b45309; font-size:11px;">Hace ${c.dias} días</div>
+          </div>
+          ${urlWa ? `<a href="${urlWa}" target="_blank" class="btn-wa-toast">💬 Seguir</a>` : `<span style="color:#999; font-size:11px;">Sin cel</span>`}
+        `;
+        listaCont.appendChild(div);
+      });
+
+      toast.style.display = "block";
+    };
+
+    window.cerrarToastSeguimiento = function() {
+      const toast = document.getElementById("toast-seguimiento");
+      if (toast) toast.style.display = "none";
+    };
+
     window.renderizarTablaControl = function() {
       const tbody = document.getElementById("tbody-control");
       const textoFiltro = (document.getElementById("filtro-cliente")?.value || "").toLowerCase();
@@ -2880,6 +2524,8 @@
       document.getElementById("count-pendientes").textContent = clientesPorLlamar;
       document.getElementById("count-aprobadas").textContent = cantAprobadas;
       document.getElementById("count-rechazadas").textContent = cantRechazadas;
+
+      revisarSeguimientoPendientes(3);
 
       const filtradas = [...listaCotizaciones]
         .sort((a, b) => (Number(b.consecutivo) || 0) - (Number(a.consecutivo) || 0))
@@ -2934,6 +2580,9 @@
       });
     };
 
+    // =========================================================
+    // EXPORTADOR EMPRESARIAL DE EXCEL CON ESTILOS Y COLORES M.W.
+    // =========================================================
     window.exportarHistorialExcel = async function() {
       if (listaCotizaciones.length === 0) {
         await mostrarModalAlerta({
@@ -2943,20 +2592,218 @@
         });
         return;
       }
-      const datosExcel = listaCotizaciones.map(c => ({
-        "No. Cotización": c.consecutivo,
-        "Fecha": c.fecha,
-        "Nombre Cliente": c.cliente,
-        "Cédula / NIT": c.cedula,
-        "Celular": c.celular,
-        "Dirección": c.direccion || "",
-        "Valor Total": c.valorTotal,
-        "Estado": c.estado
-      }));
-      const ws = XLSX.utils.json_to_sheet(datosExcel);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Control_Cotizaciones");
-      XLSX.writeFile(wb, "Control_Cotizaciones_MW.xlsx");
+
+      if (typeof window.ExcelJS === "undefined") {
+        await mostrarModalAlerta({
+          titulo: "Cargando motor de Excel",
+          mensaje: "La librería de generación de Excel aún se está descargando. Por favor intenta de nuevo en 3 segundos.",
+          tipo: "warning"
+        });
+        return;
+      }
+
+      try {
+        const wb = new window.ExcelJS.Workbook();
+        wb.creator = "Soluciones Integrales M.W. S.A.S.";
+        wb.created = new Date();
+
+        const ws = wb.addWorksheet("Control de Cotizaciones", {
+          views: [{ showGridLines: true }]
+        });
+
+        // Configuración de anchos de columna fijos y amplios
+        ws.columns = [
+          { key: "consecutivo", width: 12 }, // A: N°
+          { key: "fecha",       width: 14 }, // B: Fecha
+          { key: "cliente",     width: 34 }, // C: Cliente
+          { key: "cedula",      width: 18 }, // D: NIT/CC
+          { key: "celular",     width: 18 }, // E: Celular
+          { key: "direccion",   width: 32 }, // F: Dirección
+          { key: "valorTotal",  width: 22 }, // G: Valor Total
+          { key: "estado",      width: 16 }  // H: Estado
+        ];
+
+        // 1. BANNER PRINCIPAL (Fila 1)
+        ws.mergeCells("A1:H1");
+        const r1 = ws.getCell("A1");
+        r1.value = "SOLUCIONES INTEGRALES M.W. S.A.S.";
+        r1.font = { name: "Arial", size: 14, bold: true, color: { argb: "FFFFFFFF" } };
+        r1.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF0F291E" } }; // Verde Oscuro M.W.
+        r1.alignment = { horizontal: "center", vertical: "middle" };
+        ws.getRow(1).height = 30;
+
+        // 2. SUB-BANNER INSTITUCIONAL (Fila 2)
+        ws.mergeCells("A2:H2");
+        const r2 = ws.getCell("A2");
+        r2.value = "NIT: 900664844-3   |   Energía que transforma el campo   |   WhatsApp: (+57) 314 573 5259";
+        r2.font = { name: "Arial", size: 9.5, bold: false, color: { argb: "FFEAF1DD" } };
+        r2.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF163829" } }; // Verde Bosque 2
+        r2.alignment = { horizontal: "center", vertical: "middle" };
+        ws.getRow(2).height = 20;
+
+        // 3. METADATOS DEL REPORTE (Fila 3)
+        ws.mergeCells("A3:H3");
+        const fechaHoy = new Date().toLocaleDateString("es-CO", { year: "numeric", month: "long", day: "numeric" });
+        const r3 = ws.getCell("A3");
+        r3.value = `REPORTE OFICIAL DE CONTROL DE COTIZACIONES  •  Generado el: ${fechaHoy}`;
+        r3.font = { name: "Arial", size: 9, bold: true, color: { argb: "FF2E6B34" } };
+        r3.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFEFF3EE" } };
+        r3.alignment = { horizontal: "center", vertical: "middle" };
+        ws.getRow(3).height = 18;
+
+        // Fila 4: Espacio separador
+        ws.getRow(4).height = 8;
+
+        // 4. ENCABEZADOS DE LA TABLA (Fila 5)
+        const cabeceras = [
+          "N° COT.",
+          "FECHA",
+          "CLIENTE / RAZÓN SOCIAL",
+          "NIT / CÉDULA",
+          "CELULAR",
+          "DIRECCIÓN / CIUDAD",
+          "VALOR TOTAL (COP)",
+          "ESTADO"
+        ];
+        const rowHeader = ws.getRow(5);
+        rowHeader.values = cabeceras;
+        rowHeader.height = 26;
+
+        rowHeader.eachCell((cell) => {
+          cell.font = { name: "Arial", size: 10, bold: true, color: { argb: "FFFFFFFF" } };
+          cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF0F291E" } };
+          cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
+          cell.border = {
+            top: { style: "thin", color: { argb: "FF334155" } },
+            left: { style: "thin", color: { argb: "FF334155" } },
+            bottom: { style: "medium", color: { argb: "FF0F291E" } },
+            right: { style: "thin", color: { argb: "FF334155" } }
+          };
+        });
+
+        // 5. LLENADO DE DATOS (Ordenados por consecutivo descendente)
+        const datosOrdenados = [...listaCotizaciones].sort((a, b) => (Number(b.consecutivo) || 0) - (Number(a.consecutivo) || 0));
+        let totalAcumulado = 0;
+        let filaInicioDatos = 6;
+
+        datosOrdenados.forEach((c, idx) => {
+          const numFilaActual = filaInicioDatos + idx;
+          const valorNum = Number(c.valorTotal) || 0;
+          totalAcumulado += valorNum;
+
+          const row = ws.getRow(numFilaActual);
+          row.values = [
+            `#${String(c.consecutivo).padStart(3, "0")}`,
+            c.fecha || "",
+            c.cliente || "",
+            c.cedula || "—",
+            c.celular || "—",
+            c.direccion || "—",
+            valorNum,
+            c.estado || "Pendiente"
+          ];
+          row.height = 22;
+
+          // Color de fondo tipo cebra suave
+          const colorFondoFila = (idx % 2 === 0) ? "FFFFFFFF" : "FFF8FAF8";
+
+          row.eachCell((cell, colNumber) => {
+            cell.font = { name: "Arial", size: 9.5, color: { argb: "FF111827" } };
+            cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: colorFondoFila } };
+            cell.alignment = { vertical: "middle", wrapText: true };
+            cell.border = {
+              top: { style: "thin", color: { argb: "FFE2E8F0" } },
+              left: { style: "thin", color: { argb: "FFE2E8F0" } },
+              bottom: { style: "thin", color: { argb: "FFE2E8F0" } },
+              right: { style: "thin", color: { argb: "FFE2E8F0" } }
+            };
+
+            // Alineaciones específicas por columna
+            if (colNumber === 1 || colNumber === 2 || colNumber === 4 || colNumber === 5) {
+              cell.alignment = { horizontal: "center", vertical: "middle" };
+            }
+            if (colNumber === 1) {
+              cell.font = { name: "Arial", size: 9.5, bold: true, color: { argb: "FF111827" } };
+            }
+            if (colNumber === 3) {
+              cell.font = { name: "Arial", size: 9.5, bold: true, color: { argb: "FF0F291E" } };
+            }
+            if (colNumber === 7) {
+              // Formato contable nativo de moneda COP
+              cell.numFmt = '"$"#,##0';
+              cell.alignment = { horizontal: "right", vertical: "middle" };
+              cell.font = { name: "Arial", size: 9.5, bold: true, color: { argb: "FF111827" } };
+            }
+            // Formato condicional para la columna Estado (Píldoras)
+            if (colNumber === 8) {
+              cell.alignment = { horizontal: "center", vertical: "middle" };
+              cell.font = { name: "Arial", size: 9, bold: true };
+              if (c.estado === "Aprobada") {
+                cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFDCFCE7" } };
+                cell.font.color = { argb: "FF15803D" };
+              } else if (c.estado === "Rechazada") {
+                cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFFEE2E2" } };
+                cell.font.color = { argb: "FFB91C1C" };
+              } else {
+                cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFFEF3C7" } };
+                cell.font.color = { argb: "FFB45309" };
+              }
+            }
+          });
+        });
+
+        // 6. FILA DE RESUMEN CONTABLE (TOTALES)
+        const filaTotales = filaInicioDatos + datosOrdenados.length;
+        ws.mergeCells(`A${filaTotales}:F${filaTotales}`);
+        
+        const cellLabelTotal = ws.getCell(`A${filaTotales}`);
+        cellLabelTotal.value = "TOTAL CARTERA COTIZADA:";
+        cellLabelTotal.font = { name: "Arial", size: 10, bold: true, color: { argb: "FF0F291E" } };
+        cellLabelTotal.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFEAF1DD" } };
+        cellLabelTotal.alignment = { horizontal: "right", vertical: "middle" };
+
+        const cellValorTotal = ws.getCell(`G${filaTotales}`);
+        cellValorTotal.value = totalAcumulado;
+        cellValorTotal.numFmt = '"$"#,##0';
+        cellValorTotal.font = { name: "Arial", size: 10.5, bold: true, color: { argb: "FF0F291E" } };
+        cellValorTotal.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFEAF1DD" } };
+        cellValorTotal.alignment = { horizontal: "right", vertical: "middle" };
+
+        const cellCantTotal = ws.getCell(`H${filaTotales}`);
+        cellCantTotal.value = `${datosOrdenados.length} cots.`;
+        cellCantTotal.font = { name: "Arial", size: 9.5, bold: true, color: { argb: "FF2E6B34" } };
+        cellCantTotal.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFEAF1DD" } };
+        cellCantTotal.alignment = { horizontal: "center", vertical: "middle" };
+
+        const rowTotales = ws.getRow(filaTotales);
+        rowTotales.height = 24;
+        rowTotales.eachCell((cell) => {
+          cell.border = {
+            top: { style: "thin", color: { argb: "FF2E6B34" } },
+            bottom: { style: "double", color: { argb: "FF0F291E" } } // Doble línea contable inferior
+          };
+        });
+
+        // 7. DESCARGA DEL ARCHIVO EN NAVEGADOR
+        const buffer = await wb.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        const urlDescarga = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = urlDescarga;
+        link.download = `Control_Cotizaciones_MW_${new Date().toISOString().slice(0, 10)}.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(urlDescarga);
+
+      } catch (err) {
+        console.error("Error generando Excel:", err);
+        await mostrarModalAlerta({
+          titulo: "Error al exportar",
+          mensaje: "Ocurrió un inconveniente al generar el libro de Excel: " + (err && err.message ? err.message : err),
+          tipo: "danger"
+        });
+      }
     };
 
     window.cambiarPestana = function(nombre) {
@@ -2974,41 +2821,26 @@
       window.scrollTo(0, 0);
     };
 
-    // Inicialización por defecto
+    // INICIALIZACIÓN
     document.getElementById("cot-fecha").valueAsDate = new Date();
     for (let i = 0; i < 4; i++) agregarFilaProducto();
 
+    // REGISTRO Y AUTO-RECARGA ROBUSTA DEL SERVICE WORKER
     if ("serviceWorker" in navigator) {
+      let recargando = false;
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (!recargando) {
+          recargando = true;
+          window.location.reload();
+        }
+      });
+
       navigator.serviceWorker.register("./sw.js").then((reg) => {
-        // Revisa si hay cambios en GitHub Pages cada vez que el usuario abre la app
         reg.update();
-    
-        reg.addEventListener("updatefound", () => {
-          const nuevoWorker = reg.installing;
-          nuevoWorker.addEventListener("statechange", () => {
-            if (nuevoWorker.state === "installed" && navigator.serviceWorker.controller) {
-              // Nueva versión lista: recarga la app discretamente
-              window.location.reload();
-            }
-          });
-        });
-      }).catch(() => {});
+      }).catch((err) => {
+        console.warn("ServiceWorker no registrado:", err);
+      });
     }
-      
-    <!-- Notificación Flotante de Seguimiento -->
-    <div id="toast-seguimiento" class="toast-seguimiento-box">
-      <div class="toast-header">
-        <div class="toast-title-wrap">
-          <span class="toast-bell">🔔</span>
-          <strong>Recordatorio de Seguimiento</strong>
-        </div>
-        <button type="button" class="toast-close-btn" onclick="cerrarToastSeguimiento()">✕</button>
-      </div>
-      <p id="toast-mensaje-texto" class="toast-body-text">
-        Tienes cotizaciones pendientes hace más de 3 días.
-      </p>
-      <div id="toast-lista-clientes" class="toast-clientes-list"></div>
-    </div>
   </script>
 </body>
 </html>
