@@ -2979,7 +2979,20 @@
     for (let i = 0; i < 4; i++) agregarFilaProducto();
 
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./sw.js").catch(() => {});
+      navigator.serviceWorker.register("./sw.js").then((reg) => {
+        // Revisa si hay cambios en GitHub Pages cada vez que el usuario abre la app
+        reg.update();
+    
+        reg.addEventListener("updatefound", () => {
+          const nuevoWorker = reg.installing;
+          nuevoWorker.addEventListener("statechange", () => {
+            if (nuevoWorker.state === "installed" && navigator.serviceWorker.controller) {
+              // Nueva versión lista: recarga la app discretamente
+              window.location.reload();
+            }
+          });
+        });
+      }).catch(() => {});
     }
       
     <!-- Notificación Flotante de Seguimiento -->
