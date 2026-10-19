@@ -1426,6 +1426,74 @@
         border-radius: 0 0 4px 4px;
       }
     }
+    .toast-seguimiento-box {
+      display: none;
+      position: fixed;
+      bottom: 85px;
+      right: 24px;
+      max-width: 380px;
+      width: calc(100% - 48px);
+      background: #ffffff;
+      border: 1.5px solid #fde68a;
+      border-left: 5px solid #d97706;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 14px 35px -5px rgba(15, 41, 30, 0.22);
+      z-index: 920;
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .toast-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .toast-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #92400e;
+    }
+    .toast-close-btn {
+      background: none;
+      border: none;
+      font-size: 14px;
+      color: #9ca3af;
+      cursor: pointer;
+    }
+    .toast-body-text {
+      margin: 0 0 10px 0;
+      font-size: 13px;
+      color: #4b5563;
+    }
+    .toast-cliente-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      background: #fffbeb;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      font-size: 12.5px;
+    }
+    .btn-wa-toast {
+      background: #16a34a;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
   </style>
 </head>
 <body>
@@ -1937,6 +2005,67 @@
       orderBy
     } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
+    window.revisarSeguimientoPendientes = function(diasMinimos = 3) {
+      const hoy = new Date();
+      const clientesPorLlamar = [];
+    
+      listaCotizaciones.forEach(c => {
+        if (c.estado === "Pendiente") {
+          let fechaCot = null;
+          if (c.fechaISO) {
+            fechaCot = new Date(c.fechaISO);
+          } else if (c.fecha && c.fecha.includes("/")) {
+            const [d, m, y] = c.fecha.split("/");
+            fechaCot = new Date(`${y}-${m}-${d}`);
+          }
+          
+          if (fechaCot && !isNaN(fechaCot.getTime())) {
+            const diffTiempo = hoy.getTime() - fechaCot.getTime();
+            const diasTranscurridos = Math.floor(diffTiempo / (1000 * 60 * 60 * 24));
+            
+            if (diasTranscurridos >= diasMinimos) {
+              clientesPorLlamar.push({ ...c, dias: diasTranscurridos });
+            }
+          }
+        }
+      });
+    
+      const toast = document.getElementById("toast-seguimiento");
+      const listaCont = document.getElementById("toast-lista-clientes");
+      const textoMsg = document.getElementById("toast-mensaje-texto");
+    
+      if (clientesPorLlamar.length === 0) {
+        toast.style.display = "none";
+        return;
+      }
+    
+      textoMsg.textContent = `Tienes ${clientesPorLlamar.length} cotización(es) con más de ${diasMinimos} días sin cerrar:`;
+      listaCont.innerHTML = "";
+    
+      clientesPorLlamar.slice(0, 3).forEach(c => {
+        const celLimpio = (c.celular || "").replace(/\D/g, "");
+        const numCot = String(c.consecutivo).padStart(3, "0");
+        const mensajeWa = `Hola ${c.cliente}, le escribimos de Soluciones Integrales M.W. S.A.S. Queríamos hacer seguimiento a la cotización N° ${numCot} enviada hace ${c.dias} días para conocer sus dudas o comentarios.`;
+        const urlWa = celLimpio ? `https://wa.me/57${celLimpio}?text=${encodeURIComponent(mensajeWa)}` : null;
+    
+        const div = document.createElement("div");
+        div.className = "toast-cliente-item";
+        div.innerHTML = `
+          <div>
+            <strong>#${numCot} - ${c.cliente}</strong>
+            <div style="color:#b45309; font-size:11px;">Hace ${c.dias} días</div>
+          </div>
+          ${urlWa ? `<a href="${urlWa}" target="_blank" class="btn-wa-toast">💬 Seguir</a>` : `<span style="color:#999; font-size:11px;">Sin cel</span>`}
+        `;
+        listaCont.appendChild(div);
+      });
+    
+      toast.style.display = "block";
+    };
+    
+    window.cerrarToastSeguimiento = function() {
+      document.getElementById("toast-seguimiento").style.display = "none";
+    };
     // =========================================================
     // MOTOR DE MODALES CENTRADOS (REEMPLAZO DE ALERT Y CONFIRM)
     // =========================================================
@@ -2852,6 +2981,21 @@
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("./sw.js").catch(() => {});
     }
+      
+    <!-- Notificación Flotante de Seguimiento -->
+    <div id="toast-seguimiento" class="toast-seguimiento-box">
+      <div class="toast-header">
+        <div class="toast-title-wrap">
+          <span class="toast-bell">🔔</span>
+          <strong>Recordatorio de Seguimiento</strong>
+        </div>
+        <button type="button" class="toast-close-btn" onclick="cerrarToastSeguimiento()">✕</button>
+      </div>
+      <p id="toast-mensaje-texto" class="toast-body-text">
+        Tienes cotizaciones pendientes hace más de 3 días.
+      </p>
+      <div id="toast-lista-clientes" class="toast-clientes-list"></div>
+    </div>
   </script>
 </body>
 </html>
