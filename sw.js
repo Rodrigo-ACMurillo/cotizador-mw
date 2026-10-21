@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = 'mw-cotizador-v4'; // <- Incrementado para forzar la actualización del nuevo index.html
+const CACHE_NAME = 'mw-cotizador-v5'; // Incrementado a v5 para forzar la actualización en dispositivos
 
 const ARCHIVOS_A_GUARDAR = [
   './',
@@ -17,7 +17,7 @@ self.addEventListener('install', (event) => {
         try {
           await cache.add(recurso);
         } catch (err) {
-          console.warn('Recurso no cacheado en install:', recurso);
+          console.warn('Recurso opcional no cacheado:', recurso);
         }
       }
     })
@@ -29,17 +29,16 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
-          // Elimina v1, v2, v3 y cualquier caché antigua
           if (key !== CACHE_NAME) return caches.delete(key);
         })
       );
-    }).then(() => self.clients.claim()) // Toma control de la pantalla abierta de inmediato
+    }).then(() => self.clients.claim())
   );
 });
 
 // Estrategia: Red primero para navegación y Cache-First seguro solo para peticiones GET
 self.addEventListener('fetch', (event) => {
-  // Ignorar peticiones de Firebase Firestore (POST, streams, APIs internas)
+  // Ignorar peticiones de Firebase Firestore (POST, streamings, APIs)
   if (event.request.method !== 'GET') return;
 
   if (event.request.mode === 'navigate') {
