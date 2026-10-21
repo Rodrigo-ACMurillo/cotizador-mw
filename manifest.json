@@ -1,22 +1,33 @@
 {
+  "id": "./index.html",
   "name": "Cotizador Soluciones Integrales M.W. S.A.S.",
   "short_name": "Cotizador M.W.",
   "description": "Sistema de Cotizaciones y Control Comercial - Soluciones Integrales M.W. S.A.S.",
+  "lang": "es-CO",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#eaf1dd",
-  "theme_color": "#2e6b34",
   "orientation": "any",
+  "background_color": "#eaf1dd",
+  "theme_color": "#0f291e",
   "icons": [
     {
-      "src": "logo.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "logo.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
