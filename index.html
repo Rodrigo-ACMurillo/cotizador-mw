@@ -21,7 +21,7 @@
 
   <style>
     :root {
-      /* Paleta Moderna M.W. (Fusión Propuesta + UI SaaS) */
+      /* Paleta Moderna M.W. */
       --bg-app: #f4f6f3;
       --bg-card: #ffffff;
       --bg-subtle: #eff3ee;
@@ -42,7 +42,7 @@
       --radio-md: 10px;
       --radio-sm: 8px;
 
-      /* Variables exclusivas para la Plantilla Fantasma PDF original */
+      /* Variables exclusivas para la Plantilla Fantasma PDF */
       --verde-header: #eaf1dd;
       --azul-tabla: #c5d9f1;
       --borde-celda: #808080;
@@ -62,9 +62,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* =========================================================
-       SISTEMA DE MODALES Y NOTIFICACIONES CENTRADAS
-       ========================================================= */
+    /* SISTEMA DE MODALES Y NOTIFICACIONES CENTRADAS */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -152,9 +150,7 @@
     .btn-modal-confirm.danger { background: #dc2626; color: #ffffff; }
     .btn-modal-confirm.danger:hover { background: #b91c1c; }
 
-    /* =========================================================
-       1. PANTALLA DE LOGIN
-       ========================================================= */
+    /* PANTALLA DE LOGIN */
     #vista-login {
       min-height: 100vh;
       display: flex;
@@ -282,9 +278,7 @@
       color: var(--texto-muted);
     }
 
-    /* =========================================================
-       2. BARRA SUPERIOR (TOPBAR) Y DATOS DE EMPRESA
-       ========================================================= */
+    /* BARRA SUPERIOR */
     #app-shell.hidden { display: none !important; }
     .topbar {
       background: #ffffff;
@@ -322,7 +316,6 @@
       color: var(--verde-corporativo);
       font-weight: 600;
     }
-
     .topbar-center {
       display: flex;
       align-items: center;
@@ -347,7 +340,6 @@
       color: var(--texto-principal);
       box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
-
     .topbar-right { display: flex; align-items: center; gap: 14px; }
     .status-badge {
       display: inline-flex;
@@ -377,9 +369,7 @@
     }
     .btn-salir:hover { background: #f1f5f9; color: #111827; }
 
-    /* =========================================================
-       3. CONTENEDOR PRINCIPAL Y ENCABEZADOS
-       ========================================================= */
+    /* CONTENEDOR PRINCIPAL */
     .main-container {
       max-width: 1240px;
       margin: 0 auto;
@@ -440,9 +430,7 @@
       color: var(--texto-principal);
     }
 
-    /* =========================================================
-       4. LAYOUT DE COTIZACIÓN (2 COLUMNAS + SCROLL INTELIGENTE)
-       ========================================================= */
+    /* LAYOUT DE COTIZACIÓN */
     .cotizador-layout {
       display: grid;
       grid-template-columns: 1fr 350px;
@@ -456,7 +444,6 @@
       border: 1px solid var(--borde-suave);
       padding: 26px;
     }
-
     .empresa-info-strip {
       display: flex;
       flex-wrap: wrap;
@@ -472,7 +459,6 @@
       color: var(--texto-secundario);
     }
     .empresa-info-item { display: inline-flex; align-items: center; gap: 5px; }
-
     .section-title {
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 18px;
@@ -480,7 +466,6 @@
       color: var(--texto-principal);
       margin: 0 0 18px 0;
     }
-
     .cliente-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -761,9 +746,7 @@
       text-align: left;
     }
 
-    /* =========================================================
-       5. VISTA DE HISTORIAL
-       ========================================================= */
+    /* VISTA DE HISTORIAL */
     .historial-header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
     .btn-primary-dark {
       background: var(--verde-oscuro);
@@ -918,9 +901,7 @@
 
     .mobile-bottom-dock { display: none; }
 
-    /* =========================================================
-       6. PLANTILLA FANTASMA PDF (Aislada, 760px)
-       ========================================================= */
+    /* PLANTILLA FANTASMA PDF (Aislada, 760px) */
     #contenedor-fantasma-pdf {
       position: absolute;
       left: 0;
@@ -958,9 +939,7 @@
     .pdf-sheet .cell-readonly { background-color: #f4f6f8; font-weight: bold; color: #1f2937; }
     .pdf-wa-inline { display: inline-flex; align-items: center; vertical-align: middle; gap: 3px; }
 
-    /* =========================================================
-       7. DISEÑO RESPONSIVO (MÓVIL / TABLET)
-       ========================================================= */
+    /* DISEÑO RESPONSIVO (MÓVIL / TABLET) */
     @media screen and (max-width: 960px) {
       .topbar { padding: 12px 16px; }
       .brand-subtitle, .topbar-center { display: none; }
@@ -1118,7 +1097,7 @@
       }
     }
 
-    /* Estilos del Toast de Seguimiento */
+    /* TOAST DE SEGUIMIENTO */
     .toast-seguimiento-box {
       display: none;
       position: fixed;
@@ -1191,9 +1170,7 @@
 </head>
 <body>
 
-  <!-- =========================================================
-       VENTANA MODAL CENTRADA
-       ========================================================= -->
+  <!-- VENTANA MODAL CENTRADA -->
   <div id="custom-modal-overlay" class="modal-overlay" role="dialog" aria-modal="true">
     <div class="modal-box">
       <div id="modal-icon-container" class="modal-icon-circle success"></div>
@@ -1206,9 +1183,7 @@
     </div>
   </div>
 
-  <!-- =========================================================
-       PANTALLA DE LOGIN
-       ========================================================= -->
+  <!-- PANTALLA DE LOGIN -->
   <div id="vista-login">
     <div class="login-card">
       <div class="login-brand">
@@ -1228,7 +1203,7 @@
       <form id="form-login" onsubmit="iniciarSesion(event)">
         <div class="form-group">
           <label class="form-label" for="login-email">Correo</label>
-          <input type="email" id="login-email" class="modern-input" placeholder="equipo@integralesmw.com" required autocomplete="email" />
+          <input type="email" id="login-email" class="modern-input" placeholder="asesor@integralesmw.com" required autocomplete="email" />
         </div>
 
         <div class="form-group">
@@ -1243,17 +1218,14 @@
       </form>
 
       <div class="login-footer">
-        Acceso solo para el equipo de Soluciones Integrales M.W.
+        Acceso restringido para el equipo comercial de Soluciones Integrales M.W.
       </div>
     </div>
   </div>
 
-  <!-- =========================================================
-       APLICACIÓN PRINCIPAL (APP-SHELL)
-       ========================================================= -->
+  <!-- APLICACIÓN PRINCIPAL (APP-SHELL) -->
   <div id="app-shell" class="hidden">
 
-    <!-- Barra Superior -->
     <header class="topbar">
       <div class="topbar-left">
         <div class="mw-badge">
@@ -1296,7 +1268,7 @@
 
         <div class="page-header">
           <div class="quote-title-group">
-            <h1 class="quote-main-title">Cotización N° <span id="cot-numero">001</span></h1>
+            <h1 class="quote-main-title">Cotización N° <span id="cot-numero">---</span></h1>
             <span id="subtitulo-estado-cot" class="quote-status-hint">Nueva cotización, todavía sin guardar</span>
           </div>
           <div>
@@ -1420,7 +1392,7 @@
               Exportar PDF
             </button>
 
-            <p class="summary-footnote">El IVA se calcula únicamente sobre los productos marcados con IVA.</p>
+            <p class="summary-footnote">El número definitivo se sincroniza de forma atómica al guardar.</p>
           </aside>
         </div>
       </section>
@@ -1518,7 +1490,7 @@
       </div>
     </div>
 
-    <!-- NOTIFICACIÓN FLOTANTE DE SEGUIMIENTO (Correctamente situada dentro de app-shell) -->
+    <!-- NOTIFICACIÓN FLOTANTE DE SEGUIMIENTO -->
     <div id="toast-seguimiento" class="toast-seguimiento-box">
       <div class="toast-header">
         <div class="toast-title-wrap">
@@ -1535,9 +1507,7 @@
 
   </div>
 
-  <!-- =========================================================
-       PLANTILLA FANTASMA PDF (Aislada, 760px)
-       ========================================================= -->
+  <!-- PLANTILLA FANTASMA PDF -->
   <div id="contenedor-fantasma-pdf">
     <div id="lienzo-pdf-excel" class="pdf-sheet">
       <table class="pdf-table">
@@ -1629,9 +1599,7 @@
     </div>
   </div>
 
-  <!-- =========================================================
-       LÓGICA JAVASCRIPT
-       ========================================================= -->
+  <!-- LÓGICA JAVASCRIPT PROTEGIDA -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
     import {
@@ -1650,8 +1618,19 @@
       updateDoc,
       deleteDoc,
       query,
-      orderBy
+      orderBy,
+      runTransaction
     } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+    // UTILIDAD DE DESINFECCIÓN CONTRA ATAQUES XSS
+    function escapeHTML(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
 
     // MOTOR DE MODALES CENTRADOS
     const ICONOS_MODAL = {
@@ -1731,7 +1710,7 @@
       });
     }
 
-    // FIREBASE & CONFIGURACIÓN LOCAL
+    // FIREBASE
     const firebaseConfig = {
       apiKey: "AIzaSyAiMACeB4GnB1ycj5L5C0BJCHSXnx1kTIE",
       authDomain: "cotizador-mw-sas.firebaseapp.com",
@@ -1742,63 +1721,63 @@
       measurementId: "G-XWNEDGHZRE"
     };
 
-    const CREDENCIAL_EQUIPO_FALLBACK = {
-      email: "equipo@integralesmw.com",
-      pass: "mw2026*"
-    };
-
     let app = null;
     let auth = null;
     let db = null;
     let unsubscribeSnapshot = null;
-    let usarFirebase = firebaseConfig.apiKey !== "REEMPLAZAR_CON_TU_API_KEY";
     let listaCotizaciones = [];
     let totalActualNumerico = 0;
     let cotizacionEditandoId = null;
 
-    if (usarFirebase) {
-      try {
-        app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        db = getFirestore(app);
-        enableIndexedDbPersistence(db).catch(() => {});
+    try {
+      app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+      enableIndexedDbPersistence(db).catch(() => {});
 
-        onAuthStateChanged(auth, (user) => {
-          const sesionLocal = sessionStorage.getItem("mw_sesion_activa") === "true";
-          if (user || sesionLocal) {
-            mostrarAplicacion();
-          } else {
-            mostrarPantallaLogin();
-          }
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    } else {
-      document.getElementById("conexion-status").innerHTML = `<span class="status-dot" style="background:#f59e0b;"></span> Modo Local`;
-      if (sessionStorage.getItem("mw_sesion_activa") === "true") {
-        mostrarAplicacion();
-      }
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          mostrarAplicacion();
+        } else {
+          mostrarPantallaLogin();
+        }
+      });
+    } catch (e) {
+      console.error("Error al inicializar Firebase:", e);
     }
 
-    function iniciarEscuchaDatos() {
-      if (usarFirebase && db) {
-        if (unsubscribeSnapshot) return;
-        const q = query(collection(db, "cotizaciones"), orderBy("consecutivo", "asc"));
-        unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
-          listaCotizaciones = [];
-          snapshot.forEach((docSnap) => {
-            listaCotizaciones.push({ id: docSnap.id, ...docSnap.data() });
-          });
-          if (!cotizacionEditandoId) actualizarConsecutivoAutomatico();
-          renderizarTablaControl();
-        }, (err) => {
-          console.warn("Cargando respaldo local:", err);
-          cargarDatosLocalStorage();
-        });
+    // MONITOREO DE RED Y SINCRONIZACIÓN
+    function actualizarInsigniaConexion(estaSincronizado = true) {
+      const el = document.getElementById("conexion-status");
+      if (!navigator.onLine) {
+        el.innerHTML = `<span class="status-dot" style="background:#dc2626;"></span> Sin internet (Offline)`;
+        el.style.color = "#dc2626";
+      } else if (!estaSincronizado) {
+        el.innerHTML = `<span class="status-dot" style="background:#f59e0b;"></span> Guardado local (Subiendo...)`;
+        el.style.color = "#d97706";
       } else {
-        cargarDatosLocalStorage();
+        el.innerHTML = `<span class="status-dot" style="background:#22c55e;"></span> Sincronizado`;
+        el.style.color = "#15803d";
       }
+    }
+    window.addEventListener("online", () => actualizarInsigniaConexion(true));
+    window.addEventListener("offline", () => actualizarInsigniaConexion(false));
+
+    function iniciarEscuchaDatos() {
+      if (!db || unsubscribeSnapshot) return;
+      const q = query(collection(db, "cotizaciones"), orderBy("consecutivo", "asc"));
+      unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
+        listaCotizaciones = [];
+        snapshot.forEach((docSnap) => {
+          listaCotizaciones.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        actualizarInsigniaConexion(!snapshot.metadata.hasPendingWrites);
+        if (!cotizacionEditandoId) actualizarConsecutivoAutomatico();
+        renderizarTablaControl();
+      }, (err) => {
+        console.warn("Error en sincronización en vivo, cargando respaldo local:", err);
+        cargarDatosLocalStorage();
+      });
     }
 
     function cargarDatosLocalStorage() {
@@ -1831,6 +1810,7 @@
       }
     };
 
+    // INICIO DE SESIÓN ESTRICTO (SOLO FIREBASE AUTH)
     window.iniciarSesion = async function(e) {
       e.preventDefault();
       const email = document.getElementById("login-email").value.trim().toLowerCase();
@@ -1843,24 +1823,13 @@
       btn.textContent = "Verificando...";
 
       try {
-        if (usarFirebase && auth) {
-          await signInWithEmailAndPassword(auth, email, pass);
-          sessionStorage.setItem("mw_sesion_activa", "true");
-          mostrarAplicacion();
-        } else if (email === CREDENCIAL_EQUIPO_FALLBACK.email && pass === CREDENCIAL_EQUIPO_FALLBACK.pass) {
-          sessionStorage.setItem("mw_sesion_activa", "true");
-          mostrarAplicacion();
-        } else {
-          throw new Error("Credenciales inválidas");
-        }
+        if (!auth) throw new Error("Firebase Auth no está activo");
+        await signInWithEmailAndPassword(auth, email, pass);
+        mostrarAplicacion();
       } catch (err) {
-        if (email === CREDENCIAL_EQUIPO_FALLBACK.email && pass === CREDENCIAL_EQUIPO_FALLBACK.pass) {
-          sessionStorage.setItem("mw_sesion_activa", "true");
-          mostrarAplicacion();
-        } else {
-          errorBox.textContent = "Correo o contraseña incorrectos. Verifica tus datos de acceso.";
-          errorBox.style.display = "block";
-        }
+        console.warn("Intento de acceso denegado:", err.message);
+        errorBox.textContent = "Correo o contraseña inválidos. Acceso denegado.";
+        errorBox.style.display = "block";
       } finally {
         btn.disabled = false;
         btn.textContent = "Entrar";
@@ -1868,8 +1837,7 @@
     };
 
     window.cerrarSesion = async function() {
-      sessionStorage.removeItem("mw_sesion_activa");
-      if (usarFirebase && auth) {
+      if (auth) {
         try { await signOut(auth); } catch (e) {}
       }
       mostrarPantallaLogin();
@@ -1934,7 +1902,7 @@
       tr.innerHTML = `
         <td class="col-num"><span class="num-item">${numFila}</span></td>
         <td class="col-desc">
-          <input type="text" class="table-input item-desc" value="${descripcion}" placeholder="Descripción del producto o servicio" />
+          <input type="text" class="table-input item-desc" value="${escapeHTML(descripcion)}" placeholder="Descripción del producto o servicio" />
         </td>
         <td class="col-cant" data-label="Cant.">
           <input type="number" class="table-input item-cant" value="${cantidad}" min="0" step="any" style="text-align:right;" placeholder="0" oninput="recalcularTotales()" />
@@ -1987,8 +1955,8 @@
       let cantItemsConIva = 0;
 
       document.querySelectorAll("#tbody-items tr").forEach((fila) => {
-        const cant = parseFloat(fila.querySelector(".item-cant").value) || 0;
-        const precio = parseFloat(fila.querySelector(".item-precio").value) || 0;
+        const cant = Math.max(0, parseFloat(fila.querySelector(".item-cant").value) || 0);
+        const precio = Math.max(0, parseFloat(fila.querySelector(".item-precio").value) || 0);
         const llevaIva = fila.querySelector(".item-iva")?.checked || false;
         const totalFila = cant * precio;
 
@@ -2002,7 +1970,11 @@
         fila.querySelector(".item-total").textContent = formatearCOPPantalla(totalFila);
       });
 
-      const porcIva = parseFloat(document.getElementById("cot-iva-porcentaje").value) || 0;
+      const inputIvaPorc = document.getElementById("cot-iva-porcentaje");
+      let porcIva = parseFloat(inputIvaPorc.value) || 0;
+      if (porcIva < 0) { porcIva = 0; inputIvaPorc.value = "0"; }
+      if (porcIva > 100) { porcIva = 100; inputIvaPorc.value = "100"; }
+
       const valorIva = baseGravableIva * (porcIva / 100);
       totalActualNumerico = subtotal + valorIva;
 
@@ -2054,7 +2026,7 @@
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td style="text-align:center; height:${ALTO_FILA_PDF}px;">${idx + 1}</td>
-          <td>${it.descripcion || ""}${etiquetaIva}</td>
+          <td>${escapeHTML(it.descripcion || "")}${etiquetaIva}</td>
           <td style="text-align:center;">${cant || ""}</td>
           <td style="text-align:right;">${precio ? formatearCOP(precio) : ""}</td>
           <td class="cell-readonly" style="text-align:right;">${formatearCOP(totalFila)}</td>
@@ -2156,8 +2128,8 @@
       const itemsActuales = [];
       document.querySelectorAll("#tbody-items tr").forEach((fila) => {
         const desc = fila.querySelector(".item-desc").value.trim();
-        const cant = parseFloat(fila.querySelector(".item-cant").value) || 0;
-        const precio = parseFloat(fila.querySelector(".item-precio").value) || 0;
+        const cant = Math.max(0, parseFloat(fila.querySelector(".item-cant").value) || 0);
+        const precio = Math.max(0, parseFloat(fila.querySelector(".item-precio").value) || 0);
         const aplicaIva = fila.querySelector(".item-iva")?.checked || false;
         if (desc !== "" || cant > 0 || precio > 0) {
           itemsActuales.push({ descripcion: desc, cantidad: cant, precio: precio, aplicaIva: aplicaIva });
@@ -2185,27 +2157,27 @@
       generarArchivoPDFDesdeObjeto(cot);
     };
 
+    // GUARDAR COTIZACIÓN (CON TRANSACCIÓN ATÓMICA DE CONSECUTIVOS)
     window.guardarCotizacion = async function() {
       const cliente = document.getElementById("cot-cliente").value.trim();
       if (!cliente) {
         await mostrarModalAlerta({
           titulo: "Falta el nombre del cliente",
-          mensaje: "Por favor escribe el nombre o razón social del cliente antes de guardar la cotización.",
+          mensaje: "Por favor escribe el nombre o razón social del cliente antes de guardar.",
           tipo: "warning"
         });
         document.getElementById("cot-cliente").focus();
         return;
       }
 
-      const consecutivoNum = parseInt(document.getElementById("cot-numero").textContent, 10);
       const fechaISO = document.getElementById("cot-fecha").value;
       const fechaFormateada = fechaISO ? fechaISO.split("-").reverse().join("/") : new Date().toLocaleDateString("es-CO");
 
       const itemsGuardados = [];
       document.querySelectorAll("#tbody-items tr").forEach((fila) => {
         const desc = fila.querySelector(".item-desc").value.trim();
-        const cant = parseFloat(fila.querySelector(".item-cant").value) || 0;
-        const precio = parseFloat(fila.querySelector(".item-precio").value) || 0;
+        const cant = Math.max(0, parseFloat(fila.querySelector(".item-cant").value) || 0);
+        const precio = Math.max(0, parseFloat(fila.querySelector(".item-precio").value) || 0);
         const aplicaIva = fila.querySelector(".item-iva")?.checked || false;
         if (desc !== "" || cant > 0 || precio > 0) {
           itemsGuardados.push({ descripcion: desc, cantidad: cant, precio: precio, aplicaIva: aplicaIva });
@@ -2213,7 +2185,6 @@
       });
 
       const datosCotizacion = {
-        consecutivo: consecutivoNum,
         fecha: fechaFormateada,
         fechaISO: fechaISO,
         validaHasta: document.getElementById("cot-valida").value,
@@ -2227,15 +2198,17 @@
         valorTotal: totalActualNumerico
       };
 
-      const numFormateado = String(consecutivoNum).padStart(3, "0");
-
+      // MODO EDICIÓN
       if (cotizacionEditandoId) {
-        if (usarFirebase && db) {
+        const consecutivoNum = parseInt(document.getElementById("cot-numero").textContent, 10);
+        datosCotizacion.consecutivo = consecutivoNum;
+
+        if (db && navigator.onLine) {
           try {
             await updateDoc(doc(db, "cotizaciones", cotizacionEditandoId), datosCotizacion);
             await mostrarModalAlerta({
               titulo: "Cotización actualizada",
-              mensaje: `Los cambios de la Cotización N° ${numFormateado} para ${cliente} se guardaron correctamente.`,
+              mensaje: `Los cambios de la Cotización N° ${String(consecutivoNum).padStart(3, "0")} se guardaron en la nube.`,
               tipo: "success"
             });
             cancelarModoEdicion();
@@ -2250,7 +2223,7 @@
             renderizarTablaControl();
             await mostrarModalAlerta({
               titulo: "Cotización actualizada",
-              mensaje: `Los cambios de la Cotización N° ${numFormateado} para ${cliente} se guardaron correctamente.`,
+              mensaje: `Los cambios de la Cotización N° ${String(consecutivoNum).padStart(3, "0")} se guardaron localmente.`,
               tipo: "success"
             });
             cancelarModoEdicion();
@@ -2259,35 +2232,66 @@
         return;
       }
 
+      // NUEVA COTIZACIÓN: Asignación atómica de consecutivo
       datosCotizacion.estado = "Pendiente";
       datosCotizacion.creadoEn = new Date().toISOString();
 
-      if (usarFirebase && db) {
+      let consecutivoAsignado = 1;
+
+      if (db && navigator.onLine) {
         try {
-          await addDoc(collection(db, "cotizaciones"), datosCotizacion);
+          const configRef = doc(db, "configuracion", "consecutivos");
+          await runTransaction(db, async (transaction) => {
+            const configDoc = await transaction.get(configRef);
+            if (!configDoc.exists()) {
+              const maxActual = listaCotizaciones.reduce((max, item) => Math.max(max, Number(item.consecutivo) || 0), 0);
+              consecutivoAsignado = maxActual + 1;
+            } else {
+              consecutivoAsignado = (configDoc.data().ultimoNumero || 0) + 1;
+            }
+            transaction.set(configRef, { ultimoNumero: consecutivoAsignado }, { merge: true });
+            
+            datosCotizacion.consecutivo = consecutivoAsignado;
+            const nuevaCotRef = doc(collection(db, "cotizaciones"));
+            transaction.set(nuevaCotRef, datosCotizacion);
+          });
+
           await mostrarModalAlerta({
-            titulo: "Cotización guardada con éxito",
-            mensaje: `La Cotización N° ${numFormateado} para ${cliente} ya quedó registrada en el historial.`,
+            titulo: "Cotización guardada",
+            mensaje: `Se asignó oficialmente el N° ${String(consecutivoAsignado).padStart(3, "0")} para ${cliente}.`,
             tipo: "success"
           });
           limpiarFormularioSinConfirmar();
         } catch (err) {
-          await mostrarModalAlerta({ titulo: "Error al guardar", mensaje: err.message, tipo: "danger" });
+          console.warn("Fallo en transacción atómica, guardando por fallback:", err);
+          guardarFallbackLocal(datosCotizacion, cliente);
         }
       } else {
-        datosCotizacion.id = "local_" + Date.now();
-        listaCotizaciones.push(datosCotizacion);
-        localStorage.setItem("cotizaciones_mw", JSON.stringify(listaCotizaciones));
-        actualizarConsecutivoAutomatico();
-        renderizarTablaControl();
-        await mostrarModalAlerta({
-          titulo: "Cotización guardada con éxito",
-          mensaje: `La Cotización N° ${numFormateado} para ${cliente} quedó registrada correctamente.`,
-          tipo: "success"
-        });
-        limpiarFormularioSinConfirmar();
+        guardarFallbackLocal(datosCotizacion, cliente);
       }
     };
+
+    function guardarFallbackLocal(datosCotizacion, cliente) {
+      const maxNum = listaCotizaciones.reduce((max, item) => Math.max(max, Number(item.consecutivo) || 0), 0);
+      const consecutivoNum = maxNum + 1;
+      datosCotizacion.consecutivo = consecutivoNum;
+
+      if (db) {
+        addDoc(collection(db, "cotizaciones"), datosCotizacion);
+      }
+      datosCotizacion.id = "local_" + Date.now();
+      listaCotizaciones.push(datosCotizacion);
+      localStorage.setItem("cotizaciones_mw", JSON.stringify(listaCotizaciones));
+      actualizarConsecutivoAutomatico();
+      renderizarTablaControl();
+
+      mostrarModalAlerta({
+        titulo: "Guardado en modo seguro",
+        mensaje: `Cotización N° ${String(consecutivoNum).padStart(3, "0")} guardada para ${cliente}. Se sincronizará automáticamente al conectar.`,
+        tipo: "success"
+      });
+      limpiarFormularioSinConfirmar();
+    }
 
     window.editarCotizacion = function(id) {
       const cot = listaCotizaciones.find(c => c.id === id);
@@ -2345,7 +2349,7 @@
       const numStr = cot ? String(cot.consecutivo).padStart(3, "0") : "";
       const confirmado = await mostrarModalConfirmacion({
         titulo: `¿Eliminar Cotización N° ${numStr}?`,
-        mensaje: `Esta acción eliminará permanentemente la cotización de "${cot?.cliente || "Cliente"}" del historial.`,
+        mensaje: `Esta acción eliminará permanentemente la cotización de "${cot?.cliente || "Cliente"}".`,
         textoConfirmar: "Sí, eliminar",
         textoCancelar: "Cancelar",
         peligro: true
@@ -2354,12 +2358,12 @@
 
       if (cotizacionEditandoId === id) cancelarModoEdicion();
 
-      if (usarFirebase && db) {
+      if (db && navigator.onLine) {
         try {
           await deleteDoc(doc(db, "cotizaciones", id));
           await mostrarModalAlerta({
             titulo: "Cotización eliminada",
-            mensaje: `La Cotización N° ${numStr} fue eliminada correctamente.`,
+            mensaje: `La Cotización N° ${numStr} fue eliminada del sistema.`,
             tipo: "info"
           });
         } catch (err) {
@@ -2372,7 +2376,7 @@
         renderizarTablaControl();
         await mostrarModalAlerta({
           titulo: "Cotización eliminada",
-          mensaje: `La Cotización N° ${numStr} fue eliminada correctamente.`,
+          mensaje: `La Cotización N° ${numStr} fue eliminada localmente.`,
           tipo: "info"
         });
       }
@@ -2395,10 +2399,10 @@
 
     window.limpiarCotizacion = async function() {
       const confirmado = await mostrarModalConfirmacion({
-        titulo: "¿Limpiar datos del formulario?",
-        mensaje: "Se vaciarán todos los campos actuales para empezar una cotización nueva desde cero.",
+        titulo: "¿Limpiar formulario?",
+        mensaje: "Se vaciarán los campos actuales para iniciar una cotización en blanco.",
         tipo: "warning",
-        textoConfirmar: "Sí, limpiar todo",
+        textoConfirmar: "Sí, limpiar",
         textoCancelar: "Seguir editando"
       });
       if (!confirmado) return;
@@ -2419,7 +2423,7 @@
     };
 
     window.cambiarEstadoCotizacion = async function(id, nuevoEstado) {
-      if (usarFirebase && db) {
+      if (db && navigator.onLine) {
         await updateDoc(doc(db, "cotizaciones", id), { estado: nuevoEstado });
       } else {
         const item = listaCotizaciones.find(c => c.id === id);
@@ -2431,7 +2435,6 @@
       }
     };
 
-    // LÓGICA DE RECORDATORIO DE SEGUIMIENTO AUTOMÁTICO
     window.revisarSeguimientoPendientes = function(diasMinimos = 3) {
       const hoy = new Date();
       const clientesPorLlamar = [];
@@ -2483,7 +2486,7 @@
         div.className = "toast-cliente-item";
         div.innerHTML = `
           <div>
-            <strong>#${numCot} - ${c.cliente}</strong>
+            <strong>#${numCot} - ${escapeHTML(c.cliente)}</strong>
             <div style="color:#b45309; font-size:11px;">Hace ${c.dias} días</div>
           </div>
           ${urlWa ? `<a href="${urlWa}" target="_blank" class="btn-wa-toast">💬 Seguir</a>` : `<span style="color:#999; font-size:11px;">Sin cel</span>`}
@@ -2548,17 +2551,21 @@
           ? `https://wa.me/57${numLimpio}?text=${encodeURIComponent('Hola ' + c.cliente + ', te compartimos la cotización N° ' + numStr + ' de Soluciones Integrales M.W. S.A.S.')}`
           : null;
 
+        const clienteSeguro = escapeHTML(c.cliente);
+        const cedulaSegura = escapeHTML(c.cedula);
+        const celularSeguro = escapeHTML(c.celular);
+
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td data-label="N°" style="font-weight:700; color:#4b5563;">${numStr}</td>
           <td data-label="Fecha" style="color:#4b5563;">${c.fecha || ""}</td>
           <td data-label="Cliente">
             <div>
-              <div class="cliente-cell-name">${c.cliente || ""}</div>
-              ${c.cedula ? `<div class="cliente-cell-doc">${c.cedula}</div>` : ""}
+              <div class="cliente-cell-name">${clienteSeguro}</div>
+              ${c.cedula ? `<div class="cliente-cell-doc">${cedulaSegura}</div>` : ""}
             </div>
           </td>
-          <td data-label="Celular" style="color:#374151;">${c.celular || "—"}</td>
+          <td data-label="Celular" style="color:#374151;">${celularSeguro || "—"}</td>
           <td data-label="Valor total" style="text-align:right; font-weight:800;">${formatearCOPPantalla(c.valorTotal)}</td>
           <td data-label="Estado" style="text-align:center;">
             <select class="estado-select estado-${c.estado}" onchange="cambiarEstadoCotizacion('${c.id}', this.value)">
@@ -2580,24 +2587,13 @@
       });
     };
 
-    // =========================================================
-    // EXPORTADOR EMPRESARIAL DE EXCEL CON ESTILOS Y COLORES M.W.
-    // =========================================================
+    // EXPORTACIÓN CORPORATIVA EXCELJS
     window.exportarHistorialExcel = async function() {
       if (listaCotizaciones.length === 0) {
         await mostrarModalAlerta({
           titulo: "Sin datos para exportar",
-          mensaje: "Todavía no hay cotizaciones registradas en el historial para generar el archivo Excel.",
+          mensaje: "Todavía no hay cotizaciones en el historial para generar el archivo Excel.",
           tipo: "info"
-        });
-        return;
-      }
-
-      if (typeof window.ExcelJS === "undefined") {
-        await mostrarModalAlerta({
-          titulo: "Cargando motor de Excel",
-          mensaje: "La librería de generación de Excel aún se está descargando. Por favor intenta de nuevo en 3 segundos.",
-          tipo: "warning"
         });
         return;
       }
@@ -2611,37 +2607,33 @@
           views: [{ showGridLines: true }]
         });
 
-        // Configuración de anchos de columna fijos y amplios
         ws.columns = [
-          { key: "consecutivo", width: 12 }, // A: N°
-          { key: "fecha",       width: 14 }, // B: Fecha
-          { key: "cliente",     width: 34 }, // C: Cliente
-          { key: "cedula",      width: 18 }, // D: NIT/CC
-          { key: "celular",     width: 18 }, // E: Celular
-          { key: "direccion",   width: 32 }, // F: Dirección
-          { key: "valorTotal",  width: 22 }, // G: Valor Total
-          { key: "estado",      width: 16 }  // H: Estado
+          { key: "consecutivo", width: 12 },
+          { key: "fecha",       width: 14 },
+          { key: "cliente",     width: 34 },
+          { key: "cedula",      width: 18 },
+          { key: "celular",     width: 18 },
+          { key: "direccion",   width: 32 },
+          { key: "valorTotal",  width: 22 },
+          { key: "estado",      width: 16 }
         ];
 
-        // 1. BANNER PRINCIPAL (Fila 1)
         ws.mergeCells("A1:H1");
         const r1 = ws.getCell("A1");
         r1.value = "SOLUCIONES INTEGRALES M.W. S.A.S.";
         r1.font = { name: "Arial", size: 14, bold: true, color: { argb: "FFFFFFFF" } };
-        r1.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF0F291E" } }; // Verde Oscuro M.W.
+        r1.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF0F291E" } };
         r1.alignment = { horizontal: "center", vertical: "middle" };
         ws.getRow(1).height = 30;
 
-        // 2. SUB-BANNER INSTITUCIONAL (Fila 2)
         ws.mergeCells("A2:H2");
         const r2 = ws.getCell("A2");
         r2.value = "NIT: 900664844-3   |   Energía que transforma el campo   |   WhatsApp: (+57) 314 573 5259";
         r2.font = { name: "Arial", size: 9.5, bold: false, color: { argb: "FFEAF1DD" } };
-        r2.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF163829" } }; // Verde Bosque 2
+        r2.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF163829" } };
         r2.alignment = { horizontal: "center", vertical: "middle" };
         ws.getRow(2).height = 20;
 
-        // 3. METADATOS DEL REPORTE (Fila 3)
         ws.mergeCells("A3:H3");
         const fechaHoy = new Date().toLocaleDateString("es-CO", { year: "numeric", month: "long", day: "numeric" });
         const r3 = ws.getCell("A3");
@@ -2651,19 +2643,11 @@
         r3.alignment = { horizontal: "center", vertical: "middle" };
         ws.getRow(3).height = 18;
 
-        // Fila 4: Espacio separador
         ws.getRow(4).height = 8;
 
-        // 4. ENCABEZADOS DE LA TABLA (Fila 5)
         const cabeceras = [
-          "N° COT.",
-          "FECHA",
-          "CLIENTE / RAZÓN SOCIAL",
-          "NIT / CÉDULA",
-          "CELULAR",
-          "DIRECCIÓN / CIUDAD",
-          "VALOR TOTAL (COP)",
-          "ESTADO"
+          "N° COT.", "FECHA", "CLIENTE / RAZÓN SOCIAL", "NIT / CÉDULA",
+          "CELULAR", "DIRECCIÓN / CIUDAD", "VALOR TOTAL (COP)", "ESTADO"
         ];
         const rowHeader = ws.getRow(5);
         rowHeader.values = cabeceras;
@@ -2681,7 +2665,6 @@
           };
         });
 
-        // 5. LLENADO DE DATOS (Ordenados por consecutivo descendente)
         const datosOrdenados = [...listaCotizaciones].sort((a, b) => (Number(b.consecutivo) || 0) - (Number(a.consecutivo) || 0));
         let totalAcumulado = 0;
         let filaInicioDatos = 6;
@@ -2704,7 +2687,6 @@
           ];
           row.height = 22;
 
-          // Color de fondo tipo cebra suave
           const colorFondoFila = (idx % 2 === 0) ? "FFFFFFFF" : "FFF8FAF8";
 
           row.eachCell((cell, colNumber) => {
@@ -2718,23 +2700,16 @@
               right: { style: "thin", color: { argb: "FFE2E8F0" } }
             };
 
-            // Alineaciones específicas por columna
             if (colNumber === 1 || colNumber === 2 || colNumber === 4 || colNumber === 5) {
               cell.alignment = { horizontal: "center", vertical: "middle" };
             }
-            if (colNumber === 1) {
-              cell.font = { name: "Arial", size: 9.5, bold: true, color: { argb: "FF111827" } };
-            }
-            if (colNumber === 3) {
-              cell.font = { name: "Arial", size: 9.5, bold: true, color: { argb: "FF0F291E" } };
-            }
+            if (colNumber === 1) cell.font = { name: "Arial", size: 9.5, bold: true, color: { argb: "FF111827" } };
+            if (colNumber === 3) cell.font = { name: "Arial", size: 9.5, bold: true, color: { argb: "FF0F291E" } };
             if (colNumber === 7) {
-              // Formato contable nativo de moneda COP
               cell.numFmt = '"$"#,##0';
               cell.alignment = { horizontal: "right", vertical: "middle" };
               cell.font = { name: "Arial", size: 9.5, bold: true, color: { argb: "FF111827" } };
             }
-            // Formato condicional para la columna Estado (Píldoras)
             if (colNumber === 8) {
               cell.alignment = { horizontal: "center", vertical: "middle" };
               cell.font = { name: "Arial", size: 9, bold: true };
@@ -2752,7 +2727,6 @@
           });
         });
 
-        // 6. FILA DE RESUMEN CONTABLE (TOTALES)
         const filaTotales = filaInicioDatos + datosOrdenados.length;
         ws.mergeCells(`A${filaTotales}:F${filaTotales}`);
         
@@ -2780,11 +2754,10 @@
         rowTotales.eachCell((cell) => {
           cell.border = {
             top: { style: "thin", color: { argb: "FF2E6B34" } },
-            bottom: { style: "double", color: { argb: "FF0F291E" } } // Doble línea contable inferior
+            bottom: { style: "double", color: { argb: "FF0F291E" } }
           };
         });
 
-        // 7. DESCARGA DEL ARCHIVO EN NAVEGADOR
         const buffer = await wb.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const urlDescarga = window.URL.createObjectURL(blob);
@@ -2795,12 +2768,11 @@
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(urlDescarga);
-
       } catch (err) {
         console.error("Error generando Excel:", err);
         await mostrarModalAlerta({
           titulo: "Error al exportar",
-          mensaje: "Ocurrió un inconveniente al generar el libro de Excel: " + (err && err.message ? err.message : err),
+          mensaje: "Ocurrió un problema generando el libro de Excel: " + (err && err.message ? err.message : err),
           tipo: "danger"
         });
       }
@@ -2825,7 +2797,7 @@
     document.getElementById("cot-fecha").valueAsDate = new Date();
     for (let i = 0; i < 4; i++) agregarFilaProducto();
 
-    // REGISTRO Y AUTO-RECARGA ROBUSTA DEL SERVICE WORKER
+    // SERVICE WORKER
     if ("serviceWorker" in navigator) {
       let recargando = false;
       navigator.serviceWorker.addEventListener("controllerchange", () => {
