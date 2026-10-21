@@ -7,17 +7,15 @@
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0f291e" />
 
-  <!-- Tipografía moderna Inter + Plus Jakarta Sans -->
+  <!-- Tipografía moderna Inter + Plus Jakarta Sans (crossorigin permite guardarla en caché para uso sin internet) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" crossorigin="anonymous">
 
-  <!-- Librerías para exportar a PDF (captura directa + generación del PDF) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  
-  <!-- Librería ExcelJS para generación de Excel empresarial con diseño y colores corporativos -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+  <!-- Librerías para exportar a PDF y Excel (crossorigin permite guardarlas en caché para uso sin internet) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js" crossorigin="anonymous"></script>
 
   <style>
     :root {
@@ -149,6 +147,51 @@
     .btn-modal-confirm:hover { background: var(--verde-oscuro-2); }
     .btn-modal-confirm.danger { background: #dc2626; color: #ffffff; }
     .btn-modal-confirm.danger:hover { background: #b91c1c; }
+
+    /* AVISO DE ACTUALIZACIÓN DE LA APLICACIÓN */
+    .update-banner {
+      display: none;
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      z-index: 9000;
+      width: calc(100% - 32px);
+      max-width: 520px;
+      align-items: center;
+      gap: 10px;
+      background: var(--verde-oscuro);
+      color: #ffffff;
+      border-radius: 14px;
+      padding: 12px 14px;
+      box-shadow: var(--sombra-sticky);
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+    .update-banner.active { display: flex; }
+    .update-banner-text { flex: 1; line-height: 1.35; }
+    .btn-update-now {
+      background: var(--amarillo-cta);
+      color: #111827;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-update-now:hover { background: var(--amarillo-cta-hover); }
+    .btn-update-later {
+      background: transparent;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
 
     /* PANTALLA DE LOGIN */
     #vista-login {
@@ -720,6 +763,7 @@
     }
     .btn-cta-save:hover { background: var(--amarillo-cta-hover); }
     .btn-cta-save:active { transform: scale(0.99); }
+    .btn-cta-save:disabled { cursor: progress; }
 
     .btn-cta-pdf {
       width: 100%;
@@ -863,6 +907,7 @@
     }
     .cliente-cell-name { font-weight: 700; color: var(--texto-principal); }
     .cliente-cell-doc { font-size: 12px; color: var(--texto-muted); margin-top: 2px; }
+    .num-provisional { color: #b45309; font-weight: 800; cursor: help; margin-left: 2px; }
 
     .estado-select {
       appearance: none;
@@ -1068,6 +1113,7 @@
         font-size: 14px;
         cursor: pointer;
       }
+      .btn-mobile-save:disabled { cursor: progress; }
       .mobile-tabs-nav {
         background: #ffffff;
         border-top: 1px solid var(--borde-suave);
@@ -1095,6 +1141,9 @@
         background: var(--verde-oscuro);
         border-radius: 0 0 4px 4px;
       }
+
+      /* El aviso de actualización sube para no quedar tapado por la barra inferior */
+      .update-banner { bottom: 124px; }
     }
 
     /* TOAST DE SEGUIMIENTO */
@@ -1181,6 +1230,13 @@
         <button type="button" id="modal-btn-confirm" class="btn-modal btn-modal-confirm">Aceptar</button>
       </div>
     </div>
+  </div>
+
+  <!-- AVISO DE NUEVA VERSIÓN -->
+  <div id="aviso-actualizacion" class="update-banner" role="status" aria-live="polite">
+    <span class="update-banner-text">Hay una versión nueva de la aplicación. Al actualizar se recarga la página.</span>
+    <button type="button" id="btn-actualizar-ahora" class="btn-update-now">Actualizar ahora</button>
+    <button type="button" id="btn-actualizar-despues" class="btn-update-later">Después</button>
   </div>
 
   <!-- PANTALLA DE LOGIN -->
@@ -1482,7 +1538,7 @@
           <div class="mobile-quote-bar-label">Total de la cotización</div>
           <div id="cot-total-movil" class="mobile-quote-bar-total">$ 0</div>
         </div>
-        <button type="button" class="btn-mobile-save" onclick="guardarCotizacion()">Guardar</button>
+        <button type="button" id="btn-guardar-movil" class="btn-mobile-save" onclick="guardarCotizacion()">Guardar</button>
       </div>
       <div class="mobile-tabs-nav">
         <button id="tab-movil-cotizacion" class="mobile-tab-btn active" onclick="cambiarPestana('cotizacion')">Cotización</button>
@@ -1599,7 +1655,7 @@
     </div>
   </div>
 
-  <!-- LÓGICA JAVASCRIPT PROTEGIDA Y ACTUALIZADA -->
+  <!-- LÓGICA JAVASCRIPT -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
     import {
@@ -1613,9 +1669,9 @@
       persistentLocalCache,
       persistentMultipleTabManager,
       collection,
-      addDoc,
       onSnapshot,
       doc,
+      setDoc,
       updateDoc,
       deleteDoc,
       query,
@@ -1623,7 +1679,9 @@
       runTransaction
     } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-    // UTILIDAD DE DESINFECCIÓN CONTRA ATAQUES XSS
+    // ───────────────────────── UTILIDADES ─────────────────────────
+
+    // Desinfección contra ataques XSS
     function escapeHTML(str) {
       return String(str || '')
         .replace(/&/g, '&amp;')
@@ -1633,7 +1691,43 @@
         .replace(/'/g, '&#39;');
     }
 
-    // MOTOR DE MODALES CENTRADOS
+    // Fecha local en formato AAAA-MM-DD (valueAsDate usa UTC y en Colombia, después de las 7 p. m., daría el día siguiente)
+    function hoyISO() {
+      const d = new Date();
+      const mes = String(d.getMonth() + 1).padStart(2, "0");
+      const dia = String(d.getDate()).padStart(2, "0");
+      return `${d.getFullYear()}-${mes}-${dia}`;
+    }
+
+    function formatearFechaISO(iso) {
+      return iso ? iso.split("-").reverse().join("/") : "";
+    }
+
+    // Número de WhatsApp en formato internacional para Colombia. Devuelve "" si no es utilizable.
+    function numeroWhatsApp(celular) {
+      let d = String(celular || "").replace(/\D/g, "");
+      if (d.startsWith("00")) d = d.slice(2);
+      if (d.length === 11 && d.startsWith("0")) d = d.slice(1);
+      if (d.length === 10) return "57" + d;
+      if (d.length === 12 && d.startsWith("57")) return d;
+      if (d.length > 12) return d;
+      return "";
+    }
+
+    function formatearCOPPantalla(valor) {
+      return "$ " + Math.round(Number(valor || 0)).toLocaleString("es-CO");
+    }
+
+    function formatearCOP(valor) {
+      return "$ " + Number(valor || 0).toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    const ESTADOS_VALIDOS = ["Pendiente", "Aprobada", "Rechazada"];
+    const ESPERA_ESCRITURA_MS = 4000;
+    const CLAVE_TOAST_CERRADO = "mw_toast_seguimiento_cerrado";
+
+    // ───────────────────────── MODALES ─────────────────────────
+
     const ICONOS_MODAL = {
       success: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
       warning: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
@@ -1711,7 +1805,8 @@
       });
     }
 
-    // CONFIGURACIÓN E INICIALIZACIÓN MODERNA DE FIREBASE
+    // ───────────────────────── FIREBASE ─────────────────────────
+
     const firebaseConfig = {
       apiKey: "AIzaSyAiMACeB4GnB1ycj5L5C0BJCHSXnx1kTIE",
       authDomain: "cotizador-mw-sas.firebaseapp.com",
@@ -1725,10 +1820,17 @@
     let app = null;
     let auth = null;
     let db = null;
-    let unsubscribeSnapshot = null;
+    let cancelarEscuchaCotizaciones = null;
+    let cancelarEscuchaConsecutivo = null;
     let listaCotizaciones = [];
+    let ultimoNumeroConfig = 0;
     let totalActualNumerico = 0;
     let cotizacionEditandoId = null;
+    let guardando = false;
+    let reconciliando = false;
+
+    // Se elimina el respaldo antiguo en localStorage: Firestore ya guarda los cambios sin conexión en su propia caché.
+    try { localStorage.removeItem("cotizaciones_mw"); } catch (e) {}
 
     try {
       app = initializeApp(firebaseConfig);
@@ -1750,7 +1852,8 @@
       console.error("Error al inicializar Firebase:", e);
     }
 
-    // MONITOREO DE RED Y SINCRONIZACIÓN
+    // ───────────────────────── CONEXIÓN ─────────────────────────
+
     function actualizarInsigniaConexion(estaSincronizado = true) {
       const el = document.getElementById("conexion-status");
       if (!navigator.onLine) {
@@ -1764,31 +1867,152 @@
         el.style.color = "#15803d";
       }
     }
-    window.addEventListener("online", () => actualizarInsigniaConexion(true));
-    window.addEventListener("offline", () => actualizarInsigniaConexion(false));
+
+    window.addEventListener("online", () => {
+      actualizarInsigniaConexion(true);
+      if (!cotizacionEditandoId) actualizarConsecutivoAutomatico();
+      setTimeout(reconciliarNumeracionPendiente, 3000);
+    });
+    window.addEventListener("offline", () => {
+      actualizarInsigniaConexion(false);
+      if (!cotizacionEditandoId) actualizarConsecutivoAutomatico();
+    });
+
+    // Espera la confirmación del servidor por un tiempo limitado.
+    // Sin conexión, Firestore deja la escritura en cola y su promesa no se resuelve hasta reconectar,
+    // así que pasado el límite se considera guardada en este dispositivo (devuelve false).
+    async function confirmarEscritura(promesa) {
+      let expiro = false;
+      let temporizador;
+      const limite = new Promise((resolver) => {
+        temporizador = setTimeout(() => { expiro = true; resolver(false); }, ESPERA_ESCRITURA_MS);
+      });
+      promesa.catch((err) => {
+        if (expiro) {
+          console.error("Escritura en cola rechazada:", err);
+          mostrarModalAlerta({
+            titulo: "No se pudo sincronizar",
+            mensaje: "Un cambio guardado sin conexión fue rechazado por el servidor: " + (err && err.message ? err.message : err),
+            tipo: "danger"
+          });
+        }
+      });
+      try {
+        return await Promise.race([promesa.then(() => true), limite]);
+      } finally {
+        clearTimeout(temporizador);
+      }
+    }
+
+    // ───────────────────────── DATOS EN VIVO ─────────────────────────
+
+    function maxConsecutivoLocal(incluirProvisionales = false) {
+      return listaCotizaciones.reduce((max, c) => {
+        if (!incluirProvisionales && c.pendienteNumeracion === true) return max;
+        return Math.max(max, Number(c.consecutivo) || 0);
+      }, 0);
+    }
+
+    function actualizarConsecutivoAutomatico() {
+      const siguiente = Math.max(ultimoNumeroConfig, maxConsecutivoLocal(!navigator.onLine)) + 1;
+      document.getElementById("cot-numero").textContent = String(siguiente).padStart(3, "0");
+    }
+
+    function mostrarErrorDeEscucha(err) {
+      const el = document.getElementById("conexion-status");
+      el.innerHTML = `<span class="status-dot" style="background:#dc2626;"></span> Sin acceso a los datos`;
+      el.style.color = "#dc2626";
+      if (err && err.code === "permission-denied") {
+        mostrarModalAlerta({
+          titulo: "Sin permiso",
+          mensaje: "Tu cuenta no tiene permiso para ver las cotizaciones. Pide al administrador que habilite tu usuario.",
+          tipo: "danger"
+        });
+      }
+    }
 
     function iniciarEscuchaDatos() {
-      if (!db || unsubscribeSnapshot) return;
+      if (!db || cancelarEscuchaCotizaciones) return;
+
       const q = query(collection(db, "cotizaciones"), orderBy("consecutivo", "asc"));
-      unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
-        listaCotizaciones = [];
-        snapshot.forEach((docSnap) => {
-          listaCotizaciones.push({ id: docSnap.id, ...docSnap.data() });
+      cancelarEscuchaCotizaciones = onSnapshot(q, (snapshot) => {
+        listaCotizaciones = snapshot.docs.map((d) => {
+          const datos = d.data();
+          return {
+            id: d.id,
+            ...datos,
+            estado: ESTADOS_VALIDOS.includes(datos.estado) ? datos.estado : "Pendiente"
+          };
         });
         actualizarInsigniaConexion(!snapshot.metadata.hasPendingWrites);
         if (!cotizacionEditandoId) actualizarConsecutivoAutomatico();
         renderizarTablaControl();
+        if (!snapshot.metadata.hasPendingWrites) reconciliarNumeracionPendiente();
       }, (err) => {
-        console.warn("Error en sincronización en vivo, cargando respaldo local:", err);
-        cargarDatosLocalStorage();
+        console.error("Error en la escucha de cotizaciones:", err);
+        mostrarErrorDeEscucha(err);
+      });
+
+      cancelarEscuchaConsecutivo = onSnapshot(doc(db, "configuracion", "consecutivos"), (snap) => {
+        ultimoNumeroConfig = snap.exists() ? (Number(snap.data().ultimoNumero) || 0) : 0;
+        if (!cotizacionEditandoId) actualizarConsecutivoAutomatico();
+      }, (err) => {
+        console.warn("No se pudo leer el contador de consecutivos:", err);
       });
     }
 
-    function cargarDatosLocalStorage() {
-      listaCotizaciones = JSON.parse(localStorage.getItem("cotizaciones_mw") || "[]");
-      if (!cotizacionEditandoId) actualizarConsecutivoAutomatico();
+    function detenerEscuchaDatos() {
+      if (cancelarEscuchaCotizaciones) { cancelarEscuchaCotizaciones(); cancelarEscuchaCotizaciones = null; }
+      if (cancelarEscuchaConsecutivo) { cancelarEscuchaConsecutivo(); cancelarEscuchaConsecutivo = null; }
+      listaCotizaciones = [];
+      ultimoNumeroConfig = 0;
       renderizarTablaControl();
     }
+
+    // Las cotizaciones creadas sin conexión llevan un número provisional.
+    // Al reconectar, cada una recibe su número oficial dentro de una transacción.
+    async function asignarNumeroOficial(id) {
+      const cotRef = doc(db, "cotizaciones", id);
+      const configRef = doc(db, "configuracion", "consecutivos");
+
+      await runTransaction(db, async (tx) => {
+        const cotSnap = await tx.get(cotRef);
+        if (!cotSnap.exists() || cotSnap.data().pendienteNumeracion !== true) return;
+
+        const configSnap = await tx.get(configRef);
+        const ultimo = configSnap.exists() ? (Number(configSnap.data().ultimoNumero) || 0) : 0;
+        const siguiente = Math.max(ultimo, maxConsecutivoLocal(false)) + 1;
+
+        if (configSnap.exists()) {
+          tx.update(configRef, { ultimoNumero: siguiente });
+        } else {
+          tx.set(configRef, { ultimoNumero: siguiente });
+        }
+        tx.update(cotRef, { consecutivo: siguiente, pendienteNumeracion: false });
+      });
+    }
+
+    async function reconciliarNumeracionPendiente() {
+      if (reconciliando || !db || !navigator.onLine) return;
+
+      const pendientes = listaCotizaciones
+        .filter((c) => c.pendienteNumeracion === true)
+        .sort((a, b) => String(a.creadoEn || "").localeCompare(String(b.creadoEn || "")));
+      if (pendientes.length === 0) return;
+
+      reconciliando = true;
+      try {
+        for (const c of pendientes) {
+          await asignarNumeroOficial(c.id);
+        }
+      } catch (err) {
+        console.warn("No se pudo confirmar la numeración pendiente:", err);
+      } finally {
+        reconciliando = false;
+      }
+    }
+
+    // ───────────────────────── SESIÓN ─────────────────────────
 
     function mostrarAplicacion() {
       document.getElementById("vista-login").classList.add("hidden");
@@ -1797,9 +2021,12 @@
     }
 
     function mostrarPantallaLogin() {
+      detenerEscuchaDatos();
+      cancelarModoEdicion();
+      document.getElementById("login-password").value = "";
       document.getElementById("app-shell").classList.add("hidden");
       document.getElementById("vista-login").classList.remove("hidden");
-      cerrarToastSeguimiento();
+      ocultarToastSeguimiento();
     }
 
     window.alternarPassword = function() {
@@ -1814,7 +2041,6 @@
       }
     };
 
-    // INICIO DE SESIÓN ESTRICTO (SOLO FIREBASE AUTH)
     window.iniciarSesion = async function(e) {
       e.preventDefault();
       const email = document.getElementById("login-email").value.trim().toLowerCase();
@@ -1828,11 +2054,17 @@
 
       try {
         if (!auth) throw new Error("Firebase Auth no está activo");
+        // onAuthStateChanged se encarga de mostrar la aplicación
         await signInWithEmailAndPassword(auth, email, pass);
-        mostrarAplicacion();
       } catch (err) {
-        console.warn("Intento de acceso denegado:", err.message);
-        errorBox.textContent = "Correo o contraseña inválidos. Acceso denegado.";
+        console.warn("Intento de acceso fallido:", err.code || err.message);
+        let mensaje = "Correo o contraseña inválidos. Acceso denegado.";
+        if (err && err.code === "auth/network-request-failed") {
+          mensaje = "No hay conexión con el servidor. Para iniciar sesión necesitas internet.";
+        } else if (err && err.code === "auth/too-many-requests") {
+          mensaje = "Demasiados intentos fallidos. Espera unos minutos e inténtalo de nuevo.";
+        }
+        errorBox.textContent = mensaje;
         errorBox.style.display = "block";
       } finally {
         btn.disabled = false;
@@ -1847,18 +2079,7 @@
       mostrarPantallaLogin();
     };
 
-    function formatearCOPPantalla(valor) {
-      return "$ " + Math.round(Number(valor || 0)).toLocaleString("es-CO");
-    }
-
-    function formatearCOP(valor) {
-      return "$ " + Number(valor || 0).toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    function actualizarConsecutivoAutomatico() {
-      const maxNum = listaCotizaciones.reduce((max, item) => Math.max(max, Number(item.consecutivo) || 0), 0);
-      document.getElementById("cot-numero").textContent = String(maxNum + 1).padStart(3, "0");
-    }
+    // ───────────────────────── ÍTEMS Y TOTALES ─────────────────────────
 
     function actualizarContadorItems() {
       const totalFilas = document.getElementById("tbody-items").children.length;
@@ -1953,51 +2174,79 @@
       }
     };
 
-    window.recalcularTotales = function() {
-      let subtotal = 0;
-      let baseGravableIva = 0;
-      let cantItemsConIva = 0;
-
+    // Lee los ítems del formulario. Con soloConContenido se omiten las filas vacías.
+    function leerItemsFormulario(soloConContenido) {
+      const items = [];
       document.querySelectorAll("#tbody-items tr").forEach((fila) => {
-        const cant = Math.max(0, parseFloat(fila.querySelector(".item-cant").value) || 0);
-        const precio = Math.max(0, parseFloat(fila.querySelector(".item-precio").value) || 0);
-        const llevaIva = fila.querySelector(".item-iva")?.checked || false;
-        const totalFila = cant * precio;
-
-        subtotal += totalFila;
-        if (llevaIva) {
-          baseGravableIva += totalFila;
-          if (totalFila > 0 || fila.querySelector(".item-desc").value.trim() !== "") {
-            cantItemsConIva++;
-          }
+        const item = {
+          descripcion: fila.querySelector(".item-desc").value.trim(),
+          cantidad: Math.max(0, parseFloat(fila.querySelector(".item-cant").value) || 0),
+          precio: Math.max(0, parseFloat(fila.querySelector(".item-precio").value) || 0),
+          aplicaIva: fila.querySelector(".item-iva")?.checked || false
+        };
+        if (!soloConContenido || item.descripcion !== "" || item.cantidad > 0 || item.precio > 0) {
+          items.push(item);
         }
-        fila.querySelector(".item-total").textContent = formatearCOPPantalla(totalFila);
+      });
+      return items;
+    }
+
+    function itemLlevaIva(item, porcIva) {
+      return typeof item.aplicaIva === "boolean" ? item.aplicaIva : porcIva > 0;
+    }
+
+    // Única fuente de cálculo para pantalla, guardado y PDF. Todo en pesos enteros.
+    function calcularTotales(items, porcIva) {
+      let subtotal = 0;
+      let baseIva = 0;
+      let cantItemsIva = 0;
+
+      items.forEach((it) => {
+        const totalFila = Math.round((Number(it.cantidad) || 0) * (Number(it.precio) || 0));
+        subtotal += totalFila;
+        if (itemLlevaIva(it, porcIva)) {
+          baseIva += totalFila;
+          if (totalFila > 0 || String(it.descripcion || "").trim() !== "") cantItemsIva++;
+        }
       });
 
+      const valorIva = Math.round(baseIva * (porcIva / 100));
+      return { subtotal, baseIva, cantItemsIva, valorIva, total: subtotal + valorIva };
+    }
+
+    window.recalcularTotales = function() {
       const inputIvaPorc = document.getElementById("cot-iva-porcentaje");
       let porcIva = parseFloat(inputIvaPorc.value) || 0;
       if (porcIva < 0) { porcIva = 0; inputIvaPorc.value = "0"; }
       if (porcIva > 100) { porcIva = 100; inputIvaPorc.value = "100"; }
 
-      const valorIva = baseGravableIva * (porcIva / 100);
-      totalActualNumerico = subtotal + valorIva;
+      const items = leerItemsFormulario(false);
+      const filas = document.querySelectorAll("#tbody-items tr");
+      filas.forEach((fila, i) => {
+        const totalFila = Math.round(items[i].cantidad * items[i].precio);
+        fila.querySelector(".item-total").textContent = formatearCOPPantalla(totalFila);
+      });
 
-      document.getElementById("cot-subtotal").textContent = formatearCOPPantalla(subtotal);
-      document.getElementById("cot-cant-items-iva").textContent = cantItemsConIva;
-      document.getElementById("cot-base-iva").textContent = formatearCOPPantalla(baseGravableIva);
-      document.getElementById("cot-iva-valor").textContent = formatearCOPPantalla(valorIva);
-      document.getElementById("cot-total-general").textContent = formatearCOPPantalla(totalActualNumerico);
+      const r = calcularTotales(items, porcIva);
+      totalActualNumerico = r.total;
+
+      document.getElementById("cot-subtotal").textContent = formatearCOPPantalla(r.subtotal);
+      document.getElementById("cot-cant-items-iva").textContent = r.cantItemsIva;
+      document.getElementById("cot-base-iva").textContent = formatearCOPPantalla(r.baseIva);
+      document.getElementById("cot-iva-valor").textContent = formatearCOPPantalla(r.valorIva);
+      document.getElementById("cot-total-general").textContent = formatearCOPPantalla(r.total);
 
       const totalMovil = document.getElementById("cot-total-movil");
-      if (totalMovil) totalMovil.textContent = formatearCOPPantalla(totalActualNumerico);
+      if (totalMovil) totalMovil.textContent = formatearCOPPantalla(r.total);
     };
 
-    // MOTOR PDF INDEPENDIENTE
+    // ───────────────────────── PDF ─────────────────────────
+
     async function generarArchivoPDFDesdeObjeto(datos) {
       const numStr = String(datos.consecutivo || 1).padStart(3, "0");
       document.getElementById("pdf-numero").textContent = numStr;
       document.getElementById("pdf-fecha").textContent = datos.fecha || "";
-      document.getElementById("pdf-valida").textContent = datos.validaHasta ? datos.validaHasta.split("-").reverse().join("/") : "";
+      document.getElementById("pdf-valida").textContent = formatearFechaISO(datos.validaHasta);
       document.getElementById("pdf-cliente").textContent = datos.cliente || "";
       document.getElementById("pdf-documento").textContent = datos.cedula || "";
       document.getElementById("pdf-celular").textContent = datos.celular || "";
@@ -2008,8 +2257,6 @@
       tbodyPdf.innerHTML = "";
 
       const ALTO_FILA_PDF = 24;
-      let subtotal = 0;
-      let baseGravableIva = 0;
       const porcIva = Number(datos.ivaPorcentaje) || 0;
 
       const itemsLista = Array.isArray(datos.items) && datos.items.length > 0
@@ -2019,11 +2266,8 @@
       itemsLista.forEach((it, idx) => {
         const cant = Number(it.cantidad) || 0;
         const precio = Number(it.precio) || 0;
-        const totalFila = cant * precio;
-        const llevaIva = typeof it.aplicaIva === "boolean" ? it.aplicaIva : (porcIva > 0);
-
-        subtotal += totalFila;
-        if (llevaIva) baseGravableIva += totalFila;
+        const totalFila = Math.round(cant * precio);
+        const llevaIva = itemLlevaIva(it, porcIva);
 
         const etiquetaIva = (llevaIva && porcIva > 0) ? ` <span style="font-size:8.5px; color:#2e6b34; font-weight:bold;">(+IVA)</span>` : "";
 
@@ -2048,13 +2292,12 @@
         tbodyPdf.appendChild(trVacio);
       }
 
-      const valorIva = baseGravableIva * (porcIva / 100);
-      const totalGen = subtotal + valorIva;
+      const r = calcularTotales(itemsLista, porcIva);
 
-      document.getElementById("pdf-subtotal").textContent = formatearCOP(subtotal);
-      document.getElementById("pdf-iva-label").textContent = `IVA (${valorIva > 0 ? porcIva : 0}%):`;
-      document.getElementById("pdf-iva-valor").textContent = formatearCOP(valorIva);
-      document.getElementById("pdf-total-general").textContent = formatearCOP(totalGen);
+      document.getElementById("pdf-subtotal").textContent = formatearCOP(r.subtotal);
+      document.getElementById("pdf-iva-label").textContent = `IVA (${r.valorIva > 0 ? porcIva : 0}%):`;
+      document.getElementById("pdf-iva-valor").textContent = formatearCOP(r.valorIva);
+      document.getElementById("pdf-total-general").textContent = formatearCOP(r.total);
 
       const clienteLimpio = (datos.cliente || "Cliente").trim().replace(/\s+/g, "_");
       const nombreArchivo = `Cotizacion_${numStr}_${clienteLimpio}.pdf`;
@@ -2126,23 +2369,11 @@
 
     window.exportarCotizacionActualPDF = function() {
       const consecutivoNum = parseInt(document.getElementById("cot-numero").textContent, 10) || 1;
-      const fechaISO = document.getElementById("cot-fecha").value;
-      const fechaFormateada = fechaISO ? fechaISO.split("-").reverse().join("/") : new Date().toLocaleDateString("es-CO");
-
-      const itemsActuales = [];
-      document.querySelectorAll("#tbody-items tr").forEach((fila) => {
-        const desc = fila.querySelector(".item-desc").value.trim();
-        const cant = Math.max(0, parseFloat(fila.querySelector(".item-cant").value) || 0);
-        const precio = Math.max(0, parseFloat(fila.querySelector(".item-precio").value) || 0);
-        const aplicaIva = fila.querySelector(".item-iva")?.checked || false;
-        if (desc !== "" || cant > 0 || precio > 0) {
-          itemsActuales.push({ descripcion: desc, cantidad: cant, precio: precio, aplicaIva: aplicaIva });
-        }
-      });
+      const fechaISO = document.getElementById("cot-fecha").value || hoyISO();
 
       generarArchivoPDFDesdeObjeto({
         consecutivo: consecutivoNum,
-        fecha: fechaFormateada,
+        fecha: formatearFechaISO(fechaISO),
         validaHasta: document.getElementById("cot-valida").value,
         cliente: document.getElementById("cot-cliente").value.trim() || "Cliente",
         cedula: document.getElementById("cot-documento").value.trim(),
@@ -2150,7 +2381,7 @@
         direccion: document.getElementById("cot-direccion").value.trim(),
         observaciones: document.getElementById("cot-observaciones").value.trim(),
         ivaPorcentaje: parseFloat(document.getElementById("cot-iva-porcentaje").value) || 0,
-        items: itemsActuales,
+        items: leerItemsFormulario(true),
         valorTotal: totalActualNumerico
       });
     };
@@ -2161,8 +2392,71 @@
       generarArchivoPDFDesdeObjeto(cot);
     };
 
-    // GUARDAR COTIZACIÓN (CON TRANSACCIÓN ATÓMICA DE CONSECUTIVOS)
+    // ───────────────────────── GUARDAR COTIZACIÓN ─────────────────────────
+
+    function establecerGuardando(valor) {
+      guardando = valor;
+      ["btn-guardar-principal", "btn-guardar-movil"].forEach((id) => {
+        const boton = document.getElementById(id);
+        if (boton) {
+          boton.disabled = valor;
+          boton.style.opacity = valor ? "0.65" : "";
+        }
+      });
+    }
+
+    // Con conexión: el número oficial se asigna de forma atómica con el contador central
+    async function guardarNuevaConNumeracionOficial(datos) {
+      const configRef = doc(db, "configuracion", "consecutivos");
+      const nuevaRef = doc(collection(db, "cotizaciones"));
+      let asignado = 0;
+
+      await runTransaction(db, async (tx) => {
+        const configSnap = await tx.get(configRef);
+        const ultimo = configSnap.exists() ? (Number(configSnap.data().ultimoNumero) || 0) : 0;
+        asignado = Math.max(ultimo, maxConsecutivoLocal(false)) + 1;
+
+        if (configSnap.exists()) {
+          tx.update(configRef, { ultimoNumero: asignado });
+        } else {
+          tx.set(configRef, { ultimoNumero: asignado });
+        }
+        tx.set(nuevaRef, { ...datos, consecutivo: asignado, pendienteNumeracion: false });
+      });
+
+      return { numero: asignado, provisional: false };
+    }
+
+    // Sin conexión: se guarda en la caché de Firestore con número provisional.
+    // Al reconectar, la escritura sube sola y luego se confirma el número oficial.
+    function guardarNuevaProvisional(datos) {
+      const numero = Math.max(ultimoNumeroConfig, maxConsecutivoLocal(true)) + 1;
+      const ref = doc(collection(db, "cotizaciones"));
+
+      setDoc(ref, { ...datos, consecutivo: numero, pendienteNumeracion: true }).catch((err) => {
+        console.error("Cotización provisional rechazada:", err);
+        mostrarModalAlerta({
+          titulo: "No se pudo sincronizar",
+          mensaje: `La cotización N° ${String(numero).padStart(3, "0")} guardada sin conexión fue rechazada por el servidor: ${err && err.message ? err.message : err}`,
+          tipo: "danger"
+        });
+      });
+
+      return { numero, provisional: true };
+    }
+
     window.guardarCotizacion = async function() {
+      if (guardando) return;
+
+      if (!db) {
+        await mostrarModalAlerta({
+          titulo: "Sin conexión con la base de datos",
+          mensaje: "La aplicación no pudo iniciar Firebase. Recarga la página e inténtalo de nuevo.",
+          tipo: "danger"
+        });
+        return;
+      }
+
       const cliente = document.getElementById("cot-cliente").value.trim();
       if (!cliente) {
         await mostrarModalAlerta({
@@ -2174,128 +2468,128 @@
         return;
       }
 
-      const fechaISO = document.getElementById("cot-fecha").value;
-      const fechaFormateada = fechaISO ? fechaISO.split("-").reverse().join("/") : new Date().toLocaleDateString("es-CO");
+      const fechaISO = document.getElementById("cot-fecha").value || hoyISO();
+      const validaISO = document.getElementById("cot-valida").value;
 
-      const itemsGuardados = [];
-      document.querySelectorAll("#tbody-items tr").forEach((fila) => {
-        const desc = fila.querySelector(".item-desc").value.trim();
-        const cant = Math.max(0, parseFloat(fila.querySelector(".item-cant").value) || 0);
-        const precio = Math.max(0, parseFloat(fila.querySelector(".item-precio").value) || 0);
-        const aplicaIva = fila.querySelector(".item-iva")?.checked || false;
-        if (desc !== "" || cant > 0 || precio > 0) {
-          itemsGuardados.push({ descripcion: desc, cantidad: cant, precio: precio, aplicaIva: aplicaIva });
-        }
-      });
+      if (validaISO && validaISO < fechaISO) {
+        await mostrarModalAlerta({
+          titulo: "Fecha de validez incorrecta",
+          mensaje: "La fecha \"Válida hasta\" es anterior a la fecha de la cotización. Corrígela antes de guardar.",
+          tipo: "warning"
+        });
+        document.getElementById("cot-valida").focus();
+        return;
+      }
+
+      const itemsGuardados = leerItemsFormulario(true);
+      const porcIva = parseFloat(document.getElementById("cot-iva-porcentaje").value) || 0;
+      const resumen = calcularTotales(itemsGuardados, porcIva);
+
+      if (itemsGuardados.length === 0 || resumen.total <= 0) {
+        await mostrarModalAlerta({
+          titulo: "La cotización no tiene valores",
+          mensaje: "Agrega al menos un ítem con cantidad y precio antes de guardar.",
+          tipo: "warning"
+        });
+        return;
+      }
 
       const datosCotizacion = {
-        fecha: fechaFormateada,
+        fecha: formatearFechaISO(fechaISO),
         fechaISO: fechaISO,
-        validaHasta: document.getElementById("cot-valida").value,
+        validaHasta: validaISO,
         cliente: cliente,
         cedula: document.getElementById("cot-documento").value.trim(),
         celular: document.getElementById("cot-celular").value.trim(),
         direccion: document.getElementById("cot-direccion").value.trim(),
         observaciones: document.getElementById("cot-observaciones").value.trim(),
-        ivaPorcentaje: parseFloat(document.getElementById("cot-iva-porcentaje").value) || 0,
+        ivaPorcentaje: porcIva,
         items: itemsGuardados,
-        valorTotal: totalActualNumerico
+        valorTotal: resumen.total
       };
 
-      // MODO EDICIÓN
+      // MODO EDICIÓN: el consecutivo y el estado no se tocan
       if (cotizacionEditandoId) {
-        const consecutivoNum = parseInt(document.getElementById("cot-numero").textContent, 10);
-        datosCotizacion.consecutivo = consecutivoNum;
+        const numEdicion = String(document.getElementById("cot-numero").textContent).trim();
+        let aviso = null;
 
-        if (db && navigator.onLine) {
-          try {
-            await updateDoc(doc(db, "cotizaciones", cotizacionEditandoId), datosCotizacion);
-            await mostrarModalAlerta({
-              titulo: "Cotización actualizada",
-              mensaje: `Los cambios de la Cotización N° ${String(consecutivoNum).padStart(3, "0")} se guardaron en la nube.`,
-              tipo: "success"
-            });
-            cancelarModoEdicion();
-          } catch (err) {
-            await mostrarModalAlerta({ titulo: "Error al actualizar", mensaje: err.message, tipo: "danger" });
-          }
-        } else {
-          const idx = listaCotizaciones.findIndex(c => c.id === cotizacionEditandoId);
-          if (idx !== -1) {
-            listaCotizaciones[idx] = { ...listaCotizaciones[idx], ...datosCotizacion };
-            localStorage.setItem("cotizaciones_mw", JSON.stringify(listaCotizaciones));
-            renderizarTablaControl();
-            await mostrarModalAlerta({
-              titulo: "Cotización actualizada",
-              mensaje: `Los cambios de la Cotización N° ${String(consecutivoNum).padStart(3, "0")} se guardaron localmente.`,
-              tipo: "success"
-            });
-            cancelarModoEdicion();
-          }
+        establecerGuardando(true);
+        try {
+          const confirmada = await confirmarEscritura(
+            updateDoc(doc(db, "cotizaciones", cotizacionEditandoId), datosCotizacion)
+          );
+          aviso = {
+            titulo: "Cotización actualizada",
+            mensaje: confirmada
+              ? `Los cambios de la Cotización N° ${numEdicion} se guardaron en la nube.`
+              : `Los cambios de la Cotización N° ${numEdicion} se guardaron en este dispositivo y se sincronizarán al recuperar la conexión.`,
+            tipo: "success"
+          };
+        } catch (err) {
+          aviso = { titulo: "Error al actualizar", mensaje: err && err.message ? err.message : String(err), tipo: "danger" };
+        } finally {
+          establecerGuardando(false);
         }
+
+        await mostrarModalAlerta(aviso);
+        if (aviso.tipo === "success") cancelarModoEdicion();
         return;
       }
 
-      // NUEVA COTIZACIÓN: Asignación atómica de consecutivo
+      // NUEVA COTIZACIÓN
       datosCotizacion.estado = "Pendiente";
       datosCotizacion.creadoEn = new Date().toISOString();
 
-      let consecutivoAsignado = 1;
+      let aviso = null;
+      let guardadaOk = false;
 
-      if (db && navigator.onLine) {
-        try {
-          const configRef = doc(db, "configuracion", "consecutivos");
-          await runTransaction(db, async (transaction) => {
-            const configDoc = await transaction.get(configRef);
-            if (!configDoc.exists()) {
-              const maxActual = listaCotizaciones.reduce((max, item) => Math.max(max, Number(item.consecutivo) || 0), 0);
-              consecutivoAsignado = maxActual + 1;
+      establecerGuardando(true);
+      try {
+        let resultado;
+        if (navigator.onLine) {
+          try {
+            resultado = await guardarNuevaConNumeracionOficial(datosCotizacion);
+          } catch (err) {
+            // Solo se recurre al número provisional cuando el servidor no está disponible
+            if (err && err.code === "unavailable") {
+              resultado = guardarNuevaProvisional(datosCotizacion);
             } else {
-              consecutivoAsignado = (configDoc.data().ultimoNumero || 0) + 1;
+              throw err;
             }
-            transaction.set(configRef, { ultimoNumero: consecutivoAsignado }, { merge: true });
-            
-            datosCotizacion.consecutivo = consecutivoAsignado;
-            const nuevaCotRef = doc(collection(db, "cotizaciones"));
-            transaction.set(nuevaCotRef, datosCotizacion);
-          });
-
-          await mostrarModalAlerta({
-            titulo: "Cotización guardada",
-            mensaje: `Se asignó oficialmente el N° ${String(consecutivoAsignado).padStart(3, "0")} para ${cliente}.`,
-            tipo: "success"
-          });
-          limpiarFormularioSinConfirmar();
-        } catch (err) {
-          console.warn("Fallo en transacción atómica, guardando por fallback:", err);
-          guardarFallbackLocal(datosCotizacion, cliente);
+          }
+        } else {
+          resultado = guardarNuevaProvisional(datosCotizacion);
         }
-      } else {
-        guardarFallbackLocal(datosCotizacion, cliente);
+
+        const numStr = String(resultado.numero).padStart(3, "0");
+        aviso = resultado.provisional
+          ? {
+              titulo: "Guardada sin conexión",
+              mensaje: `Cotización N° ${numStr} (provisional) guardada para ${cliente}. El número definitivo se confirma al sincronizar; si envías el PDF ahora, verifica después que el número no haya cambiado.`,
+              tipo: "success"
+            }
+          : {
+              titulo: "Cotización guardada",
+              mensaje: `Se asignó oficialmente el N° ${numStr} para ${cliente}.`,
+              tipo: "success"
+            };
+        guardadaOk = true;
+      } catch (err) {
+        console.error("No se pudo guardar la cotización:", err);
+        aviso = {
+          titulo: "No se pudo guardar",
+          mensaje: (err && err.message ? err.message : String(err)) + " Tus datos siguen en pantalla, inténtalo de nuevo.",
+          tipo: "danger"
+        };
+      } finally {
+        establecerGuardando(false);
       }
+
+      if (guardadaOk) limpiarFormularioSinConfirmar();
+      await mostrarModalAlerta(aviso);
     };
 
-    function guardarFallbackLocal(datosCotizacion, cliente) {
-      const maxNum = listaCotizaciones.reduce((max, item) => Math.max(max, Number(item.consecutivo) || 0), 0);
-      const consecutivoNum = maxNum + 1;
-      datosCotizacion.consecutivo = consecutivoNum;
-
-      if (db) {
-        addDoc(collection(db, "cotizaciones"), datosCotizacion);
-      }
-      datosCotizacion.id = "local_" + Date.now();
-      listaCotizaciones.push(datosCotizacion);
-      localStorage.setItem("cotizaciones_mw", JSON.stringify(listaCotizaciones));
-      actualizarConsecutivoAutomatico();
-      renderizarTablaControl();
-
-      mostrarModalAlerta({
-        titulo: "Guardado en modo seguro",
-        mensaje: `Cotización N° ${String(consecutivoNum).padStart(3, "0")} guardada para ${cliente}. Se sincronizará automáticamente al conectar.`,
-        tipo: "success"
-      });
-      limpiarFormularioSinConfirmar();
-    }
+    // ───────────────────────── EDITAR / ELIMINAR ─────────────────────────
 
     window.editarCotizacion = function(id) {
       const cot = listaCotizaciones.find(c => c.id === id);
@@ -2362,32 +2656,24 @@
 
       if (cotizacionEditandoId === id) cancelarModoEdicion();
 
-      if (db && navigator.onLine) {
-        try {
-          await deleteDoc(doc(db, "cotizaciones", id));
-          await mostrarModalAlerta({
-            titulo: "Cotización eliminada",
-            mensaje: `La Cotización N° ${numStr} fue eliminada del sistema.`,
-            tipo: "info"
-          });
-        } catch (err) {
-          await mostrarModalAlerta({ titulo: "Error al eliminar", mensaje: err.message, tipo: "danger" });
-        }
-      } else {
-        listaCotizaciones = listaCotizaciones.filter(c => c.id !== id);
-        localStorage.setItem("cotizaciones_mw", JSON.stringify(listaCotizaciones));
-        if (!cotizacionEditandoId) actualizarConsecutivoAutomatico();
-        renderizarTablaControl();
-        await mostrarModalAlerta({
+      let aviso;
+      try {
+        const confirmada = await confirmarEscritura(deleteDoc(doc(db, "cotizaciones", id)));
+        aviso = {
           titulo: "Cotización eliminada",
-          mensaje: `La Cotización N° ${numStr} fue eliminada localmente.`,
+          mensaje: confirmada
+            ? `La Cotización N° ${numStr} fue eliminada del sistema.`
+            : `La Cotización N° ${numStr} se eliminó en este dispositivo y se sincronizará al recuperar la conexión.`,
           tipo: "info"
-        });
+        };
+      } catch (err) {
+        aviso = { titulo: "Error al eliminar", mensaje: err && err.message ? err.message : String(err), tipo: "danger" };
       }
+      await mostrarModalAlerta(aviso);
     };
 
     function limpiarFormularioSinConfirmar() {
-      document.getElementById("cot-fecha").valueAsDate = new Date();
+      document.getElementById("cot-fecha").value = hoyISO();
       document.getElementById("cot-cliente").value = "";
       document.getElementById("cot-documento").value = "";
       document.getElementById("cot-celular").value = "";
@@ -2418,6 +2704,8 @@
       cambiarPestana("cotizacion");
     };
 
+    // ───────────────────────── HISTORIAL ─────────────────────────
+
     window.seleccionarFiltroEstado = function(estado) {
       document.getElementById("filtro-estado").value = estado;
       document.querySelectorAll(".filter-pill").forEach(btn => {
@@ -2427,19 +2715,38 @@
     };
 
     window.cambiarEstadoCotizacion = async function(id, nuevoEstado) {
-      if (db && navigator.onLine) {
-        await updateDoc(doc(db, "cotizaciones", id), { estado: nuevoEstado });
-      } else {
-        const item = listaCotizaciones.find(c => c.id === id);
-        if (item) {
-          item.estado = nuevoEstado;
-          localStorage.setItem("cotizaciones_mw", JSON.stringify(listaCotizaciones));
-          renderizarTablaControl();
-        }
+      if (!ESTADOS_VALIDOS.includes(nuevoEstado)) return;
+      try {
+        await confirmarEscritura(updateDoc(doc(db, "cotizaciones", id), { estado: nuevoEstado }));
+      } catch (err) {
+        console.error("No se pudo cambiar el estado:", err);
+        await mostrarModalAlerta({
+          titulo: "No se pudo cambiar el estado",
+          mensaje: err && err.message ? err.message : String(err),
+          tipo: "danger"
+        });
       }
     };
 
+    function ocultarToastSeguimiento() {
+      const toast = document.getElementById("toast-seguimiento");
+      if (toast) toast.style.display = "none";
+    }
+
+    // Al cerrar el aviso con la X no vuelve a aparecer durante el resto del día
+    window.cerrarToastSeguimiento = function() {
+      ocultarToastSeguimiento();
+      try { localStorage.setItem(CLAVE_TOAST_CERRADO, hoyISO()); } catch (e) {}
+    };
+
     window.revisarSeguimientoPendientes = function(diasMinimos = 3) {
+      try {
+        if (localStorage.getItem(CLAVE_TOAST_CERRADO) === hoyISO()) {
+          ocultarToastSeguimiento();
+          return;
+        }
+      } catch (e) {}
+
       const hoy = new Date();
       const clientesPorLlamar = [];
 
@@ -2481,10 +2788,10 @@
       listaCont.innerHTML = "";
 
       clientesPorLlamar.slice(0, 3).forEach(c => {
-        const celLimpio = (c.celular || "").replace(/\D/g, "");
+        const celWa = numeroWhatsApp(c.celular);
         const numCot = String(c.consecutivo).padStart(3, "0");
         const mensajeWa = `Hola ${c.cliente}, le escribimos de Soluciones Integrales M.W. S.A.S. Queríamos hacer seguimiento a la cotización N° ${numCot} enviada hace ${c.dias} días para conocer sus dudas o comentarios.`;
-        const urlWa = celLimpio ? `https://wa.me/57${celLimpio}?text=${encodeURIComponent(mensajeWa)}` : null;
+        const urlWa = celWa ? `https://wa.me/${celWa}?text=${encodeURIComponent(mensajeWa)}` : null;
 
         const div = document.createElement("div");
         div.className = "toast-cliente-item";
@@ -2493,17 +2800,12 @@
             <strong>#${numCot} - ${escapeHTML(c.cliente)}</strong>
             <div style="color:#b45309; font-size:11px;">Hace ${c.dias} días</div>
           </div>
-          ${urlWa ? `<a href="${urlWa}" target="_blank" class="btn-wa-toast">💬 Seguir</a>` : `<span style="color:#999; font-size:11px;">Sin cel</span>`}
+          ${urlWa ? `<a href="${urlWa}" target="_blank" rel="noopener" class="btn-wa-toast">💬 Seguir</a>` : `<span style="color:#999; font-size:11px;">Sin cel</span>`}
         `;
         listaCont.appendChild(div);
       });
 
       toast.style.display = "block";
-    };
-
-    window.cerrarToastSeguimiento = function() {
-      const toast = document.getElementById("toast-seguimiento");
-      if (toast) toast.style.display = "none";
     };
 
     window.renderizarTablaControl = function() {
@@ -2543,26 +2845,33 @@
         });
 
       if (filtradas.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:28px; color:#6b7280;">No hay cotizaciones registradas para este filtro.</td></tr>`;
+        const mensajeVacio = totalCots === 0 && !cancelarEscuchaCotizaciones
+          ? "Cargando historial de cotizaciones..."
+          : "No hay cotizaciones registradas para este filtro.";
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:28px; color:#6b7280;">${mensajeVacio}</td></tr>`;
         return;
       }
 
       tbody.innerHTML = "";
       filtradas.forEach((c) => {
         const numStr = String(c.consecutivo).padStart(3, "0");
-        const numLimpio = (c.celular || "").replace(/\D/g, "");
-        const urlWa = numLimpio
-          ? `https://wa.me/57${numLimpio}?text=${encodeURIComponent('Hola ' + c.cliente + ', te compartimos la cotización N° ' + numStr + ' de Soluciones Integrales M.W. S.A.S.')}`
+        const celWa = numeroWhatsApp(c.celular);
+        const urlWa = celWa
+          ? `https://wa.me/${celWa}?text=${encodeURIComponent('Hola ' + c.cliente + ', te compartimos la cotización N° ' + numStr + ' de Soluciones Integrales M.W. S.A.S.')}`
           : null;
 
         const clienteSeguro = escapeHTML(c.cliente);
         const cedulaSegura = escapeHTML(c.cedula);
         const celularSeguro = escapeHTML(c.celular);
+        const fechaSegura = escapeHTML(c.fecha);
+        const marcaProvisional = c.pendienteNumeracion === true
+          ? `<span class="num-provisional" title="Número provisional: se confirma al sincronizar">*</span>`
+          : "";
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td data-label="N°" style="font-weight:700; color:#4b5563;">${numStr}</td>
-          <td data-label="Fecha" style="color:#4b5563;">${c.fecha || ""}</td>
+          <td data-label="N°" style="font-weight:700; color:#4b5563;">${numStr}${marcaProvisional}</td>
+          <td data-label="Fecha" style="color:#4b5563;">${fechaSegura}</td>
           <td data-label="Cliente">
             <div>
               <div class="cliente-cell-name">${clienteSeguro}</div>
@@ -2580,7 +2889,7 @@
           </td>
           <td data-label="Acciones">
             <div class="crud-actions">
-              ${urlWa ? `<a class="btn-icon-action wa" href="${urlWa}" target="_blank" title="Enviar WhatsApp">💬</a>` : ""}
+              ${urlWa ? `<a class="btn-icon-action wa" href="${urlWa}" target="_blank" rel="noopener" title="Enviar WhatsApp">💬</a>` : ""}
               <button class="btn-icon-action" onclick="descargarPDFDesdeHistorial('${c.id}')" title="Descargar PDF">📄</button>
               <button class="btn-icon-action" onclick="editarCotizacion('${c.id}')" title="Editar cotización">✏️</button>
               <button class="btn-icon-action del" onclick="eliminarCotizacion('${c.id}')" title="Eliminar cotización">🗑️</button>
@@ -2591,7 +2900,8 @@
       });
     };
 
-    // EXPORTACIÓN CORPORATIVA EXCELJS
+    // ───────────────────────── EXPORTACIÓN EXCEL ─────────────────────────
+
     window.exportarHistorialExcel = async function() {
       if (listaCotizaciones.length === 0) {
         await mostrarModalAlerta({
@@ -2680,7 +2990,7 @@
 
           const row = ws.getRow(numFilaActual);
           row.values = [
-            `#${String(c.consecutivo).padStart(3, "0")}`,
+            `#${String(c.consecutivo).padStart(3, "0")}${c.pendienteNumeracion === true ? "*" : ""}`,
             c.fecha || "",
             c.cliente || "",
             c.cedula || "—",
@@ -2733,7 +3043,7 @@
 
         const filaTotales = filaInicioDatos + datosOrdenados.length;
         ws.mergeCells(`A${filaTotales}:F${filaTotales}`);
-        
+
         const cellLabelTotal = ws.getCell(`A${filaTotales}`);
         cellLabelTotal.value = "TOTAL CARTERA COTIZADA:";
         cellLabelTotal.font = { name: "Arial", size: 10, bold: true, color: { argb: "FF0F291E" } };
@@ -2767,7 +3077,7 @@
         const urlDescarga = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = urlDescarga;
-        link.download = `Control_Cotizaciones_MW_${new Date().toISOString().slice(0, 10)}.xlsx`;
+        link.download = `Control_Cotizaciones_MW_${hoyISO()}.xlsx`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -2797,22 +3107,76 @@
       window.scrollTo(0, 0);
     };
 
-    // INICIALIZACIÓN
-    document.getElementById("cot-fecha").valueAsDate = new Date();
+    // ───────────────────────── INICIALIZACIÓN ─────────────────────────
+
+    document.getElementById("cot-fecha").value = hoyISO();
     for (let i = 0; i < 4; i++) agregarFilaProducto();
 
-    // SERVICE WORKER
+    // ───────────────────────── ACTUALIZACIONES DE LA APP (SERVICE WORKER) ─────────────────────────
+    // Una versión nueva nunca recarga la página por sorpresa:
+    //  - Si el formulario está vacío, se actualiza sola.
+    //  - Si hay datos escritos, aparece un aviso y la persona decide cuándo actualizar.
+
+    let actualizacionSolicitada = false;
+    let workerEnEspera = null;
+
+    function formularioSinCambios() {
+      if (cotizacionEditandoId) return false;
+      const camposTexto = ["cot-cliente", "cot-documento", "cot-celular", "cot-direccion", "cot-observaciones"];
+      if (camposTexto.some((id) => document.getElementById(id).value.trim() !== "")) return false;
+      return leerItemsFormulario(true).length === 0;
+    }
+
+    function hayModalAbierto() {
+      return document.getElementById("custom-modal-overlay").classList.contains("active");
+    }
+
+    function aplicarActualizacion() {
+      if (!workerEnEspera) return;
+      actualizacionSolicitada = true;
+      workerEnEspera.postMessage({ type: "SKIP_WAITING" });
+    }
+
+    function ofrecerActualizacion(worker) {
+      workerEnEspera = worker;
+      if (formularioSinCambios() && !hayModalAbierto() && !guardando) {
+        aplicarActualizacion();
+        return;
+      }
+      document.getElementById("aviso-actualizacion").classList.add("active");
+    }
+
+    document.getElementById("btn-actualizar-ahora").addEventListener("click", aplicarActualizacion);
+    document.getElementById("btn-actualizar-despues").addEventListener("click", () => {
+      document.getElementById("aviso-actualizacion").classList.remove("active");
+    });
+
     if ("serviceWorker" in navigator) {
-      let recargando = false;
+      // Solo se recarga cuando la actualización fue pedida (no en la primera instalación)
       navigator.serviceWorker.addEventListener("controllerchange", () => {
-        if (!recargando) {
-          recargando = true;
-          window.location.reload();
-        }
+        if (actualizacionSolicitada) window.location.reload();
       });
 
       navigator.serviceWorker.register("./sw.js").then((reg) => {
-        reg.update();
+        if (reg.waiting && navigator.serviceWorker.controller) {
+          ofrecerActualizacion(reg.waiting);
+        }
+
+        reg.addEventListener("updatefound", () => {
+          const nuevo = reg.installing;
+          if (!nuevo) return;
+          nuevo.addEventListener("statechange", () => {
+            if (nuevo.state === "installed" && navigator.serviceWorker.controller) {
+              ofrecerActualizacion(nuevo);
+            }
+          });
+        });
+
+        const buscarActualizacion = () => { reg.update().catch(() => {}); };
+        document.addEventListener("visibilitychange", () => {
+          if (!document.hidden) buscarActualizacion();
+        });
+        setInterval(buscarActualizacion, 60 * 60 * 1000);
       }).catch((err) => {
         console.warn("ServiceWorker no registrado:", err);
       });
