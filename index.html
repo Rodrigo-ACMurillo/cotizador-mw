@@ -1599,7 +1599,7 @@
     </div>
   </div>
 
-  <!-- LÓGICA JAVASCRIPT PROTEGIDA -->
+  <!-- LÓGICA JAVASCRIPT PROTEGIDA Y ACTUALIZADA -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
     import {
@@ -1609,8 +1609,9 @@
       signOut
     } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
     import {
-      getFirestore,
-      enableIndexedDbPersistence,
+      initializeFirestore,
+      persistentLocalCache,
+      persistentMultipleTabManager,
       collection,
       addDoc,
       onSnapshot,
@@ -1710,7 +1711,7 @@
       });
     }
 
-    // FIREBASE
+    // CONFIGURACIÓN E INICIALIZACIÓN MODERNA DE FIREBASE
     const firebaseConfig = {
       apiKey: "AIzaSyAiMACeB4GnB1ycj5L5C0BJCHSXnx1kTIE",
       authDomain: "cotizador-mw-sas.firebaseapp.com",
@@ -1732,8 +1733,11 @@
     try {
       app = initializeApp(firebaseConfig);
       auth = getAuth(app);
-      db = getFirestore(app);
-      enableIndexedDbPersistence(db).catch(() => {});
+      db = initializeFirestore(app, {
+        localCache: persistentLocalCache({
+          tabManager: persistentMultipleTabManager()
+        })
+      });
 
       onAuthStateChanged(auth, (user) => {
         if (user) {
